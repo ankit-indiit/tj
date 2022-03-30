@@ -7,7 +7,9 @@
             <h2 class="text-xl font-semibold"> Collections
             </h2>
          </div>
-         <a href="#" class="is_link featured-btn pull-right" data-toggle="modal" data-target="#addProductCollection"> Add Collection </a>
+         @if (Auth::user()->hasRole('admin'))
+            <a href="#" class="is_link featured-btn pull-right" data-toggle="modal" data-target="#addProductCollection"> Add Collection </a>         
+         @endif
          <!-- Modal -->
          <div class="modal main-prod fade" id="addProductCollection" tabindex="-1" role="dialog" aria-labelledby="addProductCollectionLabel" aria-hidden="true">
             <form id="addProductCollectionForm" enctype="multipart/form-data" method="post">

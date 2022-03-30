@@ -22,9 +22,9 @@
                     <li>
                         <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800" onclick="updatePost(<?php echo $post->id; ?>);"> <i class="uil-edit-alt mr-1"></i> Edit Post </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="#" class="flex items-center px-3 py-2 hover:bg-gray-200 hover:text-gray-800 rounded-md dark:hover:bg-gray-800"> <i class="uil-comment-slash mr-1"></i> Disable comments </a>
-                    </li>                   
+                    </li>  --}}                  
                     <li>
                         <hr class="-mx-2 my-2 dark:border-gray-800" />
                     </li>

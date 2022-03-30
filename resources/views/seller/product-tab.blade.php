@@ -651,7 +651,7 @@
                                  <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->price }}</div>
                                  <div class="text-xs font-semibold ven-nam text-yellow-500">
                                     @foreach ($product->productCategoryId as $proCatId)
-                                       <a href="shop-timeline.html">
+                                       <a href="{{ route('category.show', str_replace(' ', '-', strtolower(getProductCategoryNameById($proCatId->cat_id)))) }}">
                                           {{ getProductCategoryNameById($proCatId->cat_id) }}
                                        </a>
                                     @endforeach
@@ -872,47 +872,3 @@
       </div>
    </div>
 </div>
-
-@section('customModals')
-{{-- Add Product Category Modal --}}
-<div id="add-product-category-modal" class="create-post main-post" uk-modal>
-   <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
-      <div class="text-center py-4 border-b">
-         <h3 class="text-lg font-semibold">Add Category</h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
-      </div>
-      <form id="addProductCategoryForm" enctype="multipart/form-data" method="post">
-        @csrf
-        <div class="flex flex-1 items-start space-x-4 p-5">
-            <div class="flex-1 pt-2 small-textarea">
-               <textarea name="name" id="name" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="Enter Category Name"></textarea>
-            </div>
-         </div>                   
-         <div class="bsolute bottom-0 p-4 space-x-4 w-full">
-            <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
-               <div class="lg:block hidden"> Add Category Image </div>
-               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
-                  <input type="file" id="feature_image" name="feature_image" style="visibility:hidden;" onchange="ValidateFileUpload('feature_image','product_category_image');">
-                  <a href="#" onclick="$('#feature_image').trigger('click'); return false;">
-                  <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                  </svg>
-                  </a>
-
-               </div>
-            </div>
-            <img id="product_category_image" />
-         </div>
-         <div class="flex items-center w-full justify-between p-3 border-t">
-            <div class="flex space-x-2 pull-right">
-               <button type="submit" id="addProductCategoryBtn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
-                  Add
-               </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('add-product-category-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-                  Cancel </a>
-            </div>
-         </div>
-      </form>
-   </div>
-</div>
-@endsection

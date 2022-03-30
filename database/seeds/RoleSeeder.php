@@ -6,17 +6,18 @@ use App\User;
 
 class RoleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
-        if (!Role::where('name', 'seller')->exists()) {
+        if (!Role::where('name', 'admin')->exists()) {
         	Role::create([
-        		'name' => 'seller'
+        		'name' => 'admin'
         	]);
+        }
+
+        if (!Role::where('name', 'seller')->exists()) {
+            Role::create([
+                'name' => 'seller'
+            ]);
         }
 
         if (!Role::where('name', 'buyer')->exists()) {

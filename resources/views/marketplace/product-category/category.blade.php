@@ -12,9 +12,11 @@
         <div>
           <h2 class="text-xl font-semibold"> Men Clothes</h2>
         </div>
-        <div>
-          <a href="javascript:void(0);" uk-toggle="target: #add-product-category-modal" class="is_link featured-btn pull-right mx-1"> Add Category </a>
-        </div>
+        @if (Auth::user()->hasRole('admin'))
+          <div>
+            <a href="javascript:void(0);" uk-toggle="target: #add-product-category-modal" class="is_link featured-btn pull-right mx-1"> Add Category </a>
+          </div>
+        @endif
       </div>
       <hr>
       <div class="row first-page">

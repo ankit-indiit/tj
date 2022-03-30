@@ -53,8 +53,13 @@ Route::post('add-to-wishlist', 'ProductController@addToWishlist')->name('add-to-
 Route::get('wishlist', 'WishlistController@index')->name('wishlist');
 Route::post('delete-product-from-wishlist', 'WishlistController@deleteProductFromWishlist')->name('delete-product-from-wishlist');
 Route::get('inventory', 'InventoryController@index')->name('inventory');
-Route::get('seller-order', 'SellerOrderController@index')->name('seller.order');
+Route::get('seller-order', 'OrderController@sellerOrder')->name('seller.order');
+Route::get('friend-follower', 'FriendController@friendFollower')->name('friend.follower');
+Route::get('order-history', 'OrderController@orderHistory')->name('order.history');
+Route::get('order-history-detail', 'OrderController@orderHistoryDetail')->name('order.history-detail');
 Route::get('trending', 'ProductController@trending')->name('trending');
+Route::get('best-seller', 'ProductController@bestSeller')->name('best.seller');
+Route::get('featured-product', 'ProductController@featuredProduct')->name('featured.product');
 Route::resource('category', ProductCategoryController::class);
 Route::resource('collection', ProductCollectionController::class);
 Route::resource('product', ProductController::class);

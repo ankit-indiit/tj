@@ -166,7 +166,21 @@ class ProductController extends Controller
     public function trending()
     {
         $products = Product::orderBy('updated_at', 'DESC')->get();
-        $data = ['page_title' => 'Shop Product | TJ', 'products' => $products];
+        $data = ['page_title' => 'Trending Product | TJ', 'products' => $products];
         return view('marketplace.trending',$data);
+    }
+
+    public function bestSeller()
+    {
+        $products = Product::orderBy('updated_at', 'DESC')->get();
+        $data = ['page_title' => 'Best Seller Product | TJ', 'products' => $products];
+        return view('marketplace.best-seller',$data);
+    }
+
+    public function featuredProduct()
+    {
+        $products = Product::orderBy('updated_at', 'DESC')->get();
+        $data = ['page_title' => 'Fearured Product | TJ', 'products' => $products];
+        return view('marketplace.featured-product',$data);
     }
 }

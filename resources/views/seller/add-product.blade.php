@@ -4,9 +4,9 @@
    <div class="mcontainer">
       <div class="profile user-profile bg-white rounded-2xl -mt-4">
          <div class="profiles_banner">
-            <img src="{{ asset('images/avatars/profile-cover.jpg') }}" alt="">
+            <img id="coverImageUpdate" src="{{ url('public/profile/cover/') }}/{{ Auth::user()->cover_image ? Auth::user()->cover_image : 'download.png' }}" alt="" />
             <div class="profile_action absolute bottom-0 right-0 space-x-1.5 p-3 text-sm z-50 hidden lg:flex">
-               <a href="#" class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
+               <a href="javascript:void(0);" onclick="coverImageForm();" class="flex items-center justify-center h-8 px-3 rounded-md bg-gray-700 bg-opacity-70 text-white space-x-1.5">
                   <ion-icon name="create-outline" class="text-xl md hydrated" role="img" aria-label="create outline"></ion-icon>
                   <span> Edit </span>
                </a>
@@ -14,17 +14,19 @@
          </div>
          <div class="profiles_content">
             <div class="profile_avatar">
-               <div class="profile_avatar_holder"> 
-                  <img src="{{ asset('images/avatars/avatar-8.jpg') }}" alt="">
+               <div class="profile_avatar_holder">
+                  <img class="user_profile_image" src="{{ show_user_image() }}" alt="" />
                </div>
-               <div class="user_status status_online"></div>
-               <div class="icon_change_photo" hidden="">
-                  <ion-icon name="camera" class="text-xl md hydrated" role="img" aria-label="camera"></ion-icon>
+               <!--div class="user_status status_online"></div-->
+               <div class="icon_change_photo" onclick="profileImageForm();">
+                  <ion-icon name="create-outline" class="text-xl md hydrated" role="img" aria-label="camera"></ion-icon>
                </div>
+
             </div>
+
             <div class="profile_info">
-               <h1> Josephine Williams </h1>
-               <!--p> Family , Food , Fashion , Fourever <a href="#">Edit </a></p-->
+               <h1>{{ Auth::user()->name }}</h1>
+
             </div>
          </div>
       </div>

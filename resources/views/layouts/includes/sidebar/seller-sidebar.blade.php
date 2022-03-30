@@ -10,7 +10,7 @@
                   <div class=" bg-white rounded-2xl -mt-4">
                      <div class="profile_avatar">
                         <div class="profile_avatar_holder"> 
-                           <img src="assets/images/avatars/avatar-8.jpg" alt="">
+                           <img src="{{ show_user_image() }}" alt="">
                         </div>
                         <div class="user_status status_online"></div>
                         <div class="icon_change_photo" hidden="">
@@ -27,7 +27,7 @@
                         <i class="fa fa-rss" aria-hidden="true"></i>
                         <span> Feed </span> </a> 
                      </li>
-                     <li class=""><a href="seller-orders.html"> 
+                     <li class=""><a href="{{ route('seller.order') }}"> 
                         <i class="fa fa-gift" aria-hidden="true"></i>
                         <span> Orders </span> </a> 
                      </li>

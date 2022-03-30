@@ -22,8 +22,8 @@
                         <a class="submenu" href="{{ route('shop') }}">Shop</a>
                         <a class="submenu" href="{{ route('category.index') }}">Categories</a>
                         <a class="submenu" href="{{ route('trending') }}">Trending</a>
-                        <a class="submenu" href="best-seller.html">Best Sellers</a>
-                        <a class="submenu" href="featured-products.html">Featured products</a>
+                        <a class="submenu" href="{{ route('best.seller') }}">Best Sellers</a>
+                        <a class="submenu" href="{{ route('featured.product') }}">Featured products</a>
                     </div>
                 </div>
             </li>
@@ -31,11 +31,11 @@
                 <i class="icon-feather-layers" style="font-weight: bold;"> </i>
                     <span> Collections</span></a> 
             </li> 
-            <li><a href="friends-followers.html">
+            <li><a href="{{ route('friend.follower') }}">
                 <i class="fa fa-user-plus" aria-hidden="true"></i>
                 <span> Friends & Followers</span></a> 
             </li>
-            <li><a href="order-history.html"> 
+            <li><a href="{{ route('order.history') }}"> 
                 <i class="fa fa-gift" aria-hidden="true"></i>
                 <span> Orders</span> </a> 
             </li> 

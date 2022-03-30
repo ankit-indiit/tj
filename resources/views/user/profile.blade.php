@@ -354,223 +354,74 @@
                <div class="">
                   <div class="tab-pane active" id="home-1" role="tabpanel" aria-labelledby="home-tab">
                      <div class="row">
-                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                           <div class="card">
-                              <div class="card-media h-44">
-                                 <div class="card-media-overly"></div>
-                                 <img src="{{ asset('images/tshert.png') }}" alt="" />
-                                 <div class="main-tools" style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
-                                    <a class="remove" href="#" aria-expanded="false"><i class="icon-feather-more-horizontal"></i> </a>
-                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop main-ss uk-drop-bottom-right" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss" style="left: -182px; top: -5.99998px;">
-                                       <div class="sidebar_innersss" data-simplebar="init">
-                                          <div class="simplebar-wrapper" style="margin: 0px;">
-                                             <div class="simplebar-height-auto-observer-wrapper">
-                                                <div class="simplebar-height-auto-observer"></div>
-                                             </div>
-                                             <div class="simplebar-mask">
-                                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                                   <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
-                                                      <ul class="space-y-1">
-                                                         <li>
-                                                            Add to Collection
-                                                         </li>
-                                                         <li>Remove From Wishlist</li>
-                                                      </ul>
+                        @foreach ($wishlistedProducts as $wishlistedProduct)
+                           @php
+                              $unSerlizeProImage = unserialize($wishlistedProduct->image);
+                              $productImage = reset($unSerlizeProImage);
+                              $checkWishlist = checkIfProductInWishlist(Auth::user()->id, $wishlistedProduct->id);
+                            @endphp
+                           <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                              <div class="card">
+                                 <div class="card-media h-44">
+                                    <div class="card-media-overly"></div>
+                                    <img src="{{ url("public/images/product/$productImage") }}" alt="" />
+                                    <div class="main-tools" style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
+                                       <a class="remove" href="#" aria-expanded="false"><i class="icon-feather-more-horizontal"></i> </a>
+                                       <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop main-ss uk-drop-bottom-right" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss" style="left: -182px; top: -5.99998px;">
+                                          <div class="sidebar_innersss" data-simplebar="init">
+                                             <div class="simplebar-wrapper" style="margin: 0px;">
+                                                <div class="simplebar-height-auto-observer-wrapper">
+                                                   <div class="simplebar-height-auto-observer"></div>
+                                                </div>
+                                                <div class="simplebar-mask">
+                                                   <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                      <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
+                                                         <ul class="space-y-1">
+                                                            <li>
+                                                               Add to Collection
+                                                            </li>
+                                                            <li>Remove From Wishlist</li>
+                                                         </ul>
+                                                      </div>
                                                    </div>
                                                 </div>
+                                                <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
                                              </div>
-                                             <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden; height: 42px;"></div>
+                                             <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                                <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
+                                             </div>
+                                             <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                                <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden; height: 42px;"></div>
+                                             </div>
                                           </div>
                                        </div>
                                     </div>
                                  </div>
-                              </div>
-                              <div class="card-body">
-                                 <!--div class="-top-3 absolute bg-blue-100 font-medium px-2 py-1 right-2 rounded-full text text-blue-500 text-sm">
-                                            $19.99
-                                        </div-->
+                                 <div class="card-body">
+                                    <!--div class="-top-3 absolute bg-blue-100 font-medium px-2 py-1 right-2 rounded-full text text-blue-500 text-sm">
+                                               $19.99
+                                           </div-->
 
-                                 <a href="shop-4.html" class="ext-lg font-medium mt-1 t truncate"> Men T-shirt </a>
-                                 <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
-                                    Add to Cart
-                                 </a>
-                                 <div class="text-xs font-semibold uppercase text-yellow-500">$19.99</div>
-                                 <div class="text-xs font-semibold ven-nam text-yellow-500">
-                                    <a href="shop-timeline.html">Forever 21</a>
-                                 </div>
-                                 <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                           <div class="card">
-                              <div class="card-media h-44">
-                                 <div class="card-media-overly"></div>
-                                 <img src="{{ asset('images/tshert.png') }}" alt="" />
-                                 <div class="main-tools" style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
-                                    <a class="remove" href="#" aria-expanded="false"><i class="icon-feather-more-horizontal"></i> </a>
-                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop main-ss uk-drop-bottom-right" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss" style="left: -182px; top: -5.99998px;">
-                                       <div class="sidebar_innersss" data-simplebar="init">
-                                          <div class="simplebar-wrapper" style="margin: 0px;">
-                                             <div class="simplebar-height-auto-observer-wrapper">
-                                                <div class="simplebar-height-auto-observer"></div>
-                                             </div>
-                                             <div class="simplebar-mask">
-                                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                                   <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
-                                                      <ul class="space-y-1">
-                                                         <li>
-                                                            Add to Collection
-                                                         </li>
-                                                         <li>Remove From Wishlist</li>
-                                                      </ul>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                             <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden; height: 42px;"></div>
-                                          </div>
-                                       </div>
+                                    <a href="{{ route('product.detail', $wishlistedProduct->slug) }}" class="ext-lg font-medium mt-1 t truncate">{{ $wishlistedProduct->name }}</a>
+                                    <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
+                                       Add to Cart
+                                    </a>
+                                    <div class="text-xs font-semibold uppercase text-yellow-500">${{ $wishlistedProduct->price }}</div>
+                                    <div class="text-xs font-semibold ven-nam text-yellow-500">
+                                       @foreach ($wishlistedProduct->productCategoryId as $proCatId)
+                                          <a href="{{ route('category.show', str_replace(' ', '-', strtolower(getProductCategoryNameById($proCatId->cat_id)))) }}">
+                                            {{ getProductCategoryNameById($proCatId->cat_id) }}
+                                          </a>
+                                      @endforeach 
+                                    </div>
+                                    <div class="ratings">
+                                       <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+                                       <i class="fa fa-star" aria-hidden="true"></i>
                                     </div>
                                  </div>
                               </div>
-                              <div class="card-body">
-                                 <a href="shop-4.html" class="ext-lg font-medium mt-1 t truncate"> Men T-shirt </a>
-                                 <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
-                                    Add to Cart
-                                 </a>
-                                 <div class="text-xs font-semibold uppercase text-yellow-500">$19.99</div>
-                                 <div class="text-xs font-semibold ven-nam text-yellow-500">
-                                    <a href="shop-timeline.html">Forever 21</a>
-                                 </div>
-                                 <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                 </div>
-                              </div>
                            </div>
-                        </div>
-                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                           <div class="card">
-                              <div class="card-media h-44">
-                                 <div class="card-media-overly"></div>
-                                 <img src="{{ asset('images/tshert.png') }}" alt="" />
-                                 <div class="main-tools" style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
-                                    <a class="remove" href="#" aria-expanded="false"><i class="icon-feather-more-horizontal"></i> </a>
-                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop main-ss uk-drop-bottom-right" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss" style="left: -182px; top: -5.99998px;">
-                                       <div class="sidebar_innersss" data-simplebar="init">
-                                          <div class="simplebar-wrapper" style="margin: 0px;">
-                                             <div class="simplebar-height-auto-observer-wrapper">
-                                                <div class="simplebar-height-auto-observer"></div>
-                                             </div>
-                                             <div class="simplebar-mask">
-                                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                                   <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
-                                                      <ul class="space-y-1">
-                                                         <li>
-                                                            Add to Collection
-                                                         </li>
-                                                         <li>Remove From Wishlist</li>
-                                                      </ul>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                             <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden; height: 42px;"></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="card-body">
-
-                                 <a href="shop-4.html" class="ext-lg font-medium mt-1 t truncate"> Men T-shirt </a>
-                                 <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
-                                    Add to Cart
-                                 </a>
-                                 <div class="text-xs font-semibold uppercase text-yellow-500">$19.99</div>
-                                 <div class="text-xs font-semibold ven-nam text-yellow-500">
-                                    <a href="shop-timeline.html">Forever 21</a>
-                                 </div>
-                                 <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-                           <div class="card">
-                              <div class="card-media h-44">
-                                 <div class="card-media-overly"></div>
-                                 <img src="{{ asset('images/tshert.png') }}" alt="" />
-                                 <div class="main-tools" style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
-                                    <a class="remove" href="#" aria-expanded="false"><i class="icon-feather-more-horizontal"></i> </a>
-                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop main-ss uk-drop-bottom-right" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss" style="left: -182px; top: -5.99998px;">
-                                       <div class="sidebar_innersss" data-simplebar="init">
-                                          <div class="simplebar-wrapper" style="margin: 0px;">
-                                             <div class="simplebar-height-auto-observer-wrapper">
-                                                <div class="simplebar-height-auto-observer"></div>
-                                             </div>
-                                             <div class="simplebar-mask">
-                                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                                   <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
-                                                      <ul class="space-y-1">
-                                                         <li>
-                                                            Add to Collection
-                                                         </li>
-                                                         <li>Remove From Wishlist</li>
-                                                      </ul>
-                                                   </div>
-                                                </div>
-                                             </div>
-                                             <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                                          </div>
-                                          <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                                             <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden; height: 42px;"></div>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="card-body">
-                                 <a href="shop-4.html" class="ext-lg font-medium mt-1 t truncate"> Men T-shirt </a>
-                                 <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
-                                    Add to Cart
-                                 </a>
-                                 <div class="text-xs font-semibold uppercase text-yellow-500">$19.99</div>
-                                 <div class="text-xs font-semibold ven-nam text-yellow-500">
-                                    <a href="shop-timeline.html">Forever 21</a>
-                                 </div>
-                                 <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
+                        @endforeach
                      </div>
                   </div>
 
@@ -1322,8 +1173,6 @@
 </div>
 <!-- Edit Address Modal -->
 
-
-
 <!-- upload cover Image Modal -->
 <div id="editCoverImage" class="create-post" uk-modal>
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
@@ -1445,7 +1294,6 @@
 <!-- Create post modal -->
 
 <!-- create poll post modal -->
-
 <div id="poll-post-modal" class="create-post" uk-modal>
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
 
@@ -1630,6 +1478,46 @@
 </div>
 <!--- create suggestion-post-modal--->
 
+<div id="add-product-category-modal" class="create-post main-post" uk-modal>
+   <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+      <div class="text-center py-4 border-b">
+         <h3 class="text-lg font-semibold">Add Category</h3>
+         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+      </div>
+      <form id="addProductCategoryForm" enctype="multipart/form-data" method="post">
+        @csrf
+        <div class="flex flex-1 items-start space-x-4 p-5">
+            <div class="flex-1 pt-2 small-textarea">
+               <textarea name="name" id="name" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="Enter Category Name"></textarea>
+            </div>
+         </div>                   
+         <div class="bsolute bottom-0 p-4 space-x-4 w-full">
+            <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
+               <div class="lg:block hidden"> Add Category Image </div>
+               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
+                  <input type="file" id="feature_image" name="feature_image" style="visibility:hidden;" onchange="ValidateFileUpload('feature_image','product_category_image');">
+                  <a href="#" onclick="$('#feature_image').trigger('click'); return false;">
+                  <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  </a>
+
+               </div>
+            </div>
+            <img id="product_category_image" />
+         </div>
+         <div class="flex items-center w-full justify-between p-3 border-t">
+            <div class="flex space-x-2 pull-right">
+               <button type="submit" id="addProductCategoryBtn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
+                  Add
+               </button>
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('add-product-category-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+                  Cancel </a>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
 @endsection
 
 @section('customScripts')

@@ -107,45 +107,27 @@
                            <div class="simplebar-mask">
                               <div class="simplebar-offset" style="right: -17px; bottom: 0px;">
                                  <div class="simplebar-content" style="padding: 0px 10px 0px 0px; height: auto; overflow: hidden scroll;">
-                                    <li>
-                                       <div class="cart_avatar">
-                                          <img src="{{ asset('images/product/2.jpg') }}" alt="" />
-                                       </div>
-                                       <div class="cart_text">
-                                          <div class="font-semibold leading-4 mb-1.5 text-base line-clamp-1">Wireless headphones</div>
-                                          <p class="text-sm">Type Accessories</p>
-                                       </div>
-                                       <div class="cart_price">
-                                          <span> $14.99 </span>
-                                          <button class="type">Add to cart</button>
-                                       </div>
-                                    </li>
-                                    <li>
-                                       <div class="cart_avatar">
-                                          <img src="{{ asset('images/product/13.jpg') }}" alt="" />
-                                       </div>
-                                       <div class="cart_text">
-                                          <div class="font-semibold leading-4 mb-1.5 text-base line-clamp-1">Parfum Spray</div>
-                                          <p class="text-sm">Type Parfums</p>
-                                       </div>
-                                       <div class="cart_price">
-                                          <span> $16.99 </span>
-                                          <button class="type">Add to cart</button>
-                                       </div>
-                                    </li>
-                                    <li>
-                                       <div class="cart_avatar">
-                                          <img src="{{ asset('images/product/15.jpg') }}" alt="" />
-                                       </div>
-                                       <div class="cart_text">
-                                          <div class="font-semibold leading-4 mb-1.5 text-base line-clamp-1">Herbal Shampoo</div>
-                                          <p class="text-sm">Type Herbel</p>
-                                       </div>
-                                       <div class="cart_price">
-                                          <span> $12.99 </span>
-                                          <button class="type">Add to cart</button>
-                                       </div>
-                                    </li>
+                                    @foreach ($wishlistedProducts as $wishlistedProduct)
+                                       @php
+                                          $unSerlizeProImage = unserialize($wishlistedProduct->image);
+                                          $productImage = reset($unSerlizeProImage);
+                                        @endphp
+                                       <li>
+                                          <div class="cart_avatar">
+                                             <img src="{{ url("public/images/product/$productImage") }}" alt="" />
+                                          </div>
+                                          <div class="cart_text">
+                                             <div class="font-semibold leading-4 mb-1.5 text-base line-clamp-1">{{ $wishlistedProduct->name }}</div>
+                                             @foreach ($wishlistedProduct->productCategoryId as $proCatId)
+                                                <p class="text-sm">{{ getProductCategoryNameById($proCatId->cat_id) }}</p>
+                                            @endforeach                                             
+                                          </div>
+                                          <div class="cart_price">
+                                             <span> ${{ $wishlistedProduct->price }} </span>
+                                             <button class="type">Add to cart</button>
+                                          </div>
+                                       </li>
+                                    @endforeach
                                  </div>
                               </div>
                            </div>
@@ -160,7 +142,7 @@
                      </ul>
 
                      <div class="cart_footer">
-                        <a href="cart.html" class="is_link become-sel"> Go to wishlist </a>
+                        <a href="{{ route('wishlist') }}" class="is_link become-sel"> Go to wishlist </a>
                      </div>
                   </div>
                </div>

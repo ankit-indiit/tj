@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Product;
+use App\Wishlist;
+use Auth;
 
 class FeedController extends Controller
 {
@@ -23,7 +26,9 @@ class FeedController extends Controller
      */
     public function index()
     {
-        $data = ['page_title' => 'Feed | TJ'];
+        $wishlistedProductId = Wishlist::where('user_id', Auth::user()->id)->pluck('product_id');
+        $wishlistedProducts = Product::whereIn('id', $wishlistedProductId)->select('id', 'name', 'image', 'price', 'slug')->get();
+        $data = ['page_title' => 'Feed | TJ', 'wishlistedProducts' => $wishlistedProducts];
         return view('feed',$data);
     }
     

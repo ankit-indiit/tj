@@ -18,6 +18,7 @@ use App\SellerWorkingHour;
 use App\BecomeSeller;
 use App\Coupon;
 use App\Product;
+use App\Wishlist;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Storage;
@@ -25,11 +26,6 @@ use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
@@ -57,7 +53,9 @@ class UserController extends Controller
                                 ->get();
         $coupons = Coupon::where('user_id', Auth::user()->id)->get();
         $products = Product::where('user_id', Auth::user()->id)->where('status', 1)->get();
-        $data = ['page_title' => 'My Profile | TJ', 'countries' => $countries, 'address' => $address, 'links' => $links, 'workingHours' => $workingHours, 'estimatedDelivery' => $estimatedDelivery, 'coupons' => $coupons, 'products' => $products];
+        $wishlistedProductId = Wishlist::where('user_id', Auth::user()->id)->pluck('product_id');
+        $wishlistedProducts = Product::whereIn('id', $wishlistedProductId)->get();
+        $data = ['page_title' => 'My Profile | TJ', 'countries' => $countries, 'address' => $address, 'links' => $links, 'workingHours' => $workingHours, 'estimatedDelivery' => $estimatedDelivery, 'coupons' => $coupons, 'products' => $products, 'wishlistedProducts' => $wishlistedProducts];
         
         return view('user.profile', $data);
     }
