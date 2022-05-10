@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Spatie\Searchable\Search;
+use App\Product;
+use App\ProductCategory;
+use App\User;
 use Auth;
 
 class HomeController extends Controller
@@ -34,4 +38,23 @@ class HomeController extends Controller
         return view('terms-conditions',$data);
     }
     
+    public function search(Request $request)
+    {
+        $searchBy = $request->search_option;
+        if ($request->search_option == 'category') {
+            $filteredData = ProductCategory::where('name', 'like', '%' . $request->search . '%')->get();
+        } elseif ($request->search_option == 'product') {
+            $filteredData = Product::where('name', 'like', '%' . $request->search . '%')->get();
+        } elseif ($request->search_option == 'people') {
+            $filteredData = User::select('id', 'name', 'profile_image')->where('name', 'like', '%' . $request->search . '%')->get();
+        } else {
+            $filteredData = (new Search())
+                ->registerModel(ProductCategory::class, 'name')
+                ->registerModel(Product::class, 'name')
+                ->registerModel(User::class, 'name')
+                ->perform($request->search);    
+        }
+        $data = ['page_title' => 'Search | TJ', 'searchBy' => $searchBy, 'filteredData' => $filteredData];
+        return view('search', $data);
+    }
 }

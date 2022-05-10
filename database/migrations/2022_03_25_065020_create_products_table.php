@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->integer('user_id')->nullable();
             $table->string('name')->nullable();
             $table->string('price')->nullable();
+            $table->string('discounted_price')->nullable();
             $table->integer('quantity')->nullable();
             $table->string('delivery_cost')->nullable();
             $table->longText('description')->nullable();
@@ -25,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->longText('image')->nullable();
             $table->string('slug')->unique();
             $table->string('sku')->unique();
+            $table->integer('feature')->nullable();
             $table->timestamps();
         });
     }

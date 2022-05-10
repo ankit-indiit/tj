@@ -611,8 +611,8 @@
             <h2 class="text-xl font-semibold"> Products
             </h2>
          </div>
-         <div id="divcheck" style="display:none;">
-            <a href="#" class="is_link featured-btn pull-right"> Add to featured products </a>
+         <div class="addFeatureProductBtn d-none">
+            <a href="javascript:void(0);" id="addFeatureProductBtn" class="is_link featured-btn pull-right"> Add to featured products </a>
          </div>
          <div class="wishlist-search">
             <div class="header_search" aria-expanded="false">
@@ -622,7 +622,7 @@
          </div>
          <a href="{{ route('product.create') }}" class="is_link featured-btn pull-right mx-1"> Add Product </a>
          <a href="javascript:void(0);" uk-toggle="target: #add-product-category-modal" class="is_link featured-btn pull-right mx-1"> Add Category </a>
-         <a href="{{ route('product.create') }}" class="is_link featured-btn pull-right mx-1"> Add Collection </a>
+         {{-- <a href="{{ route('product.create') }}" class="is_link featured-btn pull-right mx-1"> Add Collection </a> --}}
          </div>
       <div class="row">
          <div class="col-lg-12">
@@ -632,23 +632,62 @@
                      @foreach ($products as $product)
                         @php
                            $unSerlizeProImage = unserialize($product->image);
-                           $productImage = reset($unSerlizeProImage);
+                           $productImage = reset($unSerlizeProImage);                         
                         @endphp
                         <div class="col-sm-3">
                            <div class="card">
                               <div class="card-media h-44">
                                  <div class="card-media-overly"></div>
                                  <img src="{{ url("public/images/product/$productImage") }}" alt="">
-                                 <div class="product-list"> 
-                                    <label class="cont">
-                                    <input type="checkbox" class="checkme">
-                                    <span class="checkmark"></span>
-                                    </label>
+                                 <div class="main-tools" style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Edit Product">
+                                    <a class="remove" href="#" aria-expanded="false"><i class="icon-feather-more-horizontal"></i>
+                                    </a>
+                                    <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop main-ss uk-drop-bottom-right" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss" style="left: -182px; top: -6px; height: 80px !important;">
+                                       <div class="sidebar_innersss" data-simplebar="init">
+                                          <div class="simplebar-wrapper" style="margin: 0px;">
+                                             <div class="simplebar-height-auto-observer-wrapper">
+                                                <div class="simplebar-height-auto-observer"></div>
+                                             </div>
+                                             <div class="simplebar-mask">
+                                                <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                   <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
+                                                      <ul class="space-y-1 ">
+                                                         <li>
+                                                            <a href="{{ route('product.edit', $product->id) }}">Edit Product</a>
+                                                         </li>
+                                                         <li>
+                                                            <form action="javascript:void(0);" id="deleteSellerProduct" method="post">
+                                                               @csrf
+                                                               @method('DELETE')
+                                                               <input type="hidden" name="id" id="{{ $product->id }}" value="{{ $product->id }}">
+                                                               <button type="submit" id="deleteSellerProductBtn">Delete Product</button>
+                                                            </form>
+                                                         </li>       
+                                                      </ul>
+                                                   </div>
+                                                </div>
+                                             </div>                                             
+                                          </div>                                         
+                                       </div>
+                                    </div>
                                  </div>
+                                 @if ($product->feature != 1)
+                                    <div class="product-list feature-check-box">                                    
+                                       <label class="cont">
+                                          <input type="checkbox" class="checkme addFeatureProduct" name="addFeatureProduct[]" value="{{ $product->id }}">
+                                          <span class="checkmark"></span>
+                                       </label>
+                                    </div>
+                                 @endif
                               </div>
                               <div class="card-body">
                                  <a href="{{ route('product.detail', $product->slug) }}" class="ext-lg font-medium mt-1 t truncate"> {{ $product->name }} </a>
-                                 <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->price }}</div>
+                                 <div class="featuredProduct">
+                                    @if ($product->feature == 1)
+                                       <a href="javascript:void(0);" id="removeFeatureProduct" data-id="{{ $product->id }}" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">Featured</a>
+                                    @endif                                    
+                                 </div>
+                                 <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->discounted_price }}</div>
                                  <div class="text-xs font-semibold ven-nam text-yellow-500">
                                     @foreach ($product->productCategoryId as $proCatId)
                                        <a href="{{ route('category.show', str_replace(' ', '-', strtolower(getProductCategoryNameById($proCatId->cat_id)))) }}">
@@ -657,7 +696,7 @@
                                     @endforeach
                                  </div>
                                  <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+                                    {!! @showProductRating($product->id) !!}
                                  </div>
                               </div>
                            </div>

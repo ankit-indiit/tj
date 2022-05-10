@@ -19246,3 +19246,8 @@ a.ad_to_colletion_btn i {
 .error {
     color: red !important;
 }
+
+.chatContent {
+  overflow: scroll;
+  height: 600px;
+}

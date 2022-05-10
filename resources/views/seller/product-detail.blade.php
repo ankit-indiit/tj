@@ -27,73 +27,89 @@
                   <div class="product-details-desc">
                      <h3>{{ $productDetail->name }}</h3>
                      <div class="price">
-                        <span class="new-price">${{ $productDetail->price }}</span>
-                        <span class="old-price">$20.00</span>
+                        <span class="new-price">${{ $productDetail->discounted_price }}</span>
+                        <span class="old-price">${{ $productDetail->price }}</span>
                      </div>
-                     <div class="product-review">
-                        <div class="rating">
-                           <i class="fa fa-star"></i>
-                           <i class="fa fa-star"></i>
-                           <i class="fa fa-star"></i>
-                           <i class="fa fa-star"></i>
-                           <i class="fa fa-star-half-alt"></i>
-                        </div>
-                        <a href="#" class="rating-count">3 reviews</a>
+                     <div class="product-review">                        
+                        {!! showProductRating($productDetail->id) !!}
                      </div>
-                     <p>{{ $productDetail->description }}</p>
-                     <div class="product-add-to-cart">
-                        <div class="input-counter">
-                           <span class="minus-btn">
-                           <i class="fa fa-minus"></i>
-                           </span>
-                           <input type="text" value="1">
-                           <span class="plus-btn">
-                           <i class="fa fa-plus"></i>
-                           </span>
-                        </div>
-                        <a type="submit" class="default-btn" href="cart.html">
-                        Add to Cart
+                     <p>{{ $productDetail->description }}</p>                     
+                     @foreach ($productCollectionIds as $collectionId)
+                        <a href="javascript:void(0);" class="btn btn-secondary btn-sm">
+                           {{ getProductCollection($collectionId) }}
                         </a>
-                        <a href="#" class="is_link featured-btn pull-right" aria-expanded="false" style="
-                           margin-top: 0px;
-                           padding: 23px 20px;
-                           line-height: 2px;
-                           background: #ff980024;
-                           color: #ffc107;
-                           margin-right: 9px;
-                           "> Add to Collections </a>
-                        <div class="bg-white w-56 main-df shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss">
-                           <div class="sidebar_innersss" data-simplebar="init">
-                              <div class="simplebar-wrapper" style="margin: 0px;">
-                                 <div class="simplebar-height-auto-observer-wrapper">
-                                    <div class="simplebar-height-auto-observer"></div>
-                                 </div>
-                                 <div class="simplebar-mask">
-                                    <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                       <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
-                                          <ul class="space-y-1 ">
-                                             <li> summer collection 2021
-                                             </li>
-                                             <li> 
-                                                winter collection 2020
-                                             </li>
-                                             <li> 
-                                                Exclusive collection 
-                                             </li>
-                                          </ul>
+                     @endforeach
+                     <div class="product-add-to-cart">
+                        <div class="input-counter quantity">
+                           <span class="minus-btn">
+                              <a href="javascript:void(0);" class="dicreseProductQty">
+                                 <i class="fa fa-minus"></i>                        
+                              </a>
+                           </span>
+                           <input type="text" name="quantity" id="productQuantity{{ $productDetail->id }}" class="productQty" value="1">
+                           <input type="hidden" name="quantity" class="proQty" value="{{ $productDetail->quantity }}">
+                           <span class="plus-btn">
+                              <a href="javascript:void(0);" class="increseProductQty">
+                                 <i class="fa fa-plus"></i>                         
+                              </a>
+                           </span>
+                        </div>
+                        @if ($productDetail->check_cart_status == 1)
+                           <div class="addToCartDiv{{ $productDetail->id }}">
+                              <a type="submit" class="default-btn" href="{{ route('cart') }}">
+                                 Go To Cart
+                              </a>
+                           </div>
+                        @else
+                           <div class="addToCartDiv{{ $productDetail->id }}">
+                              <a type="submit" class="default-btn" href="javascript:void(0);" id="addToCart" data-product="{{ $productDetail->id }}">
+                                 Add to Cart
+                                 </a>
+                              </div>
+                        @endif
+                        @if (Auth::user()->switch_as == 'seller')
+                           <a href="javascript:void(0);" class="is_link featured-btn pull-right" aria-expanded="false" style="
+                              margin-top: 0px;
+                              padding: 23px 20px;
+                              line-height: 2px;
+                              background: #ff980024;
+                              color: #ffc107;
+                              margin-right: 9px;
+                              "> Add to Collections </a>
+                           @if (count($collections) > 0)
+                              <div class="bg-white w-56 main-df shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss">
+                                 <div class="sidebar_innersss" data-simplebar="init">
+                                    <div class="simplebar-wrapper" style="margin: 0px;">
+                                       <div class="simplebar-height-auto-observer-wrapper">
+                                          <div class="simplebar-height-auto-observer"></div>
                                        </div>
+                                       <div class="simplebar-mask">
+                                          <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                             <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
+                                                <ul class="space-y-1 ">
+                                                   @foreach ($collections as $collection)
+                                                      <li>
+                                                         <a href="javascript:void(0);" id="assignCollection" data-id="{{$collection->id}}" data-product="{{$productDetail->id}}">
+                                                            {{$collection->name}}
+                                                         </a>
+                                                      </li>
+                                                   @endforeach
+                                                </ul>
+                                             </div>
+                                          </div>
+                                       </div>
+                                       <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                       <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                       <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
                                     </div>
                                  </div>
-                                 <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
                               </div>
-                              <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                                 <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                              </div>
-                              <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                                 <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                              </div>
-                           </div>
-                        </div>
+                           @endif
+                        @endif
                      </div>                     
                   </div>
                </div>
@@ -155,80 +171,79 @@
                                           <a href="#" class="btn default-btn">Write a Review</a>
                                        </div>
                                        <div class="review-comments">
-                                          <div class="review-item">
-                                             <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
+                                          @foreach ($productReviews as $productReview)
+                                             <div class="review-item">
+                                                @if ($productReview->rating == 5)
+                                                   <div class="rating">
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                   </div>
+                                                @elseif ($productReview->rating == 4)
+                                                   <div class="rating">
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                   </div>
+                                                @elseif ($productReview->rating == 3)
+                                                   <div class="rating">
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                   </div>
+                                                @elseif ($productReview->rating == 2)
+                                                   <div class="rating">
+                                                      <i class="fa fa-star"></i>
+                                                      <i class="fa fa-star"></i>
+                                                   </div>
+                                                @elseif ($productReview->rating == 1)
+                                                   <div class="rating">
+                                                      <i class="fa fa-star"></i>       
+                                                   </div>
+                                                @endif                                          
+                                                <h3>{{ $productReview->title }}</h3>
+                                                <span><strong>{{ @show_user_name($productReview->user_id) }}</strong> on <strong>{{ $productReview->created_at }}</strong></span>
+                                                <p>{{ $productReview->comment }}</p>
+                                                <a href="#" class="review-report-link">Report as Inappropriate</a>
                                              </div>
-                                             <h3>Good</h3>
-                                             <span><strong>Admin</strong> on <strong>Sep 21, 2019</strong></span>
-                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-                                             <a href="#" class="review-report-link">Report as Inappropriate</a>
-                                          </div>
-                                          <div class="review-item">
-                                             <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                             </div>
-                                             <h3>Good</h3>
-                                             <span><strong>Admin</strong> on <strong>Sep 21, 2019</strong></span>
-                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-                                             <a href="#" class="review-report-link">Report as Inappropriate</a>
-                                          </div>
-                                          <div class="review-item">
-                                             <div class="rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                             </div>
-                                             <h3>Good</h3>
-                                             <span><strong>Admin</strong> on <strong>Sep 21, 2019</strong></span>
-                                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
-                                             <a href="#" class="review-report-link">Report as Inappropriate</a>
-                                          </div>
+                                          @endforeach
                                        </div>
-                                       <div class="review-form">
-                                          <h3>Write a Review</h3>
-                                          <form>
-                                             <div class="row">
-                                                <div class="col-lg-6 col-md-6">
-                                                   <div class="form-group">
-                                                      <label>Name</label>
-                                                      <input type="text" id="name" name="name" placeholder="Enter your name" class="form-control">
+                                       @if (checkIfUserSubmitedReview($productDetail->id) != 1)    
+                                          <div class="review-form">
+                                             <h3>Write a Review</h3>
+                                             <form id="productReviewForm" action="{{ route('product-review') }}" method="post">
+                                                @csrf
+                                                <input type="hidden" name="product_id" value="{{ $productDetail->id }}">
+                                                <div class="row">                               
+                                                   <div class="col-lg-6 col-md-6">
+                                                      <div class="form-group">
+                                                         <label>Rating</label>
+                                                         <select class="star-rating" name="rating">
+                                                             <option value="">Select a rating</option>
+                                                             <option value="5">Excellent</option>
+                                                             <option value="4">Very Good</option>
+                                                             <option value="3">Average</option>
+                                                             <option value="2">Poor</option>
+                                                             <option value="1">Terrible</option>
+                                                         </select>
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-lg-12 col-md-12">
+                                                      <div class="form-group">
+                                                         <label>Body of Review (1500)</label>
+                                                         <textarea name="comment" id="review-body" cols="30" rows="3" placeholder="Write your comments here" class="form-control"></textarea>
+                                                      </div>
+                                                   </div>
+                                                   <div class="col-lg-12 col-md-12">
+                                                      <button type="submit" id="productReviewBtn" class="btn default-btn">Submit Review</button>
                                                    </div>
                                                 </div>
-                                                <div class="col-lg-6 col-md-6">
-                                                   <div class="form-group">
-                                                      <label>Email</label>
-                                                      <input type="email" id="email" name="email" placeholder="Enter your email" class="form-control">
-                                                   </div>
-                                                </div>
-                                                <div class="col-lg-12 col-md-12">
-                                                   <div class="form-group">
-                                                      <label>Review Title</label>
-                                                      <input type="text" id="review-title" name="review-title" placeholder="Enter your review a title" class="form-control">
-                                                   </div>
-                                                </div>
-                                                <div class="col-lg-12 col-md-12">
-                                                   <div class="form-group">
-                                                      <label>Body of Review (1500)</label>
-                                                      <textarea name="review-body" id="review-body" cols="30" rows="3" placeholder="Write your comments here" class="form-control"></textarea>
-                                                   </div>
-                                                </div>
-                                                <div class="col-lg-12 col-md-12">
-                                                   <button type="submit" class="btn default-btn">Submit Review</button>
-                                                </div>
-                                             </div>
-                                          </form>
-                                       </div>
+                                             </form>
+                                          </div>
+                                       @endif
                                     </div>
                                  </div>
                               </div>
@@ -259,7 +274,6 @@
 	               		@php
 		                   $unSerlizeProImage = unserialize($relatedProduct->image);
 		                   $productImage = reset($unSerlizeProImage);
-                         $checkWishlist = checkIfProductInWishlist(Auth::user()->id, $relatedProduct->id);
 		                @endphp
 		                  <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
 		                     <div class="card">
@@ -302,9 +316,7 @@
 		                                 </div>
 		                              </div>
 		                           </div>
-		                           <a href="javascript:void(0);" id="addOrRemoveProductToWishlist" data-id="{{ $relatedProduct->id }}" class="bg-{{$checkWishlist == 1 ? 'blue' : 'red'}}-100 absolute right-2 top-2 p-0.5 px-1.5 rounded-full text-{{$checkWishlist == 1 ? 'blue' : 'red'}}-500">
-		                           <i class="icon-feather-heart"> </i>
-		                           </a>
+		                           {!! addToWishlistButtonSection(Auth::user()->id, $relatedProduct->id) !!}
 		                        </div>
 		                        <div class="card-body">                          
 		                           <div class="ext-lg font-medium mt-1 t truncate">
@@ -334,32 +346,105 @@
 @section('customScripts')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
-  $(document).on('click', '#addOrRemoveProductToWishlist', function(){
-    var productId = $(this).data('id');
-    $.ajax({
-        headers: {
-            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: 'post',
-        url: _baseURL + "/add-to-wishlist",
-        data: { productId: productId },
-        dataType: 'json',
-        success: function (data) {
-          console.log(data);
-          if (data.erro == '101') {
-              swal("", data.message, "success", {
-                 button: "close",
-              });              
-              $('.swal-button--confirm').on('click', function(){
-                 window.location.reload();
-              });
-           } else {
-              swal("", data.message, "error", {
-                 button: "close",
-              });              
-           }
-        }
-    });
-  });
+   $(document).ready(function(){
+      $('.tab ul.tabs').addClass('active').find('> li:eq(0)').addClass('current');
+         $('.tab ul.tabs li a').on('click', function (g) {
+            var tab = $(this).closest('.tab'), 
+            index = $(this).closest('li').index();
+            tab.find('ul.tabs > li').removeClass('current');
+            $(this).closest('li').addClass('current');
+            tab.find('.tab_content').find('div.tabs_item').not('div.tabs_item:eq(' + index + ')').slideUp();
+            tab.find('.tab_content').find('div.tabs_item:eq(' + index + ')').slideDown();
+            g.preventDefault();
+      });
+      var starRatingControl = new StarRating('.star-rating',{
+          tooltip: 'Select a Rating',
+      });
+   });
+
+  // $(document).on('click', '#addProductToWishlist', function(){
+  //   var productId = $(this).data('id');
+  //   $.ajax({
+  //       headers: {
+  //           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+  //       },
+  //       type: 'post',
+  //       url: _baseURL + "/add-to-wishlist",
+  //       data: { productId: productId },
+  //       dataType: 'json',
+  //       success: function (data) {
+  //         console.log(data);
+  //         if (data.erro == '101') {
+  //             swal("", data.message, "success", {
+  //                button: "close",
+  //             });              
+  //             $('.swal-button--confirm').on('click', function(){
+  //                window.location.reload();
+  //             });
+  //          } else {
+  //             swal("", data.message, "error", {
+  //                button: "close",
+  //             });              
+  //          }
+  //       }
+  //   });
+  // });
+
+   $("#productReviewForm").validate({
+      rules: {
+         rating: {
+            required: true,
+         },
+         comment: {
+            required: true,
+         },
+      },
+      messages: {
+         rating: "Please enter your rating.",
+         comment: "Please enter comment.",
+      },
+      submitHandler: function(forms,e) {
+         e.preventDefault();
+         var form = $('#productReviewForm')[0];
+         var serializedData = new FormData(form);
+         //var serializedData = $(form).serialize();
+         $("#productReviewBtn").attr("disabled", true);
+         $('#productReviewBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+         $.ajax({
+            headers: {
+               'X-CSRF-Token': $('input[name="_token"]').val()
+            },
+            type: 'post',
+            url: "{{ url('product-review') }}",
+            data: serializedData,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(data) {
+               
+               $("#productReviewBtn").attr("disabled", false);
+
+               $('#productReviewBtn').html('Post');
+
+               if (data.erro == '101') {
+                  swal("", data.message, "success", {
+                     button: "close",
+                  });
+
+                  $("#productReviewForm").trigger('reset');
+                  $(".review-form").addClass('d-none');
+                  $(".review-comments").append(data.data);
+                  
+               } else {
+                  swal("", data.message, "error", {
+                     button: "close",
+                  });
+               }
+            }
+         });
+         return false;
+      }
+   });
 </script>
 @endsection

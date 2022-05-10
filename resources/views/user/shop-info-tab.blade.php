@@ -1,5 +1,59 @@
 <div class="row mt-4">
    <div class="col-12">
+      <h4 class="text-xl mb-3 font-semibold">  Shop Image </h4>
+      <div class="name-info">
+        <div class="row">
+            <div class="col-sm-9">
+               @php $shopImage = ''; @endphp
+               @foreach ($shopInfo as $shop)
+                    @php $shopImage = $shop->image; @endphp
+                    <div class="w-25">
+                        <img src="{{$shop->image}}" >
+                    </div>
+               @endforeach
+            </div>
+            <div class="col-sm-3">
+                <a href="javascript:void(0);" uk-toggle="target: #add-shop-image-modal" title="Add Shop Image">
+                    <i class="fa fa-{{$shopImage == '' ? 'plus' : 'edit'}}" aria-hidden="true"></i>
+                </a>  
+            </div>
+        </div>
+      </div>
+   </div>
+</div>
+<div class="row mt-4">
+   <div class="col-12">
+      <h4 class="text-xl mb-3 font-semibold">  Shop Category </h4>
+      <div class="name-info">
+        <div class="row">
+            <div class="col-sm-9">
+                @foreach ($shopCategories as $shopCategory)
+                    <div class="row">
+                        <div class="col-sm-9">               
+                            <a href="#" class="name-fld">
+                                <i class="fa fa-list-alt" aria-hidden="true"></i> 
+                                {{$shopCategory->name}}
+                            </a>
+                        </div>                
+                        <div class="col-sm-3">
+                            <a href="javascript:void(0);" id="editShopCategory" data-id="{{$shopCategory->id}}" title="Edit Shop Image">
+                                <i class="fa fa-edit" aria-hidden="true"></i>
+                            </a>  
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <div class="col-sm-3">
+                <a href="javascript:void(0);" uk-toggle="target: #add-shop-category-modal" title="Add Shop Image">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                </a>  
+            </div>
+        </div>
+      </div>
+   </div>
+</div>
+<div class="row mt-4">
+   <div class="col-12">
       <h4 class="text-xl mb-3 font-semibold">  Social Links </h4>
       <div class="name-info">
         <div class="row">
@@ -60,12 +114,12 @@
       <h4 class="text-xl mb-3 font-semibold"> Estimated Delivery </h4>
       <div class="name-info">
         <div class="row">
-            @foreach ($estimatedDelivery as $delivery)
+            @foreach ($shopInfo as $shop)
                 <div class="col-sm-9">                
                    <a href="#" class="name-fld"><i class="fa fa-truck" aria-hidden="true"></i>
-                   {{$delivery->estimated_delivery}}</a>
+                   {{$shop->estimated_delivery}}</a>
                 </div>
-                @if ($delivery->estimated_delivery == NULL)
+                @if ($shop->estimated_delivery == NULL)
                     <div class="col-sm-3">
                         <a href="javascript:void(0);" uk-toggle="target: #add-estimated-delivery" title="Add Estimated Delivery">
                             <i class="fa fa-plus" aria-hidden="true"></i>
@@ -73,7 +127,7 @@
                     </div>
                 @else
                     <div class="col-sm-3">
-                        <a href="javascript:void(0);" class="editEstimateDelevery" data-id="{{$delivery->id}}" title="Edit Estimated Delivery">
+                        <a href="javascript:void(0);" class="editEstimateDelevery" data-id="{{$shop->id}}" title="Edit Estimated Delivery">
                             <i class="fa fa-edit" aria-hidden="true"></i>
                         </a> 
                     </div>
@@ -113,6 +167,75 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div id="add-shop-image-modal" class="create-post" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+        <div class="text-center py-4 border-b">
+           <h3 class="text-lg font-semibold" id="postTitle">{{$shopImage == '' ? 'Add' : 'Change'}} Shop Image</h3>
+           <span id="err_mess" style="color: red;font-weight: 700;padding: 5px 5px 5px 5px;"></span>
+           <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+        </div>
+        <form id="addShopImageForm" enctype="multipart/form-data" method="post">
+            @csrf
+            <div class="text-center px-4">                
+                <div class="bsolute bottom-0 p-4 space-x-4 w-full">
+            <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
+               <div class="lg:block hidden"> Add to your shop </div>
+                   <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
+                      <input type="file" id="shopImageUpload" name="shopImageUpload" style="visibility:hidden;" onchange="ValidateFileUpload('shopImageUpload','outputShopImage')">
+                      <a href="#" onclick="$('#shopImageUpload').trigger('click'); return false;">
+                         <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                         </svg>
+                      </a>                      
+                   </div>
+                </div>
+                <img id="outputShopImage">
+             </div>
+                <button type="submit" id="addShopImageBtn" class="btn btn-primary btn-sm mb-4">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="add-shop-category-modal" class="create-post" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+        <div class="text-center py-4 border-b">
+           <h3 class="text-lg font-semibold" id="postTitle">Shop Category</h3>
+           <span id="err_mess" style="color: red;font-weight: 700;padding: 5px 5px 5px 5px;"></span>
+           <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+        </div>
+        <form id="addShopCategoryForm" enctype="multipart/form-data" method="post">
+            @csrf
+            <div class="text-center px-4">                
+                <div class="mx-4 my-4">
+                    <input type="text" name="name" class="form-control border" placeholder="Enter Category Name">
+                </div>
+                <button type="submit" id="addShopCategoryBtn" class="btn btn-primary btn-sm mb-4">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="edit-shop-category-modal" class="create-post" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+        <div class="text-center py-4 border-b">
+           <h3 class="text-lg font-semibold" id="postTitle">Shop Category</h3>
+           <span id="err_mess" style="color: red;font-weight: 700;padding: 5px 5px 5px 5px;"></span>
+           <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+        </div>
+        <form id="updateShopCategoryForm" enctype="multipart/form-data" method="post">
+            @csrf
+            <div class="text-center px-4">                
+                <div class="mx-4 my-4">
+                    <input type="hidden" name="id" class="form-control border shop-category-id" placeholder="Enter Category Name">
+                    <input type="text" name="name" class="form-control border shop-category" placeholder="Enter Category Name">
+                </div>
+                <button type="submit" id="updateShopCategoryBtn" class="btn btn-primary btn-sm mb-4">Add</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -231,7 +354,20 @@
         <form id="addSellerEstimatedDelivery" method="post">
             @csrf
             <div class="text-center px-4">
-                <input type="text" class="form-control my-4 border estimated-delivery" placeholder="Enter Estimated Delivery" name="estimated_delivery">
+                <div class="row">
+                  <div class="col-md-4">
+                    <input type="number" class="form-control my-4 border estimate-day-to" placeholder="Estimate Day To" name="estimate_day_to">
+                  </div>
+                  <div class="col-md-1 pt-2">
+                    <h5 class="pt-4">To</h5>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="number" class="form-control my-4 border estimated-day" placeholder="Estimated Day" name="estimated_day">
+                  </div>
+                  <div class="col-md-2 pt-2">
+                    <h5 class="pt-4">Days</h5>
+                  </div>
+                </div>      
                 <button type="submit" id="addSellerEstimatedDeliveryBtn" class="btn btn-primary btn-sm mb-4">Add</button>
             </div>
         </form>
@@ -248,7 +384,20 @@
         <form id="editSellerEstimatedDelivery" method="post">
             @csrf
             <div class="text-center px-4">
-                <input type="text" class="form-control my-4 border estimated-delivery" placeholder="Enter Estimated Delivery" name="estimated_delivery">
+              <div class="row">
+                <div class="col-md-4">
+                  <input type="number" class="form-control my-4 border estimate-day-to" placeholder="Estimate Day To" name="estimate_day_to">
+                </div>
+                <div class="col-md-1 pt-2">
+                  <h5 class="pt-4">To</h5>
+                </div>
+                <div class="col-md-4">
+                  <input type="number" class="form-control my-4 border estimated-day" placeholder="Estimated Day" name="estimated_day">
+                </div>
+                <div class="col-md-2 pt-2">
+                  <h5 class="pt-4">Days</h5>
+                </div>
+              </div>                
                 <button type="submit" id="editSellerEstimatedDeliveryBtn" class="btn btn-primary btn-sm mb-4">Add</button>
             </div>
         </form>
@@ -265,12 +414,11 @@
         <form id="addDiscountCoupon" method="post">
             @csrf
             <div class="text-center px-4">
-                <input type="text" class="form-control my-4 border coupon-name" placeholder="Enter Coupon Name" name="coupon_name">
-                <input type="text" class="form-control my-4 border coupon-title" placeholder="Enter Coupon Title" name="title">
-                <input type="text" class="form-control my-4 border coupon-description" placeholder="Enter Coupon Description" name="description">
-                <input type="text" class="form-control my-4 border coupon-type" placeholder="Enter Coupon Type" name="type">
-                <input type="text" class="form-control my-4 border coupon-expired-on" placeholder="Enter Coupon Expiry" name="expired_on">
-                <input type="text" class="form-control my-4 border coupon-discounted-value" placeholder="Enter Discounted Value" name="discounted-value">
+                <input type="text" class="form-control my-4 border" placeholder="Enter Coupon Title" name="title">
+                <input type="text" class="form-control my-4 border" placeholder="Enter Coupon Description" name="description">
+                <input type="text" class="form-control my-4 border" placeholder="Enter Coupon Type" name="type">
+                <input type="text" class="form-control my-4 border" placeholder="Enter Coupon Expiry" name="expired_on">
+                <input type="text" class="form-control my-4 border" placeholder="Enter Discounted Value" name="discounted-value">
                 <button type="submit" id="addDiscountCouponBtn" class="btn btn-primary btn-sm mb-4">Add</button>
             </div>
         </form>
@@ -288,7 +436,6 @@
             @csrf
             <div class="text-center px-4">
                 <input type="hidden" name="id" class="coupon-id">
-                <input type="text" class="form-control my-4 border coupon-name" placeholder="Enter Coupon Name" name="coupon_name">
                 <input type="text" class="form-control my-4 border coupon-title" placeholder="Enter Coupon Title" name="title">
                 <input type="text" class="form-control my-4 border coupon-description" placeholder="Enter Coupon Description" name="description">
                 <input type="text" class="form-control my-4 border coupon-type" placeholder="Enter Coupon Type" name="type">

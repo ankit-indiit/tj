@@ -18,6 +18,7 @@ use App\PostsLike;
 use App\PostsPoll;
 use App\PostsComments;
 use App\CommentLike;
+use App\BecomeSeller;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Storage;
@@ -34,6 +35,9 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->switch_as == 'seller') {
+            $request['store_id'] = BecomeSeller::where('user_id', Auth::user()->id)->pluck('id')->first();
+        }
         $image = '';
         switch ($request->postType) {
             case 1:
@@ -50,7 +54,8 @@ class PostController extends Controller
                     'user_id' => Auth::user()->id,
                     'content' => $request->post_content,
                     'post_type' => $request->postType,
-                    'image'     => $image
+                    'image'     => $image,
+                    'store_id'     => $request->store_id
                 ];
 
                 break;
@@ -70,7 +75,8 @@ class PostController extends Controller
                     'post_type' => $request->postType,
                     'button1' => $request->pollButton1,
                     'button2' => $request->pollButton2,
-                    'image'     => $image
+                    'image'     => $image,
+                    'store_id'     => $request->store_id
                 ];
                 break;
             case 3:

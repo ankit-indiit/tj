@@ -58,22 +58,26 @@
 
             @php $user_posts = user_posts(); @endphp
             @if(count($user_posts) > 0)
-                @foreach($user_posts as $posts)
-                    @if($posts->post_type == 1)
-                        @include('layouts.templates.simplepost' , array('post'=>$posts))
-                    @elseif(($posts->post_type == 2))
-                        @include('layouts.templates.pollpost', array('post'=>$posts))
-                    @elseif(($posts->post_type == 3))
-                        @include('layouts.templates.productpost', array('post'=>$posts))
-                    @elseif(($posts->post_type == 4))
-                        @include('layouts.templates.suggestionpost', array('post'=>$posts))
-                    @endif
-                @endforeach              
+              @foreach($user_posts as $posts)
+                  @if($posts->post_type == 1)
+                      @include('layouts.templates.simplepost' , array('post'=>$posts))
+                  @elseif(($posts->post_type == 2))
+                      @include('layouts.templates.pollpost', array('post'=>$posts))
+                  @elseif(($posts->post_type == 3))
+                      @include('layouts.templates.productpost', array('post'=>$posts))
+                  @elseif(($posts->post_type == 4))
+                      @include('layouts.templates.suggestionpost', array('post'=>$posts))
+                  @endif
+              @endforeach              
+              <div class="flex justify-center mt-6">
+                 <a href="#" class="bg-white dark:bg-gray-900 font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white"> Load more ..</a>
+              </div>
+            @else
+              <div class="flex justify-center mt-6">
+                 No post found
+              </div>
             @endif
 
-            <div class="flex justify-center mt-6">
-               <a href="#" class="bg-white dark:bg-gray-900 font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white"> Load more ..</a>
-            </div>
          </div>
 
          <div id="update-post-modal" class="create-post" uk-modal>

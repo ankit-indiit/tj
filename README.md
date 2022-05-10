@@ -77,3 +77,44 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 "# tj" 
+
+===========Done list============
+Add product categories and listing on categories page.
+Add product collections and listing on collection page
+Filter product on the bases of categories.
+Create shop page and listing categories and products.
+Add to wishlist functionality.
+Delete product from wishlist.
+Show wishlist menu only to buyer
+Create wishlist page and listing wishlisted product.
+Create Inventory page and listing products.
+Change sidebar for seller and buyer.
+Create trending product files and listing.
+
+validatiion on become seller form - done
+remove refresh on like post - done
+hide disable comment option to poll post - done
+Shop info tab issue - done
+Show discount coupon to user wise - done
+Edit user profile functionality -done
+Add collection issue on add product page - done
+Show add category option to admin only - done
+
+
+Add validation on become seller form
+Fixed like post issue.
+Fixed social link (add, update) issue on shop info tab
+Fixed working hours (add, update) issue on shop info tab
+Fixed estimated delivery (add, update) issue on shop info tab.
+Show discount coupon user wise.
+Hide disable comment option to poll post.
+Edit and update user profile and cover image functionality.
+Show add category and add collection button to admin only.
+Create Trending, Best seller, Featured product files.
+Dynamic wishlist tab in user profile.
+Dynamic wishlist tab on feed page right sidebar.
+Create friends & followers files.
+
+
+===========
+Dinamic photos tab in my profile page for seller and buyer.

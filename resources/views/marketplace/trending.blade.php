@@ -25,16 +25,14 @@
                        <div class="card-media h-44">
                           <div class="card-media-overly"></div>
                           <img src="{{ url("public/images/product/$productImage") }}" alt="">
-                          <a href="#" class="bg-red-100 absolute right-2 top-2 p-0.5 px-1.5 rounded-full text-red-500">
-                          <i class="icon-feather-heart"> </i>
-                          </a>
+                          <div class="product-wishlist-btn-section{{ $product->id }}">
+                            {!! addToWishlistButtonSection(Auth::user()->id, $product->id) !!}
+                          </div>  
                        </div>
                        <div class="card-body">
                           <div class="ext-lg font-medium mt-1 t truncate">{{ $product->name }}</div>
-                          <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
-                          Add to Cart
-                          </a>
-                          <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->price }}</div>
+                          {!! productCartButton($product->id) !!}
+                          <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->discounted_price }}</div>
                           <div class="text-xs font-semibold ven-nam text-yellow-500">
                             @foreach ($product->productCategoryId as $proCatId)
                               <a href="{{ route('category.show', str_replace(' ', '-', strtolower(getProductCategoryNameById($proCatId->cat_id)))) }}">
@@ -43,7 +41,7 @@
                             @endforeach
                           </div>
                           <div class="ratings">
-                             <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+                             {!! @showProductRating($product->id) !!}
                           </div>
                        </div>
                     </div>

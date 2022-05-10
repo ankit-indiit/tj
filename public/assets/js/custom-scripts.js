@@ -231,3 +231,409 @@ $(document).ready(function(){
 $(document).on('click', '#closeBecomeSeller', function(){
     setCookie("becomeSellerNotification", "closed");
 });
+
+var url = document.location.toString();
+if (url.match('#')) {
+    if (url.split('#')[1] == 'collection') {
+        $('#home-tab').removeClass('active');
+        $('#home').removeClass('active');
+        $('#collectionTab').addClass('active');
+        $('#collection-tab').addClass('active');
+    }
+//$('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+       // $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').trigger('click');
+       // $(".conf-fisrt").hide();
+} 
+
+$(document).on('click', '#followForFriendship', function(){
+    var friendId = $(this).data('id');
+    $('#addToFriendList').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/add-to-friend-list",
+        data: { 
+            friendId: friendId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {            
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+
+                let addedData = '<a href="javascript:void(0);" id="cancelOrunFollowFriend" data-id="'+friendId+'" data-status="pending" class="btn btn-primary btn-sm">Requested</a>';
+
+                $('.userFriendshipBtnSection'+friendId+'').html(addedData);
+                $('.suggestion-list-'+friendId+'').addClass('d-none');
+           }
+        }            
+      });
+});
+
+$(document).on('click', '#cancelOrunFollowFriend', function(){
+    var friendId = $(this).data('id');
+    var friendShipStatus = $(this).data('status');
+    $('#addToFriendList').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/cancel-or-follow-request",
+        data: { 
+            friendId: friendId,
+            friendShipStatus: friendShipStatus,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {
+                // $('#addToFriendList').html('Follow');
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+
+                let addedData = '<a href="javascript:void(0);" id="followForFriendship" data-id="'+friendId+'" data-status="'+friendShipStatus+'" class="btn btn-primary btn-sm">Follow</a>';
+
+                $('.userFriendshipBtnSection'+friendId+'').html(addedData);
+                $('#followingUser').addClass('d-none');
+           }
+        }            
+      });
+});
+
+$(document).on('click', '#blockFriend', function(){
+    var friendId = $(this).data('id');
+    $('#addToFriendList').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/block-friend",
+        data: { 
+            friendId: friendId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+
+                let addedData = '<a href="javascript:void(0);" id="unBlockFriend" data-id="'+friendId+'" class="btn btn-secondary btn-sm">Blocked</a>';
+
+                $('.userFriendshipBtnSection'+friendId+'').html(addedData);
+           }
+        }            
+      });
+});
+
+$(document).on('click', '#unBlockFriend', function(){
+    var friendId = $(this).data('id');
+    $('#addToFriendList').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/un-block-friend",
+        data: { 
+            friendId: friendId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+
+                let addedData = '<a href="javascript:void(0);" id="cancelOrunFollowFriend" data-id="'+friendId+'" data-status="confirmed" class="btn btn-primary btn-sm">Friend</a><a href="javascript:void(0);" id="blockFriend" data-id="'+friendId+'" data-status="blocked" class="btn btn-danger btn-sm ml-2">Block</a>';
+
+                $('.userFriendshipBtnSection'+friendId+'').html(addedData);
+           }
+        }            
+      });
+});
+
+$(document).on('click', '#followBack', function(){
+    var friendshipId = $(this).data('id');
+    var userId = $(this).data('user-id');
+    var notificationId = $(this).data('notification-id');
+    // alert(userId);
+    $(this).html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/follow-back",
+        data: { 
+            friendshipId: friendshipId,
+            userId: userId,
+            notificationId: notificationId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+
+                $('.followBackBtnSec').html('');
+                let addedData = '<a href="javascript:void(0);" id="cancelOrunFollowFriend" data-id="'+userId+'" data-status="confirmed" class="btn btn-primary btn-sm">Friend</a><a href="javascript:void(0);" id="blockFriend" data-id="'+userId+'" data-status="blocked" class="btn btn-danger btn-sm ml-2">Block</a>';
+
+                $('.userFriendshipBtnSection'+userId+'').html(addedData);
+           }           
+        }            
+      });
+});
+
+$(document).on('click', '#deleteSenderRequest', function(){
+    var friendshipId = $(this).data('id');
+    var notoficationId = $(this).data('notification-id');
+    // alert(userId);
+    $(this).html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/delete-follow-request",
+        data: { 
+            friendshipId: friendshipId,
+            notoficationId: notoficationId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+                $('.followBackBtnSec').html('');
+           }           
+        }            
+      });
+});
+
+$(document).on('click', '#followShop', function(){
+    var shopId = $(this).data('id');
+    $('#followShop').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/follow-shop",
+        data: { 
+            shopId: shopId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {            
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+
+                let addedData = '<a href="#" class="flex items-center justify-center h-9 px-4 rounded-md bg-gray-200 font-semibold" id="unFollowShop" data-id="shopId"> Unfollow </a>';
+                $('.followShopBtnSection'+shopId+'').html(addedData);
+                $('.followShopList'+shopId+'').addClass('d-none');
+                $('.followShop'+shopId+'').html('Joined');
+           }
+        }            
+    });
+});
+
+$(document).on('click', '#unFollowShop', function(){
+    var shopId = $(this).data('id');
+    $('#unFollowShop').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/un-follow-shop",
+        data: { 
+            shopId: shopId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {            
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+                let addedData = '<a href="javascript:void(0);" class="bg-blue-600 flex flex-1 h-8 items-center justify-center rounded-md text-white capitalize followShop'+shopId+'" id="followShop" data-id="'+shopId+'">Join</a><a href="shop-profile/'+shopId+'" class="bg-gray-200 flex flex-1 h-8 items-center justify-center rounded-md capitalize">View</a>';
+                $('.shopJoinUnjoinSection'+shopId+'').html(addedData);
+           }
+        }            
+    });
+});
+
+var productIds = [];
+
+$(function(){
+  $('.addFeatureProduct').click(function(){
+    if (($('.addFeatureProduct:checkbox:checked').length) > 0) {
+        $('.addFeatureProductBtn').removeClass('d-none');
+           } else {
+        $('.addFeatureProductBtn').addClass('d-none');
+    }
+  });
+
+  $('#addFeatureProductBtn').click(function(){
+        var values = $('.addFeatureProduct:checkbox:checked').map(function () {
+          return this.value;
+        }).get();
+
+        $.ajax({
+            headers: {
+               'X-CSRF-Token': $('input[name="_token"]').val()
+            },    
+            type: 'post',
+            url: _baseURL + "/add-feature-product",
+            data: { 
+                productIds: values,
+            },
+            success: function (data) {   
+               if (data.erro == '101') {            
+                    swal("", data.message, "success", {
+                        button: "close",
+                    });
+                    $('.swal-button--confirm').on('click', function(){
+                        window.location.reload();
+                    });                  
+               }
+            }            
+        });
+    });
+});
+
+$(document).on('click', '#removeFeatureProduct', function(){
+    var productId = $(this).data('id');
+    $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },    
+        type: 'post',
+        url: _baseURL + "/remove-feature-product",
+        data: { 
+            productId: productId,
+        },
+        success: function (data) {   
+           if (data.erro == '101') {            
+                swal("", data.message, "success", {
+                    button: "close",
+                });
+                $('.swal-button--confirm').on('click', function(){
+                    window.location.reload();
+                });                    
+           }
+        }            
+    });
+});
+
+$(document).on('click', '#addProductToWishlist', function(){
+    var productId = $(this).data('id');
+    $.ajax({
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'post',
+        url: _baseURL + "/add-to-wishlist",
+        data: { productId: productId },
+        dataType: 'json',
+        success: function (data) {
+          console.log(data);
+          if (data.erro == '101') {
+              swal("", data.message, "success", {
+                 button: "close",
+              });
+              $('.product-wishlist-btn-section'+productId+'').html(data.html);              
+              // $('.swal-button--confirm').on('click', function(){
+              //    window.location.reload();
+              // });
+           } else {
+              swal("", data.message, "error", {
+                 button: "close",
+              });              
+           }
+        }
+    });
+  });
+
+$(document).on('click', '#assignCollection', function(){
+    var collectionId = $(this).data('id');
+    var productId = $(this).data('product');
+    $.ajax({
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'post',
+        url: _baseURL + "/assign-collection-to-product",
+        data: { 
+            collectionId: collectionId,
+            productId: productId,
+        },
+        dataType: 'json',
+        success: function (data) {
+          console.log(data);
+          if (data.erro == '101') {
+              swal("", data.message, "success", {
+                 button: "close",
+              });              
+              $('.swal-button--confirm').on('click', function(){
+                 window.location.reload();
+              });
+           } else {
+              swal("", data.message, "error", {
+                 button: "close",
+              });              
+           }
+        }
+    });
+});
+
+$("#deleteSellerProduct").validate({
+  rules: {
+     
+  },
+  messages: {
+      
+  },
+  submitHandler: function(forms, e) {
+    e.preventDefault();
+    var id = $('#id').val();
+    var form = $('#deleteSellerProduct')[0];
+    var serializedData = new FormData(form);
+    // serializedData.append('product_images', JSON.stringify(all_uploaded_files));
+    // console.log(serializedData);
+    
+     $("#deleteSellerProductBtn").attr("disabled", true);
+     $('#deleteSellerProductBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+     $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },
+        type: 'POST',
+        enctype: 'multipart/form-data',        
+        url: _baseURL + "/product/"+id,
+        data: serializedData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(data) {
+           $("#deleteSellerProductBtn").attr("disabled", false);
+
+           if (data.erro == '101') {
+              swal("", data.message, "success", {
+                 button: "close",
+              });
+
+              $('.swal-button--confirm').on('click', function(){
+                 window.location.reload();
+              });
+           } else {
+              swal("", data.message, "error", {
+                 button: "close",
+              });
+           }
+        }
+     });
+     return false;
+  }
+}); 

@@ -14,7 +14,8 @@
         "laravelcollective/html": "~6.0",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^1.2",
-        "spatie/laravel-permission": "^3.15"
+        "spatie/laravel-permission": "^3.15",
+        "spatie/laravel-searchable": "^1.9.1"
     },
     "require-dev": {
         "facade/ignition": "^1.16.15",
@@ -42,7 +43,8 @@
             "database/factories"
         ],
         "files": [
-            "app/helpers.php"
+            "app/helpers.php",
+            "app/ProductHelper.php"
         ]
     },
     "autoload-dev": {

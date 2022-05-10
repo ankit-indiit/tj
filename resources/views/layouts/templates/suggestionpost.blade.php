@@ -2,17 +2,18 @@
     <!-- post header-->
     <div class="flex justify-between items-center lg:p-4 p-2.5">
         <div class="flex flex-1 items-center space-x-4">
-            <a href="#">
-                <img src="{{ show_user_image() }}" class="bg-gray-200 border border-white rounded-full w-10 h-10" />
+            @php $userId= Crypt::encrypt($post->user_id); @endphp
+            <a href="{{ $post->user_id == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                <img src="{{ show_user_image($post->user_id) }}" class="bg-gray-200 border border-white rounded-full w-10 h-10" />
             </a>
             <div class="flex-1 font-semibold capitalize">
-                <a href="#" class="text-black"> {{ show_user_name($post->user_id) }} </a>
+                <a href="{{ $post->user_id == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}" class="text-black"> {{ show_user_name($post->user_id) }} </a>
                 <div class="text-gray-700 flex items-center space-x-2">{{ show_time_ago($post->created_at) }}
                     <ion-icon name="people" role="img" class="md hydrated" aria-label="people"></ion-icon>
                 </div>
             </div>
         </div>
-        <div>
+        <div class="{{ hideFeedThingFromTimeLine() }}">
             <a href="#" aria-expanded="false"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
             <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
                 <ul class="space-y-1">

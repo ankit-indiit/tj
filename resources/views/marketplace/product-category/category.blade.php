@@ -5,7 +5,9 @@
       <nav aria-label="breadcrumb">
          <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="shop-1.html">Categories</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Men Clothes</li>
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ str_replace('-', ' ', ucfirst(Request::segment(2))) }}
+            </li>
          </ol>
       </nav>
       <div class="my-2 flex items-center justify-between pb-3">

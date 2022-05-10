@@ -8,6 +8,7 @@ use App\User;
 use App\SellerSocialLink;
 use App\SellerWorkingHour;
 use App\Coupon;
+use App\ShopCategory;
 use Auth;
 
 class BecomeSellerController extends Controller
@@ -44,6 +45,48 @@ class BecomeSellerController extends Controller
         return redirect('feed');
     }
 
+
+    public function addShopImage(Request $request)
+    {
+        if ($request->file('shopImageUpload')) {
+            $image = $request->file('shopImageUpload');
+            $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/assets/images');
+            $image->move($destinationPath, $imagename);
+            $image = $imagename;
+        }
+        BecomeSeller::where('user_id', Auth::user()->id)->update([
+            'image' => $image,
+        ]);
+
+        $messags['message'] = "Shop image has been added!";
+        $messags['erro'] = 101;
+        echo json_encode($messags);
+    }
+
+    public function addShopCategory(Request $request)
+    {
+        $request['store_id'] = BecomeSeller::where('user_id', Auth::user()->id)->pluck('id')->first();
+        ShopCategory::create($request->all());
+        $messags['message'] = "Shop category has been added!";
+        $messags['erro'] = 101;
+        echo json_encode($messags);
+    }
+
+    public function editShopCategory(Request $request)
+    {
+        return ShopCategory::where('id', $request->shopCatId)->first();
+    }
+
+    public function updateShopCategory(Request $request)
+    {
+        ShopCategory::where('id', $request->id)->update([
+            'name' => $request->name,
+        ]);
+        $messags['message'] = "Shop category has been updated!";
+        $messags['erro'] = 101;
+        echo json_encode($messags);
+    }
 
     public function addSellerSocialLink(Request $request)
     {
@@ -105,7 +148,7 @@ class BecomeSellerController extends Controller
     public function addSellerEstimatedDelivery(Request $request)
     {
         BecomeSeller::where('user_id', Auth::user()->id)->update([
-            'estimated_delivery' => $request->estimated_delivery,
+            'estimated_delivery' => $request->estimate_day_to.'-'.$request->estimated_day,
         ]);
         $messags['message'] = "Estimated Delivery has been added!";
         $messags['erro'] = 101;
@@ -115,13 +158,16 @@ class BecomeSellerController extends Controller
     public function editEstimateDelevery(Request $request)
     {
         $estimatedDelivery = BecomeSeller::where('id', $request->estimateDeleveryId)->pluck('estimated_delivery')->first();
-        return $estimatedDelivery;
+        $estimateDay = explode("-", $estimatedDelivery);
+        $day['from'] = $estimateDay[0];
+        $day['till'] = $estimateDay[1];
+        return $day;
     }
 
     public function updateEstimateDelevery(request $request)
     {
         BecomeSeller::where('user_id', Auth::user()->id)->update([
-            'estimated_delivery' => $request->estimated_delivery,
+            'estimated_delivery' => $request->estimate_day_to.'-'.$request->estimated_day,
         ]);
         $messags['message'] = "Estimated Delivery has been Updated!";
         $messags['erro'] = 101;

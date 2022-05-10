@@ -65,7 +65,7 @@
       <div class="row first-page">
          @foreach ($collections as $collection)
             <div class="col-sm-6 col-md-4 col-lg-4 mb-4">
-               <a href="{{ $collection->slug }}">
+               <a href="{{ route('collection.show', $collection->slug) }}">
                   <div class="overly">
                      <img src="{{ url("public/collection/$collection->feature_image") }}" class="w-full h-48 rounded-lg shadow-sm object-cover">
                      <div class="pt-2">

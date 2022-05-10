@@ -5,16 +5,20 @@
       <nav aria-label="breadcrumb">
          <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item"><a href="shop-1.html">Categories</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Men Clothes</li>
+            <li class="breadcrumb-item active" aria-current="page">
+              {{ str_replace('-', ' ', ucfirst(Request::segment(2))) }}
+            </li>
          </ol>
       </nav>
       <div class="my-2 flex items-center justify-between pb-3">
          <div>
             <h2 class="text-xl font-semibold"> Products</h2>
          </div>
-         <div>
-           <a href="javascript:void(0);" uk-toggle="target: #add-product-category-modal" class="is_link featured-btn pull-right mx-1"> Add Category </a>
-         </div>
+         @if (Auth::user()->hasRole('admin') || Auth::user()->switch_as == 'seller')
+           <div>
+             <a href="javascript:void(0);" uk-toggle="target: #add-product-category-modal" class="is_link featured-btn pull-right mx-1"> Add Category </a>
+           </div>
+         @endif
       </div>
       <hr>      
       <div class="row">
@@ -41,16 +45,16 @@
                               </div>
                               <div class="card-body">
                                  <a href="{{ route('product.detail', $product->slug) }}" class="ext-lg font-medium mt-1 t truncate"> {{ $product->name }} </a>
-                                 <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->price }}</div>
+                                 <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->discounted_price }}</div>
                                  <div class="text-xs font-semibold ven-nam text-yellow-500">
                                     @foreach ($product->productCategoryId as $proCatId)
-                                       <a href="shop-timeline.html">
+                                       <a href="{{ route('category.show', str_replace(' ', '-', strtolower(getProductCategoryNameById($proCatId->cat_id)))) }}">
                                           {{ getProductCategoryNameById($proCatId->cat_id) }}
                                        </a>
                                     @endforeach
                                  </div>
                                  <div class="ratings">
-                                    <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+                                    {!! @showProductRating($product->id) !!}
                                  </div>
                               </div>
                            </div>

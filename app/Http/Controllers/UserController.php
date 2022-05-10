@@ -19,6 +19,10 @@ use App\BecomeSeller;
 use App\Coupon;
 use App\Product;
 use App\Wishlist;
+use App\Posts;
+use App\ProductCollection;
+use App\ProductRelatedCollection;
+use App\ShopCategory;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Support\Facades\Storage;
@@ -38,9 +42,9 @@ class UserController extends Controller
         }
     }
 
-    public function profile()
+    public function profile($collectionSlug = '')
     {
-
+        $collectionProducts = [];
         $countries = Countries::select('id', 'name')->get();
         $address = UserAddress::GetCountries()
             ->where('userId', Auth::id())
@@ -48,16 +52,28 @@ class UserController extends Controller
             ->get();
         $links = SellerSocialLink::where('seller_id', Auth::user()->id)->get();
         $workingHours = SellerWorkingHour::where('seller_id', Auth::user()->id)->get();
-        $estimatedDelivery = BecomeSeller::where('user_id', Auth::user()->id)
-                                ->select('id', 'estimated_delivery')
+        $shopInfo = BecomeSeller::where('user_id', Auth::user()->id)
+                                ->select('id', 'estimated_delivery', 'image')
+                                ->get();
+        $shopCategories = ShopCategory::where('store_id', Auth::user()->store_id)
+                                ->select('id', 'name')
                                 ->get();
         $coupons = Coupon::where('user_id', Auth::user()->id)->get();
         $products = Product::where('user_id', Auth::user()->id)->where('status', 1)->get();
         $wishlistedProductId = Wishlist::where('user_id', Auth::user()->id)->pluck('product_id');
         $wishlistedProducts = Product::whereIn('id', $wishlistedProductId)->get();
-        $data = ['page_title' => 'My Profile | TJ', 'countries' => $countries, 'address' => $address, 'links' => $links, 'workingHours' => $workingHours, 'estimatedDelivery' => $estimatedDelivery, 'coupons' => $coupons, 'products' => $products, 'wishlistedProducts' => $wishlistedProducts];
+        $collectionId = ProductCollection::where('slug', $collectionSlug)->pluck('id')->first();
+        $productIds = ProductRelatedCollection::where('product_collection', $collectionId)->pluck('product_id');
+        $collectionProducts = Product::whereIn('id', $productIds)->select('id', 'image', 'name', 'slug')->get();
+        $collections = ProductCollection::where('status', 1)->select('id', 'feature_image', 'name', 'slug')->get();        
+        $userPhotos = Posts::where('image', '!=', '')->where('user_id', Auth::user()->id)->pluck('image');
+        $data = ['page_title' => 'My Profile | TJ', 'countries' => $countries, 'address' => $address, 'links' => $links, 'workingHours' => $workingHours, 'shopInfo' => $shopInfo, 'coupons' => $coupons, 'products' => $products, 'wishlistedProducts' => $wishlistedProducts, 'userPhotos' => $userPhotos, 'collections' => $collections, 'collectionProducts' => $collectionProducts, 'shopCategories' => $shopCategories];
         
-        return view('user.profile', $data);
+        if ($collectionSlug) {
+            return view('seller.collection-product', $data);
+        } else {
+            return view('user.profile', $data);        
+        }
     }
 
     public function changePassword()

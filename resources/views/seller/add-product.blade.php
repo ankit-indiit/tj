@@ -71,6 +71,12 @@
                         <label for="">Price</label>
                         <input type="text" class="form-control" name="price" placeholder="Enter Price">
                      </div>
+                  </div> 
+                  <div class="col-lg-6">
+                     <div class="form-group">
+                        <label for="">Discounted Price</label>
+                        <input type="text" class="form-control" name="discounted_price" placeholder="Enter Discounted Price">
+                     </div>
                   </div>                                                
                   <div class="col-lg-6">
                      <div class="form-group">
@@ -104,7 +110,7 @@
                         <label for="">Collection</label>                        
                         <select class="form-control selectpicker1" multiple="" name="product_collection[]">
                           @foreach ($productCollections as $productCollection)
-                            <option value="{{ $productCollection->name }}">{{ $productCollection->name }}</option>
+                            <option value="{{ $productCollection->id }}">{{ $productCollection->name }}</option>
                           @endforeach
                         </select>
                      </div>

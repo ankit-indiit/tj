@@ -3,6 +3,14 @@
 <div class="main_contents mt-8">
    <section class="cart-area w-100">
       <div class="container">
+        <div class="flex justify-between relative md:mb-4 mb-3 border-b pb-3">
+         <div class="flex-1">
+            <h2 class="text-xl font-semibold"> My Wishlist({{ count($products) }})
+            </h2>
+         </div>
+         <div>
+         </div>
+      </div>
          <div class="row">
             <div class="col-lg-12 col-md-12">
                <form>
@@ -26,7 +34,7 @@
                                   $unSerlizeProImage = unserialize($product->image);
                                   $productImage = reset($unSerlizeProImage);
                                 @endphp
-                                <tr>
+                                <tr class="cart-product-list{{ $product->id }}">
                                    <td class="product-thumbnail">
                                       <a href="#">
                                       <img src="{{ url("public/images/product/$productImage") }}" alt="item">
@@ -36,7 +44,7 @@
                                       <a href="{{ route('product.detail', $product->slug) }}">{{ $product->name }}</a>
                                    </td>
                                    <td class="product-price">
-                                      <span class="unit-amount">${{ $product->price }}</span>
+                                      <span class="unit-amount">${{ $product->discounted_price }}</span>
                                    </td>
                                    <td class="product-quantity">
                                       <div class="star">
@@ -54,7 +62,7 @@
                                       <span class="subtotal-amount">$25.00</span>
                                    </td>
                                    <td class="product-subtotal fnd">
-                                      <div style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
+                                      {{-- <div style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
                                          <a class="remove" href="#" aria-expanded="false">  <i class="icon-feather-layers"> </i>
                                          </a>
                                          <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss">
@@ -89,14 +97,15 @@
                                                </div>
                                             </div>
                                          </div>
-                                      </div>
+                                      </div> --}}
                                       <span class="continue-shopping-box cart-buttons" data-toggle="tooltip" data-placement="top" title="Add to Cart">
                                          <span href="#" class="">
-                                            <a href="#" class="is_icon" aria-expanded="false">
+                                            <a href="javascript:void(0);" id="addToCart" data-product="{{ $product->id }}" class="is_icon" aria-expanded="false">
                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                                </svg>
                                             </a>
+                                            <input type="hidden" id="productQuantity{{ $product->id }}" value="1" name="">
                                          </span>
                                       </span>
                                       <a href="javascript:void(0);" id="deleteProductFromWishlist" data-id="{{ $product->id }}" class="remove" data-toggle="tooltip" data-placement="top" title="Delete">

@@ -83,7 +83,7 @@
                      </div>
                   </div>
                   <div class="bottom text-center mb-5">
-                     <p href="#" class="sm-text mx-auto mb-3">Go Back to <a href="feed.html" class="sign-in-txt">Website</a></p>
+                     <p class="sm-text mx-auto mb-3">Go Back to <a href="{{ route('home') }}" class="sign-in-txt">Website</a></p>
                   </div>
                </div>
             </div>

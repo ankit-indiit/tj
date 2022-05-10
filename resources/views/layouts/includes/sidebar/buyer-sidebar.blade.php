@@ -70,32 +70,16 @@
 
         <h3 class="text-lg mt-3 font-semibold ml-2 is-title"> Online Friends </h3>
         <div class="contact-list mt-2 ml-1">
-            <a href="chat.html">
+            @foreach (getOnlineUsers() as $onlineUser)
+            @php $userId= Crypt::encrypt($onlineUser->id); @endphp
+            <a href="{{ route('time.line', $userId) }}">
                 <div class="contact-avatar">
-                    <img src="{{ asset('images/avatars/avatar-1.jpg') }}" alt="">
+                    <img src="{{ $onlineUser->profile_image }}" alt="">
                     <span class="user_status status_online"></span>
                 </div>
-                <div class="contact-username"> Dennis Han</div>
+                <div class="contact-username">{{ $onlineUser->name }}</div>
             </a>
-            <a href="chat.html">
-                <div class="contact-avatar">
-                    <img src="{{ asset('images/avatars/avatar-2.jpg') }}" alt="">
-                    <span class="user_status"></span>
-                </div>
-                <div class="contact-username"> Erica Jones</div>
-            </a>
-            <a href="chat.html">
-                <div class="contact-avatar">
-                    <img src="{{ asset('images/avatars/avatar-7.jpg') }}" alt="">
-                </div>
-                <div class="contact-username">Stella Johnson</div>
-            </a>
-            <a href="chat.html">
-                <div class="contact-avatar">
-                    <img src="{{ asset('images/avatars/avatar-4.jpg') }}" alt="">
-                </div>
-                <div class="contact-username"> Alex Dolgove</div>
-            </a>
+            @endforeach
         </div>
         <br>
         <br>

@@ -64,11 +64,15 @@
              @endif
          @endforeach
       @endif
+      <div class="flex justify-center mt-6">
+          <a href="#" class="bg-white dark:bg-gray-900 font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white"> Load more ..</a>
+      </div>
+    @else
+      <div class="flex justify-center mt-6">
+         No post found
+      </div>
     @endif 
 
-    <div class="flex justify-center mt-6">
-        <a href="#" class="bg-white dark:bg-gray-900 font-semibold my-3 px-6 py-2 rounded-full shadow-md dark:bg-gray-800 dark:text-white"> Load more ..</a>
-    </div>
 
     <div id="share-post-modal" class="create-post" uk-modal>
         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
@@ -203,48 +207,25 @@
         <div class="flex items-center justify-between mb-4">
             <div>
                 <h4 class="text-2xl -mb-0.5 font-semibold">Friends</h4>
-                <p>3,4510 Friends</p>
+                <p>{{count(userFriends())}} Friends</p>
             </div>
-            <a href="#" class="text-blue-600">See all</a>
+            @if (count(userFriends()) > 0)
+              <a href="#" class="text-blue-600">See all</a>
+            @endif            
         </div>
         <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold">
-            <a href="#">
-                <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                    <img src="{{ asset('images/avatars/avatar-1.jpg') }}" alt="" class="w-full h-full object-cover absolute" />
-                </div>
-                <div>Jonathan Ali</div>
-            </a>
-            <a href="#">
-                <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                    <img src="{{ asset('images/avatars/avatar-2.jpg') }}" alt="" class="w-full h-full object-cover absolute" />
-                </div>
-                <div>Jonathan Ali</div>
-            </a>
-            <a href="#">
-                <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                    <img src="{{ asset('images/avatars/avatar-3.jpg') }}" alt="" class="w-full h-full object-cover absolute" />
-                </div>
-                <div>Jonathan Ali</div>
-            </a>
-            <a href="#">
-                <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                    <img src="{{ asset('images/avatars/avatar-4.jpg') }}" alt="" class="w-full h-full object-cover absolute" />
-                </div>
-                <div>Jonathan Ali</div>
-            </a>
-            <a href="#">
-                <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                    <img src="{{ asset('images/avatars/avatar-5.jpg') }}" alt="" class="w-full h-full object-cover absolute" />
-                </div>
-                <div>Jonathan Ali</div>
-            </a>
-            <a href="#">
-                <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                    <img src="{{ asset('images/avatars/avatar-6.jpg') }}" alt="" class="w-full h-full object-cover absolute" />
-                </div>
-                <div>Jonathan Ali</div>
-            </a>
+            @foreach (userFriends() as $friend)
+              @php $userId= Crypt::encrypt($friend); @endphp
+              <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                  <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
+                      <img src="{{ show_user_image($friend) }}" alt="" class="w-full h-full object-cover absolute" />
+                  </div>
+                  <div>{{ show_user_name($friend) }}</div>
+              </a>
+            @endforeach
         </div>
-        <a href="#" class="bg-gray-100 py-2.5 text-center font-semibold w-full mt-4 block rounded"> See all </a>
+        @if (count(userFriends()) > 0)
+          <a href="#" class="bg-gray-100 py-2.5 text-center font-semibold w-full mt-4 block rounded"> See all </a>
+        @endif 
     </div>
 </div>

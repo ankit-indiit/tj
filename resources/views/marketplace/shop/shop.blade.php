@@ -39,24 +39,21 @@
                 @php
                   $unSerlizeProImage = unserialize($product->image);
                   $productImage = reset($unSerlizeProImage);
-                  $checkWishlist = checkIfProductInWishlist(Auth::user()->id, $product->id);
                 @endphp
                 <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                   <div class="card">
                      <div class="card-media h-44">
                         <div class="card-media-overly"></div>
                         <img src="{{ url("public/images/product/$productImage") }}" alt="">
-                        <a href="javascript:void(0);" id="addOrRemoveProductToWishlist" data-id="{{ $product->id }}" class="bg-{{$checkWishlist == 1 ? 'blue' : 'red'}}-100 absolute right-2 top-2 p-0.5 px-1.5 rounded-full text-{{$checkWishlist == 1 ? 'blue' : 'red'}}-500">
-                        <i class="icon-feather-heart"> </i>
-                        </a>                                        
+                        <div class="product-wishlist-btn-section{{ $product->id }}">
+                          {!! addToWishlistButtonSection(Auth::user()->id, $product->id) !!}
+                        </div>                                       
                         <a href="" class="ad_to_colletion_btn" data-toggle="modal" data-target="#exampleModal"><i class="icon-feather-layers" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to Collection"> </i></a>
                      </div>
                      <div class="card-body">
                         <a href="{{ route('product.detail', $product->slug) }}" class="ext-lg font-medium mt-1 t truncate">{{ $product->name }}</a>
-                        <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
-                        Add to Cart
-                        </a>
-                        <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->price }}</div>
+                        {!! productCartButton($product->id) !!}
+                        <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->discounted_price }}</div>
                         <div class="text-xs font-semibold ven-nam text-yellow-500">
                           @foreach ($product->productCategoryId as $proCatId)
                               <a href="{{ route('category.show', str_replace(' ', '-', strtolower(getProductCategoryNameById($proCatId->cat_id)))) }}">
@@ -65,7 +62,7 @@
                           @endforeach                          
                         </div>
                         <div class="ratings">
-                           <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
+                           {!! @showProductRating($product->id) !!}
                         </div>
                      </div>
                   </div>
@@ -80,32 +77,6 @@
 @section('customScripts')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
-  $(document).on('click', '#addOrRemoveProductToWishlist', function(){
-    var productId = $(this).data('id');
-    $.ajax({
-        headers: {
-            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
-        },
-        type: 'post',
-        url: _baseURL + "/add-to-wishlist",
-        data: { productId: productId },
-        dataType: 'json',
-        success: function (data) {
-          console.log(data);
-          if (data.erro == '101') {
-              swal("", data.message, "success", {
-                 button: "close",
-              });              
-              $('.swal-button--confirm').on('click', function(){
-                 window.location.reload();
-              });
-           } else {
-              swal("", data.message, "error", {
-                 button: "close",
-              });              
-           }
-        }
-    });
-  });
+  
 </script>
 @endsection

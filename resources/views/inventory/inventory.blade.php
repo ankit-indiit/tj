@@ -117,9 +117,9 @@
                                          <input type="number" name="qty" class="qty" maxlength="12" value="{{ $product->quantity }}">
                                       </div>
                                    </td>
-                                   <td>22</td>
-                                   <td>6</td>
-                                   <td>3</td>
+                                   <td>{{ $product->quantity }}</td>
+                                   <td>0</td>
+                                   <td>{{ $product->quantity }}</td>
                                    <td><span class="badge badge-success" style="
                                       background: #81ba00;
                                       ">Most Stocked</span> <span data-toggle="tooltip" data-placement="bottom" title="" data-original-title="If the quantity of a product is more than 5, it will count in the Most stocked"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
