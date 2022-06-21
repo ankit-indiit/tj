@@ -19251,3 +19251,7 @@ a.ad_to_colletion_btn i {
   overflow: scroll;
   height: 600px;
 }
+
+li.li.uncompleted {
+    padding-top: 18px;
+}

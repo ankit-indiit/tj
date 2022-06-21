@@ -15,6 +15,9 @@ use App\Wishlist;
 use App\ProductReview;
 use App\FeatureProduct;
 use App\Cart;
+use App\Order;
+use App\OrderProduct;
+use App\BecomeSeller;
 use Auth;
 use DB;
 
@@ -281,13 +284,22 @@ class ProductController extends Controller
         $productCollectionIds = ProductRelatedCollection::where('product_id', $productDetail->id)
             ->pluck('product_collection');
         $collections = ProductCollection::select('id', 'name')->whereNotIn('id', $productCollectionIds)->get();
-        $data = ['page_title' => 'Create Product | TJ', 'productDetail' => $productDetail, 'relatedProducts' => $relatedProducts, 'productReviews' => $productReviews, 'productReviewAverage' => $productReviewAverage, 'productCollectionIds' => $productCollectionIds, 'collections' => $collections];
+        $orderIds = Order::where('user_id', Auth::user()->id)->pluck('id')->toArray();
+        $existOrderProduct = OrderProduct::whereIn('order_id', $orderIds)
+            ->where('product_id', $productDetail->id)
+            ->exists();
+        $data = ['page_title' => 'Create Product | TJ', 'productDetail' => $productDetail, 'relatedProducts' => $relatedProducts, 'productReviews' => $productReviews, 'productReviewAverage' => $productReviewAverage, 'productCollectionIds' => $productCollectionIds, 'collections' => $collections, 'existOrderProduct' => $existOrderProduct];
         return view('seller.product-detail', $data);
     }
 
     public function shop()
     {
-        $products = Product::get();
+        $sellerId = BecomeSeller::where('user_id', Auth::user()->id)->pluck('user_id')->first();
+        if ($sellerId) {
+            $products = Product::where('user_id', '!=', $sellerId)->get();
+        } else {
+            $products = Product::get();
+        }
         $productCategories = ProductCategory::select('feature_image', 'name', 'slug')->get();
         $data = ['page_title' => 'Shop Product | TJ', 'products' => $products, 'productCategories' => $productCategories];
         return view('marketplace.shop.shop',$data);
@@ -311,21 +323,39 @@ class ProductController extends Controller
 
     public function trending()
     {
-        $products = Product::orderBy('updated_at', 'DESC')->get();
+        $sellerId = BecomeSeller::where('user_id', Auth::user()->id)->pluck('user_id')->first();
+        if ($sellerId) {
+            $products = Product::where('user_id', $sellerId)->orderBy('updated_at', 'DESC')->get();
+        } else {
+            $products = Product::orderBy('updated_at', 'DESC')->get();
+        }
         $data = ['page_title' => 'Trending Product | TJ', 'products' => $products];
         return view('marketplace.trending',$data);
     }
 
     public function bestSeller()
     {
-        $products = Product::orderBy('updated_at', 'DESC')->get();
+        $sellerId = BecomeSeller::where('user_id', Auth::user()->id)->pluck('user_id')->first();
+        if ($sellerId) {
+            $products = Product::where('user_id', $sellerId)->orderBy('updated_at', 'DESC')->get();
+        } else {
+            $products = Product::orderBy('updated_at', 'DESC')->get();
+        }
         $data = ['page_title' => 'Best Seller Product | TJ', 'products' => $products];
         return view('marketplace.best-seller',$data);
     }
 
     public function featuredProduct()
     {
-        $products = Product::where('feature', 1)->orderBy('updated_at', 'DESC')->get();
+        $sellerId = BecomeSeller::where('user_id', Auth::user()->id)->pluck('user_id')->first();
+        if ($sellerId) {
+            $products = Product::where('feature', 1)
+                ->where('user_id', $sellerId)
+                ->orderBy('updated_at', 'DESC')
+                ->get();
+        } else {
+            $products = Product::where('feature', 1)->orderBy('updated_at', 'DESC')->get();
+        }
         $data = ['page_title' => 'Fearured Product | TJ', 'products' => $products];
         return view('marketplace.featured-product',$data);
     }

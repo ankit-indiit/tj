@@ -418,7 +418,8 @@
                 <input type="text" class="form-control my-4 border" placeholder="Enter Coupon Description" name="description">
                 <input type="text" class="form-control my-4 border" placeholder="Enter Coupon Type" name="type">
                 <input type="text" class="form-control my-4 border" placeholder="Enter Coupon Expiry" name="expired_on">
-                <input type="text" class="form-control my-4 border" placeholder="Enter Discounted Value" name="discounted-value">
+                <input type="text" class="form-control my-4 border" placeholder="Enter Discounted Value" name="discounted_value">
+                <br>
                 <button type="submit" id="addDiscountCouponBtn" class="btn btn-primary btn-sm mb-4">Add</button>
             </div>
         </form>

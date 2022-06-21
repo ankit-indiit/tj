@@ -31,6 +31,11 @@ class Product extends Model implements Searchable
         return $this->provideFilter(\App\ModelFilters\ProductFilter::class);
     }
 
+    public function getCreatedAtAttribute()
+    {
+        return date('d F Y', strtotime($this->attributes['created_at']));
+    }
+
     public function getCheckCartStatusAttribute()
     {
         return Cart::where('product_id', $this->attributes['id'])->where('user_id', Auth::user()->id)->exists();

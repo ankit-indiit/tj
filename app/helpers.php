@@ -22,6 +22,8 @@ use App\ProductReview;
 use App\Cart;
 use App\Product;
 use App\Message;
+use App\OrderProductStatus;
+use App\OrderProduct;
 
 if (!function_exists('show_user_image')) {
     function show_user_image($id = '')
@@ -536,6 +538,51 @@ if (!function_exists('cartCount')) {
     function cartCount($productId = '')
     {       
         return Cart::where('user_id', Auth::user()->id)->count();
+    }
+}
+
+if (!function_exists('getProductById')) {
+    function getProductById($productId = '')
+    {       
+        return Product::where('id', $productId)->first();
+    }
+}
+
+if (!function_exists('getProductDeleveryStatus')) {
+    function getProductDeleveryStatus($orderId, $productId, $status = '')
+    {       
+        return OrderProductStatus::where('order_id', $orderId)
+            ->where('product_id', $productId)
+            ->where('delivery_status', $status)
+            ->first();
+    }
+}
+if (!function_exists('getUpdatedProductDeleveryStatus')) {
+    function getUpdatedProductDeleveryStatus($orderId, $productId)
+    {       
+        return OrderProductStatus::where('order_id', $orderId)
+            ->where('product_id', $productId)
+            ->orderBy('id', 'DESC')
+            ->pluck('delivery_status')
+            ->first();
+    }
+}
+
+if (!function_exists('getProductByOrderId')) {
+    function getProductByOrderId($orderId)
+    {       
+        return OrderProduct::where('order_id', $orderId)
+            ->orderBy('id', 'DESC')
+            ->get();
+    }
+}
+
+if (!function_exists('getProductNameById')) {
+    function getProductNameById($id)
+    {       
+        return Product::where('id', $id)
+            ->pluck('name')
+            ->first();
     }
 }
 

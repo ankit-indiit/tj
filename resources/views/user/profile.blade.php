@@ -2320,12 +2320,28 @@
    
    $("#addDiscountCoupon").validate({
       rules: {
-         day: {
-            estimated_delivery: true
-         }       
+         title: {
+            required: true
+         },
+         description: {
+            required: true
+         },
+         type: {
+            required: true
+         },
+         expired_on: {
+            required: true
+         },
+         discounted_value: {
+            required: true
+         }        
       },
       messages: {
-         estimated_delivery: "Enter Estimated Delivery"        
+         title: "Please title",         
+         description: "Please enter description",
+         type: "Please enter type",
+         expired_on: "Please enter expired on",
+         discounted_value: "Please enter discounted value"
       },
       submitHandler: function(form) {
          var serializedData = $(form).serialize();
@@ -2360,6 +2376,49 @@
          return false;
       }
    });
+
+   // $("#addDiscountCoupon").validate({
+   //    rules: {
+   //       day: {
+   //          estimated_delivery: true
+   //       }       
+   //    },
+   //    messages: {
+   //       estimated_delivery: "Enter Estimated Delivery"        
+   //    },
+   //    submitHandler: function(form) {
+   //       var serializedData = $(form).serialize();
+   //       $("#err_mess").html('');
+   //       $('#addDiscountCouponBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+   //       $.ajax({
+   //          headers: {
+   //             'X-CSRF-Token': $('input[name="_token"]').val()
+   //          },
+   //          type: 'post',
+   //          url: "{{ url('add-discount-coupon') }}",
+   //          data: serializedData,
+   //          dataType: 'json',
+   //          success: function(data) {
+   //             $('#addDiscountCouponBtn').html('Save Changes');
+   
+   //             if (data.erro == '101') {
+   //                swal("", data.message, "success", {
+   //                   button: "close",
+   //                });
+   //                $("#addDiscountCoupon").trigger('reset');
+   //             } else {
+   //                swal("", data.message, "error", {
+   //                   button: "close",
+   //                });
+   //             }
+   //             $('.swal-button--confirm').on('click', function(){
+   //                window.location.reload();
+   //             });
+   //          }
+   //       });
+   //       return false;
+   //    }
+   // });
    
    $(document).on('click', '.editDiscountCoupon', function(){
       var editedCouponId = $(this).data('id');

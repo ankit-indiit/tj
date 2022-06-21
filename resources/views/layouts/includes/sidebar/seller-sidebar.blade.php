@@ -19,7 +19,7 @@
                      </div>
                   </div>
                   <ul>
-                     <li class=""><a href="https://dev.indiit.solutions/TJ/vendor-html/"> 
+                     <li class=""><a href="{{ route('my-profile') }}"> 
                         <i class="fa fa-home" aria-hidden="true"></i>
                         <span> Dashboard </span> </a> 
                      </li>

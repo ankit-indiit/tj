@@ -130,12 +130,14 @@
                                     Additional information
                                  </a>
                               </li>
-                              <li>
-                                 <a href="#">
-                                    <div class="dot"></div>
-                                    Reviews
-                                 </a>
-                              </li>
+                              @if (!empty($existOrderProduct))
+                                 <li>
+                                    <a href="#">
+                                       <div class="dot"></div>
+                                       Reviews
+                                    </a>
+                                 </li>
+                              @endif
                            </ul>
                         </div>
                         <div class="col-lg-12 col-md-12">

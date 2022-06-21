@@ -37,7 +37,7 @@
    <div class="mcontainer">
       <!--  Feeds  -->
       <div class="lg:flex lg:space-x-10">
-         <div class="lg:w-3/4 lg:px-20 space-y-7">
+         <div class="lg:w-3/4 lg:px-20 space-y-7 w-100">
             <div class="bg-white shadow border border-gray-100 rounded-lg dark:bg-gray-900 lg:mx-0 p-4">
                <div class="flex space-x-3">
                   <img src="{{ asset('images/avatars/avatar-2.jpg') }}" class="w-10 h-10 rounded-full" />
@@ -194,7 +194,7 @@
                </div>
            </div>
          </div>
-         @include('layouts.includes.rightsidebarfeed')
+         {{-- @include('layouts.includes.rightsidebarfeed') --}}
 
       </div>
    </div>

@@ -94,32 +94,30 @@
                                  <th>Total Quantity</th>
                                  <th>In Stock</th>
                                  <th>Sold</th>
-                                 <th>Available</th>
                                  <th>Alert level</th>
                               </tr>
                            </thead>
                            <tbody>
                               @foreach ($products as $product)
                                 @php
-                                   $unSerlizeProImage = unserialize($product->image);
-                                   $productImage = reset($unSerlizeProImage);
+                                  // print_r($product->available_product);
+                                  $inStock = $product->product_quentity - $product->product_qty;
                                 @endphp
                                 <tr>
                                    <td class="tableproduct">
                                       <div class="img-prd">
-                                         <span><img src="{{ url("public/images/product/$productImage") }}"></span>
-                                         <h5>{{ $product->name }}</h5>
+                                         <span><img src="{{ $product->product_image }}"></span>
+                                         <h5>{{ $product->product_name }}</h5>
                                       </div>
                                    </td>
                                    <td>{{ $product->sku }}</td>
                                    <td class="table-action-btn">
                                       <div class="updatequantity">
-                                         <input type="number" name="qty" class="qty" maxlength="12" value="{{ $product->quantity }}">
+                                         <input type="number" name="qty" class="qty" maxlength="12" value="{{ $product->product_quentity }}" disabled="">
                                       </div>
                                    </td>
-                                   <td>{{ $product->quantity }}</td>
-                                   <td>0</td>
-                                   <td>{{ $product->quantity }}</td>
+                                   <td>{{ $inStock }}</td>
+                                   <td>{{ $product->product_qty }}</td>
                                    <td><span class="badge badge-success" style="
                                       background: #81ba00;
                                       ">Most Stocked</span> <span data-toggle="tooltip" data-placement="bottom" title="" data-original-title="If the quantity of a product is more than 5, it will count in the Most stocked"><i class="fa fa-info-circle" aria-hidden="true"></i></span>

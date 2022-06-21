@@ -242,9 +242,9 @@
 </body>
 <!-- Javascript
     ================================================== -->
-<!--script src="{{ asset('js/jquery-3.5.1.slim.min.js') }}" ></script---->
+{{-- <script src="{{ asset('js/jquery-3.5.1.slim.min.js') }}" ></script> --}}
 <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-<!---script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script-->
+{{-- <script src="{{ asset('js/jquery-3.3.1.min.js') }}"></script> --}}
 <script>
     $(function() {
         $('[data-toggle="tooltip"]').tooltip()
@@ -253,7 +253,7 @@
 <script src="{{ asset('js/uikit.js') }}"></script>
 <script src="{{ asset('js/simplebar.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
-<!--script src="{{ asset('js/bootstrap-select.min.js') }}"></script--->
+{{-- <script src="{{ asset('js/bootstrap-select.min.js') }}"></script> --}}
 
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
@@ -289,6 +289,7 @@
 </script>
 <script src="{{ asset('js/custom-scripts.js') }}"></script>
 <script src="{{ asset('js/custom-cart.js') }}"></script>
+<script src="{{ asset('js/custom-checkout.js') }}"></script>
 <script src="{{ asset('js/custom-message.js') }}"></script>
 
 </html>

@@ -21,7 +21,7 @@ class UserAddress extends Model
      * @var array
      */
     protected $fillable = [
-        'title','userId', 'first_name', 'last_name','country_code','phone_no','countryId','pincode','locality','Address','city','landmark'
+        'title','userId', 'first_name', 'last_name','country_code','phone_no','countryId','pincode','locality','Address','city','landmark','type'
     ];
 
     public function scopeGetCountries($query)

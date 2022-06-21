@@ -35,7 +35,7 @@
                 <i class="fa fa-user-plus" aria-hidden="true"></i>
                 <span> Friends & Followers</span></a> 
             </li>
-            <li><a href="{{ route('order.history') }}"> 
+            <li><a href="{{ route('buyer.order') }}"> 
                 <i class="fa fa-gift" aria-hidden="true"></i>
                 <span> Orders</span> </a> 
             </li> 

@@ -96,7 +96,7 @@
             </div>
             <div class="cart-totals">
                <h3>Cart Totals</h3>
-               {{Session::forget('coupon')}}
+               {{-- {{Session::forget('coupon')}} --}}
                @php
                   $shipping = 00.00;
                   $totalPrice = Session::get('coupon')['total_price'] ? Session::get('coupon')['total_price'] + $shipping : $subTotal;
@@ -107,7 +107,7 @@
                   <li>Coupon <span>${{ Session::get('coupon')['coupon'] }}</span></li>
                   <li>Total <span><b>${{ $totalPrice }}</b></span></li>
                </ul>
-               <a href="checkout.html" class="default-btn">
+               <a href="{{ route('checkout') }}" class="default-btn">
                Proceed to Checkout
                <i class="flaticon-right"></i>
                </a>

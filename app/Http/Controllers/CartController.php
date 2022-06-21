@@ -74,28 +74,41 @@ class CartController extends Controller
 
     public function applyCoupon(Request $request)
     {
+        if ($request->couponName == Session::get('coupon')['coupon_name']) {
+            $messags['message'] = 'You have already used this coupon!';
+            $messags['erro'] = 202;
+            echo json_encode($messags);
+            die;
+        }
         if (isset($request->couponName) && !empty($request->couponName)) {
-            $sellerId = Coupon::where('coupon_name', $request->couponName)->pluck('user_id')->first();
-            $discountedValue = Coupon::where('coupon_name', $request->couponName)->pluck('discounted_value')->first();
-            $sellerProducts = Product::where('user_id', $sellerId)->pluck('id')->toArray();
-            $discountOn = array_intersect(json_decode($request->productIds), $sellerProducts);
-            $otherCartPro = array_diff(json_decode($request->productIds), $discountOn);
-            $products = Product::whereIn('id', $discountOn)->pluck('discounted_price')->sum();
-            $unDiscountedProduct = Product::whereIn('id', $otherCartPro)->pluck('discounted_price')->sum();
-            $discount = $products - ($products * ($discountedValue / 100));      
-            
-            Session::put('coupon', [
-                'discounted_price' => $discount, 
-                'coupon' => $products-$discount, 
-                'total_price' => $discount+$unDiscountedProduct,
-            ]);
-            $productName = '';
-            foreach ($discountOn as $productId) {
-                $productName .= Product::where('id', $productId)->pluck('name')->first();
+            $coupon = Coupon::where('coupon_name', $request->couponName)->first();
+            if ($coupon) {
+                $sellerProducts = Product::where('user_id', $coupon->user_id)->pluck('id')->toArray();
+                $discountOn = array_intersect(json_decode($request->productIds), $sellerProducts);
+                $otherCartPro = array_diff(json_decode($request->productIds), $discountOn);
+                $products = Product::whereIn('id', $discountOn)->pluck('discounted_price')->sum();
+                $unDiscountedProduct = Product::whereIn('id', $otherCartPro)->pluck('discounted_price')->sum();
+                $discount = $products - ($products * ($coupon->discounted_value / 100));      
+                
+                Session::put('coupon', [
+                    'coupon_name' => $coupon->coupon_name,
+                    'discounted_price' => $discount,
+                    'coupon' => $products-$discount, 
+                    'total_price' => $discount+$unDiscountedProduct,
+                ]);
+                $productName = '';
+                foreach ($discountOn as $productId) {
+                    $productName .= Product::where('id', $productId)->pluck('name')->first();
+                }
+                $message = 'You have got '.$coupon->discounted_value.'% discount on '.$productName .' !';
+                $erro = 101;
+            } else {
+                $message = 'Coupon not found!';
+                $erro = 201;
             }
 
-            $messags['message'] = 'You have got '.$discountedValue.'% discount on '.$productName .' !';
-            $messags['erro'] = 101;
+            $messags['message'] = $message;
+            $messags['erro'] = $erro;
             echo json_encode($messags);
         } else {
             $messags['message'] = 'Please enter your coupon!';

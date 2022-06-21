@@ -30,7 +30,7 @@
                           </div>  
                        </div>
                        <div class="card-body">
-                          <div class="ext-lg font-medium mt-1 t truncate">{{ $product->name }}</div>
+                          <div class="ext-lg font-medium mt-1 t truncate"><a href="{{ route('product.detail', $product->slug) }}">{{ $product->name }}</a></div>
                           {!! productCartButton($product->id) !!}
                           <div class="text-xs font-semibold uppercase text-yellow-500">${{ $product->discounted_price }}</div>
                           <div class="text-xs font-semibold ven-nam text-yellow-500">

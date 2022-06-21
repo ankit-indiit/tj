@@ -62,12 +62,17 @@ Route::post('add-to-cart', 'CartController@store')->name('add-to-cart');
 Route::post('update-cart', 'CartController@update')->name('update-cart');
 Route::post('move-to-wihlist', 'CartController@moveToWihlist')->name('remove-to-cart');
 Route::post('remove-to-cart', 'CartController@delete')->name('move-to-wihlist');
+Route::get('checkout', 'CheckoutController@index')->name('checkout');
+Route::get('user-address-form', 'CheckoutController@userAddressForm')->name('user-address-form');
+Route::post('place-order', 'OrderController@placeOrder')->name('place.order');
 Route::get('inventory', 'InventoryController@index')->name('inventory');
 Route::get('seller-order', 'OrderController@sellerOrder')->name('seller.order');
+Route::post('update-seller-order-status', 'OrderController@updateSellerOrderStatus')->name('update.seller-order');
 Route::get('friend-follower', 'FriendController@friendFollower')->name('friend.follower');
 Route::get('user-time-line/{id}', 'FriendController@timeLine')->name('time.line');
-Route::get('order-history', 'OrderController@orderHistory')->name('order.history');
-Route::get('order-history-detail', 'OrderController@orderHistoryDetail')->name('order.history-detail');
+Route::get('buyer-order', 'OrderController@buyerOrder')->name('buyer.order');
+Route::get('buyer-order-detail/{id}', 'OrderController@buyerOrderDetail')->name('buyer-order-detail');
+Route::get('seller-order-detail/{orderProductId}', 'OrderController@sellerOrderDetail')->name('seller-order-detail');
 
 // User Friendship Routes 
 Route::post('add-to-friend-list', 'FriendController@addToFriendList')->name('add-to-friend-list');
@@ -119,6 +124,7 @@ Route::post('unlike-post', 'PostController@unLikePost')->name('unlike-post');
 Route::post('update-poll', 'PostController@updatePoll')->name('update-poll');
 Route::post('post-comment', 'PostController@postComment')->name('post-comment');
 
-
-
-
+Route::post('payment', 'PaymentController@paymentDetail')->name('payment');
+Route::get('handle-payment', 'PaymentController@handlePayment')->name('make.payment');
+Route::get('cancel-payment', 'PaymentController@paymentCancel')->name('cancel.payment');
+Route::get('payment-success', 'PaymentController@paymentSuccess')->name('success.payment');

@@ -1,10 +1,10 @@
 <?php
-
+#https://dev.indiit.solutions/tj/dev/handle-payment
 namespace App\Http\Controllers;
-
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Srmklive\PayPal\Services\ExpressCheckout;
+
+
 use App\Order;
 use App\OrderProduct;
 use App\OrderCouponApplied;
@@ -18,41 +18,36 @@ use Session;
 use Auth;
 use DB;
 
-class OrderController extends Controller
+class PaymentController extends Controller
 {
-    public function placeOrder(Request $request)
+    public $items = [];
+    // public function __construct()
+    // {
+    //     $this->items = $items;
+    // }
+
+    public function paymentDetail(Request $request)
     {
-        $customMessages = [
-            'required_if' => 'The :attribute field is required!'
-        ];
-        $validator = Validator::make($request->all(), [
-            'billing_section' => 'required',
-            'shipping_section' => 'required',
-            'billing_first_name' => 'required',
-            'shipping_first_name' => 'required',
-            'billing_last_name' => 'required',
-            'shipping_last_name' => 'required',
-            'billing_phone_no' => 'required',
-            'shipping_phone_no' => 'required',
-            'billing_zip_code' => 'required',
-            'shipping_zip_code' => 'required',
-            'billing_country' => 'required',
-            'shipping_country' => 'required',
-            'billing_city' => 'required',
-            'shipping_city' => 'required',
-            'billing_address' => 'required',
-            'shipping_address' => 'required',
-            'save_billing_address' => 'required_if:billing_section,0',
-            'save_shipping_address' => 'required_if:shipping_section,0',
-        ], $customMessages);    
-        
-        if ($validator->fails()) {
-            return response()->json([
-                'erro' => 102,
-                'message' => $validator->errors()->first(),
+        $data = [];
+        foreach ($request->product as $key => $product) {
+            $data[] = [
+                'name' => getProductNameById($product['id']),
+                'qty' => $product['qty'],
+                'price' => $product['price'],
+            ];   
+
+            array_push($this->items, [
+                'name' => getProductNameById($product['id']),
+                'price' => $product['price'],
+                'desc'  => '',
+                'qty' => $product['qty']
             ]);
         }
-        
+
+        Session::put('payment_detail', $data);  
+
+        // dd($this->items);
+
         $request['user_id'] = Auth::user()->id;
         $request['order_status'] = '0';        
         if (Session::get('coupon') != NULL) {
@@ -146,56 +141,60 @@ class OrderController extends Controller
             $message['erro'] = 101;
             return response()->json($message, 200);
         }
-        $messags['message'] = 'Your order has been successfully placed!';
-        $messags['erro'] = 101;
+
+        $messags['message'] = 'Order detail stored in session!';
+        $messags['erro'] = 201;
         echo json_encode($messags);
     }
 
-    public function sellerOrder()
+    public function handlePayment()
     {
-        // $orderProducts = DB::select("SELECT * FROM orders as O right join order_products as OP on O.id = OP.order_id where OP.seller_id = '".Auth::user()->id."' GROUP BY created_at ");
-        $orderProducts = Order::whereHas('OrderProduct', function (Builder $query) 
-            {  $query->where('seller_id', '=', Auth::user()->id); 
-        })->get();
+        $product = [];
 
-        $data = ['page_title' => 'Seller Order | TJ', 'orderProducts' => $orderProducts];        
-        return view('order.seller-order', $data);
+        // $product['items'] = [
+        //     [
+        //         'name' => 'Nike Joyride 2',
+        //         'price' => 112,
+        //         'desc'  => 'Running shoes for Men',
+        //         'qty' => 2
+        //     ]
+        // ];
+
+        foreach (Session::get('payment_detail') as $data) {
+            $product['items'] = $data;            
+            
+        }
+        // die;
+        // dd(Session::get('payment_detail'));
+  
+        $product['invoice_id'] = 1;
+        $product['invoice_description'] = "Order #{$product['invoice_id']} Bill";
+        $product['return_url'] = route('success.payment');
+        $product['cancel_url'] = route('cancel.payment');
+        $product['total'] = 224;
+        $paypalModule = new ExpressCheckout;
+  
+        $res = $paypalModule->setExpressCheckout($product);
+        $res = $paypalModule->setExpressCheckout($product, true);
+  
+        return redirect($res['paypal_link']);
     }
-
-    public function updateSellerOrderStatus(Request $request)
+   
+    public function paymentCancel()
     {
-        $orderProducts = OrderProductStatus::create([
-            'order_id' => $request->order_id,
-            'product_id' => $request->product_id,
-            'delivery_status' => $request->productStatus,
-        ]);      
-
-        $messags['message'] = 'Order status has been update successfully!';
-        $messags['erro'] = 101;
-        echo json_encode($messags);              
+        dd('Your payment has been declend. The payment cancelation page goes here!');
     }
-
-    public function buyerOrder()
+  
+    public function paymentSuccess(Request $request)
     {
-        $orders = Order::select('id', 'created_at')->where('user_id', Auth::user()->id)->get();        
-        $data = ['page_title' => 'Order History | TJ', 'orders' => $orders];        
-        return view('order.buyer-order', $data);
-    }
-
-    public function buyerOrderDetail(Request $request, $id)
-    {
-        $order = Order::where('id', $id)->first();
-        $userAddress = UserAddress::where('id', $order->shipping_address_id)->first();                    
-        $data = ['page_title' => 'Order History | TJ', 'order' => $order, 'userAddress' => $userAddress];
-        return view('order.buyer-order-detail', $data);
-    }
-
-    public function sellerOrderDetail(Request $request, $id)
-    {
-        $product = OrderProduct::where('id', $id)->first();
-        $order = Order::where('id', $product->order_id)->first();
-        $userAddress = UserAddress::where('id', $order->shipping_address_id)->first();                    
-        $data = ['page_title' => 'Order History | TJ', 'order' => $order, 'userAddress' => $userAddress, 'product' => $product];
-        return view('order.seller-order-detail', $data);
+        $paypalModule = new ExpressCheckout;
+        $response = $paypalModule->getExpressCheckoutDetails($request->token);
+  
+        if (in_array(strtoupper($response['ACK']), ['SUCCESS', 'SUCCESSWITHWARNING'])) {            
+            return redirect()->route('buyer.order');
+            dd('Payment was successfull. The payment success page goes here!');
+        }
+  
+        dd('Error occured!');
     }
 }
