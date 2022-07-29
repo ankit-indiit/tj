@@ -37,7 +37,7 @@
                      <div class="d-flex align-items-center justify-content-between">
                         <h4 class="text-xl mb-3 font-semibold">Add Product</h4>
                         <a href="#" class="btn btn-primary pull-right  mb-3 bctp" uk-toggle="target: #add-product-attribute-modal">Product Attributes</a>
-                        <a href="{{ route('my-profile') }}" class="btn btn-primary pull-right  mb-3 bctp">Back To Products</a>
+                        <a href="{{ route('my-profile') }}?tab=product" class="btn btn-primary pull-right  mb-3 bctp">Back To Products</a>
                      </div>
                   </div>
                <div class="row">
@@ -118,7 +118,7 @@
                   <div class="col-lg-12">
                      <div class="form-group">
                         <label for="">Add Description</label>
-                        <textarea class="form-control" style="height: 90px" placeholder="Add description here" name="description" rows="5"></textarea>
+                        <textarea class="form-control" style="height: 90px" placeholder="Add Description" name="description" rows="5"></textarea>
                      </div>
                   </div>
                 <div class="col-lg-12">
@@ -165,7 +165,7 @@
             </div>
             <div class="mx-4 my-4">
                <input type="text" class="form-control border" placeholder="Enter attribute value sepreated by XL | L | M" name="option">
-               <p class="text-danger px-4">Enter attribute value sepreated by "XL | L | M"</p>
+               {{-- <p class="text-danger px-4">Enter attribute value sepreated by "XL | L | M"</p> --}}
             </div>
             <div class="mx-4 my-4">
                <button type="submit" id="addProductAttrBtn" class="form-control">Add</button>
@@ -231,9 +231,9 @@ function ValidateFileUpload(fileId, previewId) {
 
     //To check if user upload any file
     if (FileUploadPath == '') {
-       swal("", 'Please upload an image', "error", {
-          button: "close",
-       });
+       // swal("", 'Please upload an image', "error", {
+       //    button: "close",
+       // });
 
     } else {
        var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();

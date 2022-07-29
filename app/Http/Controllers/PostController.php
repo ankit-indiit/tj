@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Session;
 use Config;
 use DB;
@@ -35,6 +36,23 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        echo '<pre>';
+        $video = $request->file('post_video_upload');
+        print_r($video->getMimeType());
+        die;
+        if ($request->file('post_video_upload')) {
+            $validator = Validator::make($request->all(), [
+                // 'post_video_upload' => 'video_length:45',
+                'post_video_upload'  => 'mimes:mp4,mov,ogg,qt | max:20000'
+            ]);            
+        }
+
+        if ($validator->fails()) {
+            $messags['message'] = $validator->errors()->first();
+            $messags['erro'] = 202;
+            return response()->json($messags, 200);
+        }
+
         if (Auth::user()->switch_as == 'seller') {
             $request['store_id'] = BecomeSeller::where('user_id', Auth::user()->id)->pluck('id')->first();
         }
@@ -44,6 +62,14 @@ class PostController extends Controller
 
                 if ($request->file('post_image_upload')) {
                     $image = $request->file('post_image_upload');
+                    $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
+                    $destinationPath = public_path('/posts/images');
+                    $image->move($destinationPath, $imagename);
+                    $image = $imagename;
+                }
+
+                if ($request->file('post_video_upload')) {
+                    $image = $request->file('post_video_upload');
                     $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
                     $destinationPath = public_path('/posts/images');
                     $image->move($destinationPath, $imagename);

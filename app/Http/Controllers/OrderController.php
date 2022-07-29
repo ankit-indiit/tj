@@ -14,6 +14,7 @@ use App\Coupon;
 use App\Product;
 use App\OrderProductStatus;
 use App\Inventory;
+use App\OrderAddress;
 use Session;
 use Auth;
 use DB;
@@ -42,15 +43,13 @@ class OrderController extends Controller
             'shipping_city' => 'required',
             'billing_address' => 'required',
             'shipping_address' => 'required',
-            'save_billing_address' => 'required_if:billing_section,0',
-            'save_shipping_address' => 'required_if:shipping_section,0',
+            // 'save_billing_address' => 'required_if:billing_section,0',
+            // 'save_shipping_address' => 'required_if:shipping_section,0',
+            'payment_type' => 'required',
         ], $customMessages);    
         
         if ($validator->fails()) {
-            return response()->json([
-                'erro' => 102,
-                'message' => $validator->errors()->first(),
-            ]);
+            return redirect()->back()->with('error', $validator->errors()->first());
         }
         
         $request['user_id'] = Auth::user()->id;
@@ -74,11 +73,25 @@ class OrderController extends Controller
                     'Address' => $request->billing_address,
                     'city' => strtolower($request->billing_city),
                     'type' => 'billing',
-                ]);    
+                ]);
+                $billingAddressType = 'saved';
+            } else {
+                OrderAddress::create([
+                    'user_id' => Auth::id(),
+                    'first_name' => $request->billing_first_name,
+                    'last_name' => $request->billing_last_name,
+                    'country_code' => strtolower($request->billing_country),
+                    'phone_no' => $request->billing_phone_no,
+                    'pincode' => $request->billing_zip_code,
+                    'Address' => $request->billing_address,
+                    'city' => strtolower($request->billing_city),
+                    'type' => 'billing',
+                ]);
+                $billingAddressType = 'un_saved';
             }
 
             if ($request->save_shipping_address == 'on') {
-                $shippingAddress =UserAddress::create([
+                $shippingAddress = UserAddress::create([
                     'userId' => Auth::user()->id,
                     'first_name' => $request->shipping_first_name,
                     'last_name' => $request->shipping_last_name,
@@ -89,10 +102,26 @@ class OrderController extends Controller
                     'city' => strtolower($request->shipping_city),
                     'type' => 'shipping',
                 ]);
+                $shippingAddressType = 'saved';
+            } else {
+                OrderAddress::create([
+                    'user_id' => Auth::id(),
+                    'first_name' => $request->shipping_first_name,
+                    'last_name' => $request->shipping_last_name,
+                    'country_code' => strtolower($request->shipping_country),
+                    'phone_no' => $request->shipping_phone_no,
+                    'pincode' => $request->shipping_zip_code,
+                    'Address' => $request->shipping_address,
+                    'city' => strtolower($request->shipping_city),
+                    'type' => 'shipping',
+                ]);
+                $shippingAddressType = 'un_saved';
             }
 
-            $request['billing_address_id'] = $request->billing_section != 0 ? $request->billing_section : $billingAddress->id;
-            $request['shipping_address_id'] = $request->shipping_section != 0 ? $request->shipping_section : $shippingAddress->id;
+            $request['billing_address_id'] = isset($billingAddress) ? $billingAddress->id : $request['billing_section'];
+            $request['shipping_address_id'] = isset($shippingAddress) ? $shippingAddress->id : $request['shipping_section'];
+            $request['billing_address_type'] = $billingAddressType;
+            $request['shipping_address_type'] = $shippingAddressType;
 
             $order = Order::create($request->all());
             foreach ($request->product as $key => $product) {
@@ -146,9 +175,7 @@ class OrderController extends Controller
             $message['erro'] = 101;
             return response()->json($message, 200);
         }
-        $messags['message'] = 'Your order has been successfully placed!';
-        $messags['erro'] = 101;
-        echo json_encode($messags);
+        return redirect()->route('buyer.order')->with('success', 'Your order has been successfully placed!');
     }
 
     public function sellerOrder()
@@ -185,7 +212,12 @@ class OrderController extends Controller
     public function buyerOrderDetail(Request $request, $id)
     {
         $order = Order::where('id', $id)->first();
-        $userAddress = UserAddress::where('id', $order->shipping_address_id)->first();                    
+        if ($order->shipping_address_id == 0) {
+            $userAddress = OrderAddress::where('user_id', Auth::id())->first();           
+        } else {
+            $userAddress = UserAddress::where('id', $order->shipping_address_id)->first();            
+        }     
+        
         $data = ['page_title' => 'Order History | TJ', 'order' => $order, 'userAddress' => $userAddress];
         return view('order.buyer-order-detail', $data);
     }

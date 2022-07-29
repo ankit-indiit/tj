@@ -31,13 +31,13 @@
             <nav class="cd-secondary-nav pl-2 is_ligh -mb-0.5 border-transparent">
                <ul class="nav nav-tabs" id="myTab" role="tablist">
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Feed</a>
+                     <a class="nav-link {{ request()->tab == 'feed' ? 'active' : '' }}" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Feed</a>
                   </li>
                   <li class="nav-item" role="presentation">
                      <a class="nav-link" id="user-pics-tab" data-toggle="tab" href="#user-photos" role="tab" aria-controls="user-photos" aria-selected="true">Photos</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="product-tab" data-toggle="tab" href="#product" role="tab" aria-controls="profile" aria-selected="false">Product</a>
+                     <a class="nav-link {{ request()->tab == 'product' ? 'active' : '' }}" id="product-tab" data-toggle="tab" href="#product" role="tab" aria-controls="profile" aria-selected="false">Product</a>
                   </li>
                   <li class="nav-item" role="presentation">
                      <a class="nav-link" id="collection-tab" data-toggle="tab" href="#collectionTab" role="tab" aria-controls="collectionTab" aria-selected="true">Collections</a>
@@ -76,16 +76,16 @@
          @endif   
       </div>
       <div class="tab-content">
-         <div class="lg:flex lg:mt-8 mt-4 lg:space-x-8 tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+         <div class="lg:flex lg:mt-8 mt-4 lg:space-x-8 tab-pane {{ request()->tab == 'feed' ? 'active' : '' }}" id="home" role="tabpanel" aria-labelledby="home-tab">
             @include('user.feed-tab')
          </div>
-         <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+         <div class="tab-pane {{ request()->tab == 'profile' ? 'active' : '' }}" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             @include('user.my-info-tab')
          </div>
-         <div class="tab-pane" id="product" role="tabpanel" aria-labelledby="product-tab">
+         <div class="tab-pane {{ request()->tab == 'product' ? 'active' : '' }}" id="product" role="tabpanel" aria-labelledby="product-tab">
             @include('seller.product-tab')
          </div>
-         <div class="tab-pane" id="userFriends" role="tabpanel" aria-labelledby="messages-tab">
+         <div class="tab-pane {{ request()->tab == 'user-friends' ? 'active' : '' }}" id="userFriends" role="tabpanel" aria-labelledby="messages-tab">
             <!-- post header-->
             <div class="row mt-4">
                <div class="col-sm-3">
@@ -103,22 +103,26 @@
                      <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
                         <a href="#" class="flex items-center px-3 py-2 text-black-500 hover:bg-gray-100 hover:text-gray-500 rounded-md dark:hover:bg-red-600 p-4">
                         <b>Select Audience</b>
+                       {{--  @php
+                           echo '<pre>';
+                           print_r(userFriends(Auth::id()));
+                        @endphp --}}
                         </a>
                         <ul class="space-y-1">
-                           <li>
-                              <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                           <li class="{{ Auth::user()->privacy == 'friends' ? 'privacy' : '' }}">
+                              <a href="{{ route('privacy', 'friends') }}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
                               <i class="fa fa-users" aria-hidden="true"></i>
                               Friends
                               </a>
                            </li>
-                           <li>
-                              <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
+                           <li class="{{ Auth::user()->privacy == 'public'  ? 'privacy': '' }}">
+                              <a href="{{ route('privacy', 'public') }}" class="flex items-center py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600">
                               <i class="fa fa-globe" aria-hidden="true"></i>
                               Public
                               </a>
                            </li>
-                           <li>
-                              <a href="#" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600"> <i class="fa fa-lock" aria-hidden="true"></i> Only Me </a>
+                           <li class="{{ Auth::user()->privacy == 'only_me' ? 'privacy' : '' }}">
+                              <a href="{{ route('privacy', 'only_me') }}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600"> <i class="fa fa-lock" aria-hidden="true"></i> Only Me </a>
                            </li>
                         </ul>
                      </div>
@@ -199,7 +203,7 @@
                </div>
                <div>
                   <div class="bg-green-400 max-w-full lg:h-56 h-48 rounded-lg relative overflow-hidden shadow uk-transition-toggle">
-                     <img src="{{ asset('images/post/img-5.jpg') }}" class="w-full h-full absolute object-cover inset-0" />
+                     <img src="{{ asset('images/post/img-4.jpg') }}" class="w-full h-full absolute object-cover inset-0" />
                      <!-- overly-->
                      <div class="-bottom-12 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
                   </div>
@@ -220,7 +224,7 @@
                </div>
                <div>
                   <div class="bg-green-400 max-w-full lg:h-56 h-48 rounded-lg relative overflow-hidden shadow uk-transition-toggle">
-                     <img src="assets/images/post/img-2.jpg" class="w-full h-full absolute object-cover inset-0" />
+                     <img src="{{ asset('images/post/img-2.jpg') }}" class="w-full h-full absolute object-cover inset-0" />
                      <!-- overly-->
                      <div class="-bottom-12 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
                   </div>
@@ -255,7 +259,7 @@
                </div>
             </div>
          </div>
-         <div class="tab-pane wishlist-page" id="wish" role="tabpanel" aria-labelledby="wish-tab">
+         <div class="tab-pane {{ request()->tab == 'wish' ? 'active' : '' }} wishlist-page" id="wish" role="tabpanel" aria-labelledby="wish-tab">
             <div class="" style="margin-top: 42px;">
                <div class="row mt-4">
                   <div class="col-sm-3">
@@ -358,7 +362,7 @@
                            <div class="card">
                               <div class="card-media h-44">
                                  <div class="card-media-overly"></div>
-                                 <img src="assets/images/tshert.png" alt="" />
+                                 <img src="{{ asset('images/tshert.png') }}" alt="" />
                               </div>
                               <div class="card-body">
                                  <a href="shop-4.html" class="ext-lg font-medium mt-1 t truncate"> Men T-shirt </a>
@@ -403,7 +407,7 @@
                </div>
             </div>
          </div>
-         <div class="tab-pane photos-page" id="user-photos" role="tabpanel" aria-labelledby="user-photos-tab">
+         <div class="tab-pane {{ request()->tab == 'user-photos' ? 'active' : '' }} photos-page" id="user-photos" role="tabpanel" aria-labelledby="user-photos-tab">
             <div class="tab-pane active" id="pics" role="tabpanel" aria-labelledby="pics-tab">
                <div class="flex justify-between relative md:mb-4 mb-3">
                   <div class="flex-1">
@@ -430,7 +434,7 @@
                </div>
             </div>            
          </div>
-         <div class="tab-pane wishlist-page" id="collectionTab" role="tabpanel" aria-labelledby="collection-tab">
+         <div class="tab-pane {{ request()->tab == 'collection-tab' ? 'active' : '' }} wishlist-page" id="collectionTab" role="tabpanel" aria-labelledby="collection-tab">
             <div class="" style="margin-top: 42px;">
                <div class="row mt-4">
                   <div class="col-sm-12">
@@ -523,10 +527,10 @@
                </div>
             </div>
          </div>        
-         <div class="tab-pane" id="userBio" role="tabpanel" aria-labelledby="user-bio-tab">
+         <div class="tab-pane {{ request()->tab == 'user-bio' ? 'active' : '' }}" id="userBio" role="tabpanel" aria-labelledby="user-bio-tab">
             @include('user.bio-tab')
          </div>
-         <div class="tab-pane" id="shopInfo" role="tabpanel" aria-labelledby="shopInfoTab">
+         <div class="tab-pane {{ request()->tab == 'shop-info' ? 'active' : '' }}" id="shopInfo" role="tabpanel" aria-labelledby="shopInfoTab">
             @include('user.shop-info-tab')
          </div>
       </div>
@@ -688,7 +692,7 @@
 <div id="create-post-modal" class="create-post" uk-modal>
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
-         <h3 class="text-lg font-semibold"> Simple Post </h3>
+         <h3 class="text-lg font-semibold">Simple Post</h3>
          <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="simplePostForm" enctype="multipart/form-data" method="post">
@@ -699,34 +703,40 @@
             <div class="flex-1 pt-2">
                <textarea name="post_content" id="post_content" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="What's Your Mind ?"></textarea>
             </div>
+
          </div>
          <div class="bsolute bottom-0 p-4 space-x-4 w-full">
             <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
                <div class="lg:block hidden"> Add to your post </div>
-               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
-                  <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
+               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">                  
                   <a href="#" onclick="$('#post_image_upload').trigger('click'); return false;">
                      <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                      </svg>
+                  </a>     
+                  <a href="#" onclick="$('#post_video_upload').trigger('click'); return false;">
+                    <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
+                    </svg>
                   </a>
-                  <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                  </svg>
-                  <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+                  {{-- <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                  </svg>
+                  </svg> --}}
                </div>
             </div>
+            <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
+            <input type="file" id="post_video_upload" name="post_video_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_video_upload','output_simple_post_video')" accept="video/mp4,video/x-m4v,video/*">
             <img id="output_simple_post_image" />
+            <video id="output_simple_post_video"></video>
          </div>
          <div class="flex items-center w-full justify-between p-3 border-t">
             <div class="flex space-x-2 pull-right">
                <button type="submit" id="add_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
-               Post
+                  Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-               Cancel </a>
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+                  Cancel </a>
             </div>
          </div>
       </form>
@@ -784,7 +794,7 @@
                <button type="submit" id="add_poll_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                Cancel </a>
             </div>
          </div>
@@ -840,7 +850,7 @@
                <button type="submit" id="add_product_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                Add Listing
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                Cancel </a>
             </div>
          </div>
@@ -883,7 +893,7 @@
                <button type="submit" id="add_suggestion_post_btn" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                Ask for suggestions
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                Cancel </a>
             </div>
          </div>
@@ -933,6 +943,7 @@
 @endsection
 @section('customScripts')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+<script src="{{ asset('js/custom-shop-info.js') }}"></script>
 <script>
    $(document).ready(function() {
       const phoneInputField = document.querySelector("#phone");
@@ -980,11 +991,7 @@
       input2.on('countrychange', function(e) {
          // change the hidden input value to the selected country code
          country2.val(iti1.getSelectedCountryData().iso2);
-      });
-   
-   
-      
-   
+      }); 
    
       $("#updateProfileForm").validate({
          rules: {
@@ -1041,7 +1048,6 @@
             return false;
          }
       });
-   
    
       $("#addAddressForm").validate({
          rules: {
@@ -1235,7 +1241,6 @@
          }
       });
    
-   
       $("#updateBioForm").validate({
          rules: {
             bio_text: {
@@ -1286,7 +1291,7 @@
             }
          },
          messages: {
-            post_content: "Please enter your Bio.",
+            post_content: "Please enter post description!",
          },
          submitHandler: function(forms, e) {
             e.preventDefault();
@@ -1336,7 +1341,7 @@
          }
       });
    
-       $("#simplePostUpdateForm").validate({
+      $("#simplePostUpdateForm").validate({
          rules: {
             post_content: {
                required: true,
@@ -1344,7 +1349,7 @@
             }
          },
          messages: {
-            post_content: "Please enter your Bio.",
+            post_content: "Please enter post description!",
          },
          submitHandler: function(forms, e) {
             e.preventDefault();
@@ -1571,8 +1576,6 @@
             return false;
          }
       });
-   
-   
    });
    
    var _validFileExtensions = ['.jpg', 'png', 'jpeg', 'gif'];
@@ -1648,9 +1651,6 @@
       UIkit.modal('#editProfileImage').show();
    }
    
-   
-   
-   
    function uploadProfileFile() {
       var file = _("profile_image").files[0];
    
@@ -1671,7 +1671,6 @@
       ajax.responseType = 'json';
       ajax.send(formdata);
    }
-   
    
    function progressHandler1(event) {
       $('#progressBar1').show();
@@ -1790,28 +1789,25 @@
    
    
    function ValidateFileUpload(fileId, previewId) {
+     
       var fuData = document.getElementById(fileId);
       var FileUploadPath = fuData.value;
-   
       //To check if user upload any file
       if (FileUploadPath == '') {
-         swal("", 'Please upload an image', "error", {
-            button: "close",
-         });
-   
+         // swal("", 'Please upload an image', "error", {
+         //    button: "close",
+         // });
       } else {
-         var Extension = FileUploadPath.substring(
-            FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
-   
+         var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
          //The file uploaded is an image
-   
+
          if (Extension == "gif" || Extension == "png" || Extension == "bmp" ||
-            Extension == "jpeg" || Extension == "jpg") {
-   
+            Extension == "jpeg" || Extension == "jpg"|| Extension == "mp4"|| Extension == "x-mp4") {
+
             // To Display
             if (fuData.files && fuData.files[0]) {
                var reader = new FileReader();
-   
+
                reader.onload = function(e) {
                   var output = document.getElementById(previewId);
                   output.style.height = '150px';
@@ -1819,10 +1815,10 @@
                   output.style.padding = '10px';
                   output.src = e.target.result;
                }
-   
+
                reader.readAsDataURL(fuData.files[0]);
             }
-   
+
          }
          //The file upload is NOT an image
          else {
@@ -1831,656 +1827,7 @@
             });
          }
       }
-   }
-
-   $("#addShopImageForm").validate({
-      rules: {     
-        shopImageUpload: {
-           required: true
-        }
-      },
-      messages: {
-        shopImageUpload: "Please choose category image"
-      },
-      submitHandler: function(forms, e) {
-        e.preventDefault();
-        var form = $('#addShopImageForm')[0];
-        var serializedData = new FormData(form);
-       
-        $("#addShopImageBtn").attr("disabled", true);
-        $('#addShopImageBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-        $.ajax({
-           headers: {
-              'X-CSRF-Token': $('input[name="_token"]').val()
-           },
-           type: 'post',
-           enctype: 'multipart/form-data',
-           url: "{{ url('add-shop-image') }}",
-           data: serializedData,
-           dataType: 'json',
-           processData: false,
-           contentType: false,
-           cache: false,
-           success: function(data) {
-              $("#addShopImageBtn").attr("disabled", false);
-      
-              $('#addShopImageBtn').html('Post');
-      
-              if (data.erro == '101') {
-                 clearImage('shopImageUpload');
-                
-                 UIkit.modal('#add-shop-image-modal').hide();
-      
-                 swal("", data.message, "success", {
-                    button: "close",
-                 });
-      
-                 $("#addShopImageForm").trigger('reset');
-                 $('.swal-button--confirm').on('click', function(){
-                    window.location.reload();
-                 });
-              } else {
-                 swal("", data.message, "error", {
-                    button: "close",
-                 });
-              }
-           }
-        });
-        return false;
-      }
-   });
-
-   $("#addShopCategoryForm").validate({
-      rules: {
-         name: {
-            required: true
-         },      
-      },
-      messages: {
-         name: "Please enter shop category",         
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#addShopCategoryBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('add-shop-category') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#addShopCategoryBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#addShopCategoryForm").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-
-   $(document).on('click', '#editShopCategory', function(){
-      var shopCatId = $(this).data('id');
-      $.ajax({        
-         type: 'get',
-         url: _baseURL + "/edit-shop-category",
-         data: { shopCatId: shopCatId },
-         success: function (data) {
-            $('.shop-category-id').val(data.id);
-            $('.shop-category').val(data.name);
-            UIkit.modal('#edit-shop-category-modal').show();
-         }            
-      });
-   });
-
-   $("#updateShopCategoryForm").validate({
-      rules: {
-         name: {
-            required: true
-         },     
-      },
-      messages: {
-         name: "Please enter shop category",         
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#updateShopCategoryBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('update-shop-category') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#updateShopCategoryBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#updateShopCategoryForm").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-
-   $("#addSellerSocialLink").validate({
-      rules: {
-         social_icon: {
-            required: true
-         },
-         social_link: {
-            required: true
-         }        
-      },
-      messages: {
-         social_icon: "Please choose social icon",         
-         social_link: "Please enter a valid link"
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#addSocialLinkBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('add-seller-social-link') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#addSocialLinkBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#updateProfileForm").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-   
-   $(document).on('click', '.editSocialLink', function(){
-      var linkId = $(this).data('id');
-      $.ajax({        
-         type: 'get',
-         url: _baseURL + "/edit-social-link",
-         data: { linkId: linkId },
-         success: function (data) {
-            $('.link-id').val(data.id);
-            $('.social-icon').val(data.social_icon);
-            $('.social-link').val(data.social_link);
-            UIkit.modal('#edit-social-link-modal').show();
-         }            
-      });
-   });
-   
-   $("#updateSellerSocialLink").validate({
-      rules: {
-         social_icon: {
-            required: true
-         },
-         social_link: {
-            required: true
-         }        
-      },
-      messages: {
-         social_icon: "Please choose social icon",         
-         social_link: "Please enter a valid link"
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#updateSocialLinkBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('update-seller-social-link') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#updateSocialLinkBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#updateProfileForm").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-   
-   $("#addSellerWorkingHours").validate({
-      rules: {
-         day: {
-            required: true
-         },
-         open_time: {
-            required: true
-         },
-         close_time: {
-            required: true
-         }        
-      },
-      messages: {
-         day: "Please choose working day",         
-         open_time: "Please enter open time",
-         close_time: "Please enter close time"
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#sellerWorkingHoursBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('add-seller-working-hour') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#sellerWorkingHoursBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#addSellerWorkingHours").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-   
-   $(document).on('click', '.editWorkingHour', function(){
-      var workingHourId = $(this).data('id');
-      $.ajax({        
-         type: 'get',
-         url: _baseURL + "/edit-working-hour",
-         data: { workingHourId: workingHourId },
-         success: function (data) {
-            $('.working-id').val(data.id);
-            $('.working-day').val(data.day);
-            $('.open-time').val(data.open_time);
-            $('.close-time').val(data.close_time);
-            UIkit.modal('#edit-working-hour-modal').show();
-         }            
-      });
-   });
-   
-   $("#updateSellerWorkingHour").validate({
-      rules: {
-         day: {
-            required: true
-         },
-         open_time: {
-            required: true
-         },
-         close_time: {
-            required: true
-         }        
-      },
-      messages: {
-         day: "Please choose working day",         
-         open_time: "Please enter open time",
-         close_time: "Please enter close time"
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#updateWorkingHourBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('update-seller-working-hour') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#updateWorkingHourBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#updateSellerWorkingHour").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-   
-   $("#addSellerEstimatedDelivery").validate({
-      rules: {
-         day: {
-            estimated_delivery: true
-         }       
-      },
-      messages: {
-         estimated_delivery: "Enter Estimated Delivery"        
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#addSellerEstimatedDeliveryBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('add-seller-estimated-delivery') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#addSellerEstimatedDeliveryBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#addSellerEstimatedDelivery").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-   
-   $(document).on('click', '.editEstimateDelevery', function(){
-      var estimateDeleveryId = $(this).data('id');
-      $.ajax({        
-         type: 'get',
-         url: _baseURL + "/edit-estimate-delevery",
-         data: { estimateDeleveryId: estimateDeleveryId },
-         success: function (data) {
-            console.log(data);
-            $('.estimate-day-to').val(data.from);            
-            $('.estimated-day').val(data.till);            
-            UIkit.modal('#edit-estimated-delivery').show();
-         }            
-      });
-   });
-   
-   $("#editSellerEstimatedDelivery").validate({
-      rules: {
-         estimated_delivery: {
-            required: true
-         }      
-      },
-      messages: {
-         day: "Enter Estimated Delivery"         
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#addSellerEstimatedDeliveryBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('update-seller-estimated-delivery') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#addSellerEstimatedDeliveryBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#addSellerEstimatedDelivery").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-   
-   $("#addDiscountCoupon").validate({
-      rules: {
-         title: {
-            required: true
-         },
-         description: {
-            required: true
-         },
-         type: {
-            required: true
-         },
-         expired_on: {
-            required: true
-         },
-         discounted_value: {
-            required: true
-         }        
-      },
-      messages: {
-         title: "Please title",         
-         description: "Please enter description",
-         type: "Please enter type",
-         expired_on: "Please enter expired on",
-         discounted_value: "Please enter discounted value"
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#addDiscountCouponBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('add-discount-coupon') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#addDiscountCouponBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#addDiscountCoupon").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
-
-   // $("#addDiscountCoupon").validate({
-   //    rules: {
-   //       day: {
-   //          estimated_delivery: true
-   //       }       
-   //    },
-   //    messages: {
-   //       estimated_delivery: "Enter Estimated Delivery"        
-   //    },
-   //    submitHandler: function(form) {
-   //       var serializedData = $(form).serialize();
-   //       $("#err_mess").html('');
-   //       $('#addDiscountCouponBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-   //       $.ajax({
-   //          headers: {
-   //             'X-CSRF-Token': $('input[name="_token"]').val()
-   //          },
-   //          type: 'post',
-   //          url: "{{ url('add-discount-coupon') }}",
-   //          data: serializedData,
-   //          dataType: 'json',
-   //          success: function(data) {
-   //             $('#addDiscountCouponBtn').html('Save Changes');
-   
-   //             if (data.erro == '101') {
-   //                swal("", data.message, "success", {
-   //                   button: "close",
-   //                });
-   //                $("#addDiscountCoupon").trigger('reset');
-   //             } else {
-   //                swal("", data.message, "error", {
-   //                   button: "close",
-   //                });
-   //             }
-   //             $('.swal-button--confirm').on('click', function(){
-   //                window.location.reload();
-   //             });
-   //          }
-   //       });
-   //       return false;
-   //    }
-   // });
-   
-   $(document).on('click', '.editDiscountCoupon', function(){
-      var editedCouponId = $(this).data('id');
-      $.ajax({        
-         type: 'get',
-         url: _baseURL + "/edit-discount-coupon",
-         data: { editedCouponId: editedCouponId },
-         success: function (data) {
-            $('.coupon-id').val(data.id);            
-            $('.coupon-title').val(data.title);            
-            $('.coupon-name').val(data.coupon_name);            
-            $('.coupon-description').val(data.description);            
-            $('.coupon-type').val(data.type);            
-            $('.coupon-expired-on').val(data.expired_on);            
-            $('.coupon-discounted-value').val(data.discounted_value);            
-            UIkit.modal('#edit-discount-coupon-modal').show();
-         }            
-      });
-   });
-   
-   $("#updateDiscountCoupon").validate({
-      rules: {
-         estimated_delivery: {
-            required: true
-         }      
-      },
-      messages: {
-         day: "Enter Estimated Delivery"         
-      },
-      submitHandler: function(form) {
-         var serializedData = $(form).serialize();
-         $("#err_mess").html('');
-         $('#updateDiscountCouponBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            url: "{{ url('update-discount-coupon') }}",
-            data: serializedData,
-            dataType: 'json',
-            success: function(data) {
-               $('#updateDiscountCouponBtn').html('Save Changes');
-   
-               if (data.erro == '101') {
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-                  $("#updateDiscountCoupon").trigger('reset');
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-               $('.swal-button--confirm').on('click', function(){
-                  window.location.reload();
-               });
-            }
-         });
-         return false;
-      }
-   });
+   }     
    
    $("#addProductCategoryForm").validate({
    rules: {

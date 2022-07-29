@@ -99,133 +99,132 @@
     </div>
 
     <div id="update-post-modal" class="create-post" uk-modal>
-         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
-            <div class="text-center py-4 border-b">
-               <h3 class="text-lg font-semibold" id="postTitle">Simple Post</h3>
-               <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
-            </div>
-            <form id="simplePostUpdateForm" enctype="multipart/form-data" method="post">
-               @csrf
-               <input type="hidden" value="1" name="postType">
-               <input type="hidden" name="postId" id="editedPostId">
-               <div class="flex flex-1 items-start space-x-4 p-5">
-                  <img src="{{ show_user_image() }}" class="bg-gray-200 border border-white rounded-full w-11 h-11">
-                  <div class="flex-1 pt-2">
-                     <textarea name="post_content" id="edited_post_content" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="What's Your Mind ?"></textarea>
-                  </div>
+       <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+          <div class="text-center py-4 border-b">
+             <h3 class="text-lg font-semibold" id="postTitle">Simple Post</h3>
+             <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+          </div>
+          <form id="simplePostUpdateForm" enctype="multipart/form-data" method="post">
+             @csrf
+             <input type="hidden" value="1" name="postType">
+             <input type="hidden" name="postId" id="editedPostId">
+             <div class="flex flex-1 items-start space-x-4 p-5">
+                <img src="{{ show_user_image() }}" class="bg-gray-200 border border-white rounded-full w-11 h-11">
+                <div class="flex-1 pt-2">
+                   <textarea name="post_content" id="edited_post_content" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="What's Your Mind ?"></textarea>
+                </div>
 
-               </div>
-               <div class="bsolute bottom-0 p-4 space-x-4 w-full">
-                  <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
-                     <div class="lg:block hidden"> Add to your post </div>
-                     <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
-                        <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
-                        <a href="#" onclick="$('#post_image_upload').trigger('click'); return false;">
-                           <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                           </svg>
-                        </a>
-
-                        <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                        </svg>
-
-                        <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                        </svg>
-                     </div>
-                  </div>
-                  <img id="output_simple_post_image" />
-               </div>
-               <div class="flex items-center w-full justify-between p-3 border-t">
-                  <div class="flex space-x-2 pull-right">
-                     <button type="submit" id="update_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
-                        Post
-                     </button>
-                     <a href="javascript:void(0);" onclick="hideCurrentOpenModal('update-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-                        Cancel </a>
-                  </div>
-               </div>
-            </form>
-         </div>
-      </div>
-        <div id="disable-comment-confirm-box" class="create-post" uk-modal>
-           <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
-               <div class="text-center py-4 border-b">
-                   <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
-               </div>
-               <div class="main-txt">
-                   <h3 class="text-lg font-semibold">Are you sure you want to disable?</h3>
-                   <div class="space-x-2 buttons-yesno">
-                       <a href="#" id="disablePostComment" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium"> Yes </a>
-                       <a href="javascript:void(0);" onclick="$('#disable-comment-confirm-box').removeClass('uk-open').hide();" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm"> Cancel </a>
-                   </div>                   
-               </div>
-           </div>
-         </div>
-
-       <div id="enable-comment-confirm-box" class="create-post" uk-modal>
-         <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
-             <div class="text-center py-4 border-b">
-                 <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
              </div>
-             <div class="main-txt">
-                 <h3 class="text-lg font-semibold">Are you sure you want to enable?</h3>
-                 <div class="space-x-2 buttons-yesno">
-                     <a href="#" id="enablePostComment" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium"> Yes </a>
-                     <a href="javascript:void(0);" onclick="$('#enable-comment-confirm-box').removeClass('uk-open').hide();" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm"> Cancel </a>
-                 </div>                   
+             <div class="bsolute bottom-0 p-4 space-x-4 w-full">
+                <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
+                   <div class="lg:block hidden"> Add to your post </div>
+                   <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
+                      <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
+                      <a href="#" onclick="$('#post_image_upload').trigger('click'); return false;">
+                         <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                         </svg>
+                      </a>
+
+                      <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
+                      </svg>
+
+                      <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                      </svg>
+                   </div>
+                </div>
+                <img id="output_simple_post_image" />
              </div>
-         </div>
+             <div class="flex items-center w-full justify-between p-3 border-t">
+                <div class="flex space-x-2 pull-right">
+                   <button type="submit" id="update_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
+                      Post
+                   </button>
+                   <a href="javascript:void(0);" onclick="hideCurrentOpenModal('update-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+                      Cancel </a>
+                </div>
+             </div>
+          </form>
        </div>
-
-        <div id="delete-post-confirm-box" class="create-post" uk-modal>
-           <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
-               <div class="text-center py-4 border-b">
-                   <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
-               </div>
-               <div class="main-txt">
-                   <h3 class="text-lg font-semibold">Are you sure you want to delete?</h3>
-                   <div class="space-x-2 buttons-yesno">
-                       <a href="#" id="delete-post" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium"> Yes </a>
-                       <a href="javascript:void(0);" onclick="$('#delete-post-confirm-box').removeClass('uk-open').hide();" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm"> Cancel </a>
-                   </div>                   
-               </div>
+    </div>
+    <div id="disable-comment-confirm-box" class="create-post" uk-modal>
+       <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+           <div class="text-center py-4 border-b">
+               <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
            </div>
-        </div>
+           <div class="main-txt">
+               <h3 class="text-lg font-semibold">Are you sure you want to disable?</h3>
+               <div class="space-x-2 buttons-yesno">
+                   <a href="#" id="disablePostComment" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium"> Yes </a>
+                   <a href="javascript:void(0);" onclick="$('#disable-comment-confirm-box').removeClass('uk-open').hide();" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm"> Cancel </a>
+               </div>                   
+           </div>
+       </div>
+     </div>
+
+   <div id="enable-comment-confirm-box" class="create-post" uk-modal>
+     <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+         <div class="text-center py-4 border-b">
+             <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         </div>
+         <div class="main-txt">
+             <h3 class="text-lg font-semibold">Are you sure you want to enable?</h3>
+             <div class="space-x-2 buttons-yesno">
+                 <a href="#" id="enablePostComment" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium"> Yes </a>
+                 <a href="javascript:void(0);" onclick="$('#enable-comment-confirm-box').removeClass('uk-open').hide();" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm"> Cancel </a>
+             </div>                   
+         </div>
+     </div>
+   </div>
+
+    <div id="delete-post-confirm-box" class="create-post" uk-modal>
+       <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
+           <div class="text-center py-4 border-b">
+               <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+           </div>
+           <div class="main-txt">
+               <h3 class="text-lg font-semibold">Are you sure you want to delete?</h3>
+               <div class="space-x-2 buttons-yesno">
+                   <a href="#" id="delete-post" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium"> Yes </a>
+                   <a href="javascript:void(0);" onclick="$('#delete-post-confirm-box').removeClass('uk-open').hide();" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm"> Cancel </a>
+               </div>                   
+           </div>
+       </div>
+    </div>
       
 </div>
 <div class="lg:w-4/12 space-y-6">
     <div class="widget">
-        <h4 class="text-2xl mb-3 font-semibold">My Bio</h4>
-        <ul class="text-gray-600 space-y-4">
-            <li>{{ Auth::user()->bio}}</li>
-        </ul>
+      <h4 class="text-2xl mb-3 font-semibold">My Bio</h4>
+      <ul class="text-gray-600 space-y-4" style="padding-left: 0px;">
+          <li>{{ Auth::user()->bio}}</li>
+      </ul>
     </div>
-
     <div class="widget border-t pt-4">
         <div class="flex items-center justify-between mb-4">
-            <div>
-                <h4 class="text-2xl -mb-0.5 font-semibold">Friends</h4>
-                <p>{{count(userFriends())}} Friends</p>
-            </div>
-            @if (count(userFriends()) > 0)
-              <a href="#" class="text-blue-600">See all</a>
-            @endif            
+          <div>
+              <h4 class="text-2xl -mb-0.5 font-semibold">Friends</h4>
+              <p>{{count(userFriends())}} Friends</p>
+          </div>
+          @if (count(userFriends()) > 0)
+            <a href="{{ route('see.all-friendFollower', 'following') }}" class="text-blue-600">See all</a>
+          @endif            
         </div>
         <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold">
-            @foreach (userFriends() as $friend)
-              @php $userId= Crypt::encrypt($friend); @endphp
-              <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
-                  <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                      <img src="{{ show_user_image($friend) }}" alt="" class="w-full h-full object-cover absolute" />
-                  </div>
-                  <div>{{ show_user_name($friend) }}</div>
-              </a>
-            @endforeach
+          @foreach (userFriends() as $friend)
+            @php $userId= Crypt::encrypt($friend); @endphp
+            <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
+                    <img src="{{ show_user_image($friend) }}" alt="" class="w-full h-full object-cover absolute" />
+                </div>
+                <div>{{ show_user_name($friend) }}</div>
+            </a>
+          @endforeach
         </div>
         @if (count(userFriends()) > 0)
-          <a href="#" class="bg-gray-100 py-2.5 text-center font-semibold w-full mt-4 block rounded"> See all </a>
+          <a href="{{ route('see.all-friendFollower', 'following') }}" class="bg-gray-100 py-2.5 text-center font-semibold w-full mt-4 block rounded"> See all </a>
         @endif 
     </div>
 </div>

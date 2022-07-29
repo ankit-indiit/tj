@@ -116,14 +116,14 @@
                                 <div class="dropdown_scrollbar" data-simplebar>
                                     <div class="drop_headline">
                                         <h4>Messages </h4>
-                                        <div class="btn_action">
+                                        {{-- <div class="btn_action">
                                             <a href="#">
                                                 <i class="icon-feather-settings" uk-tooltip="title: Notifications settings ; pos: left" title="" aria-expanded="false"></i>
                                             </a>
                                             <a href="#">
                                                 <i class="icon-feather-settings" uk-tooltip="title: Notifications settings ; pos: left" title="" aria-expanded="false"></i>
                                             </a>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <input type="text" class="uk-input" placeholder="Search in Messages">
                                     <ul>
@@ -168,7 +168,7 @@
                                 <img src="{{ show_user_image() }}" class="is_avatar user_profile_image" alt="">
                             </a>
                             <div uk-drop="mode: click;offset:5" class="header_dropdown profile_dropdown">
-                                <a href="{{ url('my-profile') }}" class="user">
+                                <a href="{{ url('my-profile') }}?tab=feed" class="user">
                                     <div class="user_avatar">
                                         <img class="user_profile_image" src="{{ show_user_image() }}" alt="">
                                     </div>
@@ -187,7 +187,7 @@
                                         <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
                                     </svg> Settings/ Privacy
                                 </a>
-                                <a href="help.html">
+                                <a href="{{ route('help') }}">
                                     <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path>
                                         <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
@@ -291,5 +291,19 @@
 <script src="{{ asset('js/custom-cart.js') }}"></script>
 <script src="{{ asset('js/custom-checkout.js') }}"></script>
 <script src="{{ asset('js/custom-message.js') }}"></script>
+@if (\Session::has('success'))
+    <script type="text/javascript">
+        swal("", "{{ \Session::get('success') }}", "", {
+            button: "close",
+        });
+    </script>    
+@endif
 
+@if (\Session::has('error'))
+    <script type="text/javascript">
+        swal("", "{{ \Session::get('error') }}", "", {
+            button: "close",
+        });
+    </script>    
+@endif
 </html>

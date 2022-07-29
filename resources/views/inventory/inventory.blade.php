@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between">
          <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-4">
-               <li class="breadcrumb-item"><a href="shop-1.html">Home</a></li>
+               <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                <li class="breadcrumb-item active" aria-current="page">Inventory</li>
             </ol>
          </nav>

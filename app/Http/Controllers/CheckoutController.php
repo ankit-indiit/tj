@@ -48,9 +48,12 @@ class CheckoutController extends Controller
         $countries = Countries::select('id', 'iso', 'name')->get();
         $allCountry = '';
         foreach ($countries as $country) {
-          $userCountry = @$address->countryId == $country->id ? 'selected' : '';
+          $userCountry = @$address->country_code == strtolower($country->iso) ? 'selected' : '';
           $allCountry .= '<option value="'.$country->iso.'" '.$userCountry.'>'.$country->name.'</option>';
         }
+        // echo '<pre>';
+        // print_r($allCountry);
+        // die;
 
         $form = '<div class="user'.$request->type.'AddressForm">
             <div class="row mt-2">

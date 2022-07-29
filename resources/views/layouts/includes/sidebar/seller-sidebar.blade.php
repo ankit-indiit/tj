@@ -19,7 +19,7 @@
                      </div>
                   </div>
                   <ul>
-                     <li class=""><a href="{{ route('my-profile') }}"> 
+                     <li class=""><a href="{{ route('my-profile') }}?tab=feed"> 
                         <i class="fa fa-home" aria-hidden="true"></i>
                         <span> Dashboard </span> </a> 
                      </li>

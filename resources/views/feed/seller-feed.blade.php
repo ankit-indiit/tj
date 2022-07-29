@@ -235,9 +235,9 @@
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
                   </svg>
 
-                  <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  {{-- <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                  </svg>
+                  </svg> --}}
                </div>
             </div>
             <img id="output_simple_post_image" />
@@ -247,7 +247,7 @@
                <button type="submit" id="add_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                   Cancel </a>
             </div>
          </div>
@@ -310,7 +310,7 @@
                <button type="submit" id="add_poll_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                   Cancel </a>
             </div>
          </div>
@@ -330,9 +330,9 @@
 
       //To check if user upload any file
       if (FileUploadPath == '') {
-         swal("", 'Please upload an image', "error", {
-            button: "close",
-         });
+         // swal("", 'Please upload an image', "error", {
+         //    button: "close",
+         // });
 
       } else {
          var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
@@ -374,7 +374,7 @@
          }
       },
       messages: {
-         post_content: "Please enter your Bio.",
+         post_content: "Please enter post description!",
       },
       submitHandler: function(forms, e) {
          e.preventDefault();
@@ -432,7 +432,7 @@
          }
       },
       messages: {
-         post_content: "Please enter your Bio.",
+         post_content: "Please enter post description!",
       },
       submitHandler: function(forms, e) {
          e.preventDefault();

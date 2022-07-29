@@ -13,6 +13,7 @@
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('privacy-policy', 'HomeController@privacyPolicy')->name('privacy-policy');
 Route::get('terms-conditions', 'HomeController@termsConditions')->name('terms-conditions');
+Route::get('help', 'HomeController@help')->name('help');
 Route::get('feed', 'FeedController@index')->name('feed');
 
 Auth::routes();
@@ -20,6 +21,7 @@ Auth::routes();
 Route::get('change-password', 'UserController@changePassword')->name('change-password');
 Route::post('update-password', 'UserController@updatePassword')->name('update-password');
 Route::get('my-profile/{collectionSlug?}', 'UserController@profile')->name('my-profile');
+Route::get('privacy/{type}', 'UserController@privacy')->name('privacy');
 Route::post('update-profile', 'UserController@updateProfile')->name('update-profile');
 Route::post('add-address', 'UserController@addAddress')->name('add-address');
 Route::post('update-address', 'UserController@updateAddress')->name('update-address');
@@ -86,7 +88,7 @@ Route::get('see-all-friend-follower/{status}', 'FriendController@seeAllFriendFol
 Route::get('search-user', 'FriendController@searchUser')->name('search.user');
 Route::post('follow-shop', 'SellerShopController@followShop')->name('follow.shop');
 Route::post('un-follow-shop', 'SellerShopController@unFollowhop')->name('un.follow-shop');
-Route::get('seller-shop', 'SellerShopController@sellerShop')->name('seller.shop');
+Route::get('seller-shop/{type?}', 'SellerShopController@sellerShop')->name('seller.shop');
 Route::get('shop-detail/{id}', 'SellerShopController@shopDetail')->name('shop.detail');
 Route::get('shop-follower/{id}', 'SellerShopController@shopFollower')->name('shop.follower');
 Route::get('chat', 'MessageController@index')->name('chat');
@@ -124,7 +126,12 @@ Route::post('unlike-post', 'PostController@unLikePost')->name('unlike-post');
 Route::post('update-poll', 'PostController@updatePoll')->name('update-poll');
 Route::post('post-comment', 'PostController@postComment')->name('post-comment');
 
-Route::post('payment', 'PaymentController@paymentDetail')->name('payment');
-Route::get('handle-payment', 'PaymentController@handlePayment')->name('make.payment');
-Route::get('cancel-payment', 'PaymentController@paymentCancel')->name('cancel.payment');
-Route::get('payment-success', 'PaymentController@paymentSuccess')->name('success.payment');
+// Route::post('payment', 'PaymentController@paymentDetail')->name('payment');
+// Route::get('handle-payment', 'PaymentController@handlePayment')->name('make.payment');
+// Route::get('cancel-payment', 'PaymentController@paymentCancel')->name('cancel.payment');
+// Route::get('payment-success', 'PaymentController@paymentSuccess')->name('success.payment');
+
+Route::post('payment', 'PaypalController@charge')->name('payment');
+Route::get('handle-payment', 'PaypalController@handlePayment')->name('make.payment');
+Route::get('cancel-payment', 'PaypalController@paymentCancel')->name('cancel.payment');
+Route::get('success', 'PaypalController@success')->name('success.payment');

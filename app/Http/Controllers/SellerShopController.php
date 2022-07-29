@@ -61,9 +61,24 @@ class SellerShopController extends Controller
         return response()->json($messags, 200);      
     }
 
-    public function sellerShop()
+    public function sellerShop(Request $request, $type = '')
     {
-        $data = ['page_title' => 'Feed | TJ'];
+        $query = BecomeSeller::query();
+        if ($type == 'suggestion') {
+            // $query->where('price', '>=', $min);
+        }
+        if ($type == 'newest') {
+            $query->orderBy('id', 'DESC');
+        } 
+        if ($type == 'my_shop') {
+            $shopIds = ShopFollower::where('user_id', Auth::id())
+                ->where('status', 'confirmed')
+                ->pluck('store_id');
+            $query->whereIn('id', $shopIds);
+        }        
+        $shops = $query->get();
+
+        $data = ['page_title' => 'Feed | TJ', 'shops' => $shops];
         return view('seller.shop.shop', $data);
     }
 

@@ -314,4 +314,13 @@ class UserController extends Controller
         echo json_encode($messags);
         die;
     }
+
+    public function privacy(Request $request, $type)
+    {
+        User::where('id', Auth::id())->update([
+            'privacy' => $type
+        ]);
+
+        return redirect()->back()->with('success', 'Privacy has been updated');
+    }
 }

@@ -9,16 +9,13 @@
          </div>
       </div>
       @if (count($cartItems) > 0)
-        <form action="javascript:void(0);" id="checkoutForm" method="post">
+        <form action="{{ route('place.order') }}" id="checkoutForm" method="post">
+          @csrf
           <div class="row">
              <div class="col-md-12 col-lg-8 ">
                 <div id="accordion">
                    <div class="card">
-                      <div class="card-header" id="headingOne">
-                        {{-- @php
-                          echo '<pre>';
-                          print_r(Session::get('coupon'));
-                        @endphp --}}
+                      <div class="card-header" id="headingOne">                        
                          <h5 class="mb-0">
                             <a class="btn btn-link collapsed" data-toggle="collapse" data-target="#billingAddress" aria-expanded="false" aria-controls="billingAddress">
                               <input type="hidden" name="billing_address">
@@ -59,7 +56,7 @@
                       </div>
                       <div id="shippingAddress" class="collapse" aria-labelledby="headingOne" data-parent="#accordion" style="">
                          <div class="card-body">
-                            <label>Choose Billing Address</label>
+                            <label>Choose Shipping Address</label>
                             <select class="form-control userShippingAddress" name="shipping_section" id="userCheckoutForm" data-type="shipping">
                               <option value="">Choose address</option>
                               <option value="0">Add New Shipping Address</option>
@@ -89,12 +86,15 @@
                       <div id="collapsethree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion" style="">
                          <div class="card mt-4">
                             @php 
-                               $cartTotal = 0;
-                               $coupon = Session::get('coupon') ? Session::get('coupon')['discounted_price'] : 0;
+                              $subTotal = 0;
+                              $productIds = [];
+                              $cartTotal = 0;
+                              $coupon = @Session::get('coupon') ? @Session::get('coupon')['discounted_price'] : 0;
                             @endphp
                             @foreach ($cartItems as $cartItem)
                               @php
                                 $cartTotal = $cartTotal + $cartItem->product_price;
+                                $productIds[] .= $cartItem->product_id;
                               @endphp
                               <div class="card-body cart-product-list{{$cartItem->id}}">
                                   <input type="hidden" name="product[{{$cartItem->product_id}}][id]" value="{{$cartItem->product_id}}">
@@ -127,13 +127,7 @@
                                                     <div class="col-sm-5">
                                                        <h3>{{ $cartItem->product_name }}</h3>
                                                        <h4>Seller: {{ show_user_name($cartItem->seller_id) }} </h4>
-                                                       <b class="color-black">${{ $cartItem->product_price }}</b>
-                                                       {{-- <a href="javascript:void(0);" id="moveToWishlist" data-id="{{ $cartItem->id }}" data-product="{{ $cartItem->product_id }}" class="display-inline sp-m wsh">
-                                                          <b class="color-black">Move to wishlist</b>
-                                                       </a> --}}
-                                                       {{-- <a href="javascript:void(0);" class="display-inline sp-m rmv" id="removeToCart" data-id="{{ $cartItem->id }}">
-                                                          <b class="color-black">Remove</b>
-                                                       </a> --}}
+                                                       <b class="color-black">${{ $cartItem->product_price }}</b>                                                
                                                     </div>
                                                     <div class="col-sm-4">
                                                        <h4 class="">
@@ -151,14 +145,19 @@
                                               </div>
                                            </div>
                                         </div>
-                                        <!-- job 1 -->
                                      </div>
                                   </div>
                               </div>
                             @endforeach
                             @php
-                            $subTotal = $cartTotal - Session::get('coupon')['coupon'];
-                            $total = $subTotal + $shippingCharge;
+                              // Session::forget('coupon');
+                              if (Session::get('coupon')) {
+                                $subTotal = $cartTotal - Session::get('coupon')['coupon'];
+                                $total = $subTotal + $shippingCharge;
+                              } else {
+                                $subTotal = $cartTotal;
+                                $total = $subTotal + $shippingCharge;
+                              }
                             @endphp
                             <input type="hidden" name="sub_total" value="{{$subTotal}}">
                             <input type="hidden" name="shipping" value="{{$shippingCharge}}">
@@ -250,6 +249,7 @@
                          <h3>Apply Coupon</h3>
                          <div class="form-group">
                             <input type="text" class="form-control" id="couponName" placeholder="Add Coupon Code">
+                            <input type="hidden" id="product_ids" value="{{ json_encode($productIds) }}">
                          </div>
                          <a href="#" class="default-btn" id="applyCoupon">
                          Apply Coupon
@@ -258,21 +258,16 @@
                       </div>
                    </div>
                    <div class="cart-totals m-0 mt-4">
-                      <h3>Cart Totals</h3>
-                      {{-- @php
-                        echo '<pre>';
-                        print_r(Session::get('payment_detail')['total_amount']);
-                      @endphp --}}
+                      <h3>Cart Totals</h3>                    
                       <ul>                        
                          <li>Subtotal <span>${{ $subTotal }}</span></li>
                          <li>Shipping <span>${{ $shippingCharge }}</span></li>
-                         <li>Coupon <span>${{ Session::get('coupon')['coupon'] }}</span></li>
+                         <li>Coupon <span>${{ @Session::get('coupon')['coupon'] }}</span></li>
                          <li>Total <span><b>${{ $total }}</b></span></li>
                       </ul>
                       <div id="">
                         <input type="hidden" id="paymentRoute" name="" value="place-order">
-                        <button type="submit" id="checkoutFormBtn" class="default-btn">Place Order<i class="flaticon-right"></i></button>                   
-                        {{-- <a href="{{ route('make.payment') }}" id="paypalBtn" class="default-btn d-none">Make Payment<i class="flaticon-right"></i></a>                   --}}
+                        <button type="submit" id="checkoutFormBtn" class="default-btn">Place Order<i class="flaticon-right"></i></button>                                         
                       </div>
                    </div>
                 </div>

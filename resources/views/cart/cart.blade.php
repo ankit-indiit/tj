@@ -17,7 +17,8 @@
                   <form action="{{ route('update-cart') }}" id="updateCartForm" method="post">
                      <div class="job-list">
                         @csrf
-                        @php 
+                        @php
+                           // Session::forget('coupon');
                            $subTotal = 0;
                            $productIds = [];
                         @endphp
@@ -25,7 +26,7 @@
                         @php 
                            // $subTotal = $cartItem->product_price;
                            $subTotal = $subTotal + $cartItem->product_price;
-
+                           
                            $productIds[] .= $cartItem->product_id;
                         @endphp
                            <div class="job-details cart-product-list{{ $cartItem->id }}">
@@ -98,13 +99,17 @@
                <h3>Cart Totals</h3>
                {{-- {{Session::forget('coupon')}} --}}
                @php
-                  $shipping = 00.00;
-                  $totalPrice = Session::get('coupon')['total_price'] ? Session::get('coupon')['total_price'] + $shipping : $subTotal;
+                  if (Session::get('coupon')) {
+                     $shipping = 00.00;
+                     $totalPrice = Session::get('coupon')['total_price'] ? Session::get('coupon')['total_price'] + $shipping : $subTotal;
+                  } else {
+                     $totalPrice = $subTotal;
+                  }
                @endphp
                <ul>
                   <li>Subtotal <span>${{ $subTotal }}</span></li>
                   <li>Shipping <span>$00.00</span></li>
-                  <li>Coupon <span>${{ Session::get('coupon')['coupon'] }}</span></li>
+                  <li>Coupon <span>${{ @Session::get('coupon')['coupon'] }}</span></li>
                   <li>Total <span><b>${{ $totalPrice }}</b></span></li>
                </ul>
                <a href="{{ route('checkout') }}" class="default-btn">

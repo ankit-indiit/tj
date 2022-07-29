@@ -79,9 +79,9 @@
                             </div>
     						<p href="#" class="sm-text mx-auto text-center mb-3" style="margin-top: 31px; position: relative;">
                             <input type="checkbox" id="agree" name="agree" value="1" style="display: inline-block;height: auto;position: absolute;left: -4px;top: 7px;width: auto;">
-                            <label for="vehicle1">By creating an account, you agree to <a href="{{ url('terms-conditions') }}" class="sign-in-txt">Terms & Conditions </a> and <a href="{{ url('privacy-policy') }}" class="sign-in-txt">Privacy Policy.</a></label>
+                            <label for="vehicle1" class="privacyPolicy">By creating an account, you agree to <a href="{{ url('terms-conditions') }}" class="sign-in-txt">Terms & Conditions </a> and <a href="{{ url('privacy-policy') }}" class="sign-in-txt">Privacy Policy.</a></label>
                             </p>
-                            <div class="row justify-content-center my-3 px-3"> 
+                            <div class="row justify-content-center my-3 px-3 registerBtnSec"> 
                                 <button type="submit" class="btn-block col-sm-7 btn-color">
                                     {{ __('Register') }}
                                 </button>

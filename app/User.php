@@ -21,7 +21,7 @@ class User extends Authenticatable implements Searchable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','timezone','country_code','phone_no','cover_image','profile_image','bio', 'switch_as', 'last_seen'
+        'name', 'email', 'password','timezone','country_code','phone_no','cover_image','profile_image','bio', 'switch_as', 'last_seen', 'privacy'
     ];
 
     /**
@@ -86,6 +86,6 @@ class User extends Authenticatable implements Searchable
         return new SearchResult(
             $this,
             $this->name,
-         );
+        );
     }
 }

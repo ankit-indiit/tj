@@ -28,7 +28,7 @@
         <div class="row">
             <div class="col-sm-9">
                 @foreach ($shopCategories as $shopCategory)
-                    <div class="row">
+                    <div class="row my-2">
                         <div class="col-sm-9">               
                             <a href="#" class="name-fld">
                                 <i class="fa fa-list-alt" aria-hidden="true"></i> 
@@ -36,7 +36,7 @@
                             </a>
                         </div>                
                         <div class="col-sm-3">
-                            <a href="javascript:void(0);" id="editShopCategory" data-id="{{$shopCategory->id}}" title="Edit Shop Image">
+                            <a href="javascript:void(0);" id="editShopCategory" data-id="{{$shopCategory->id}}" title="Edit Shop Category">
                                 <i class="fa fa-edit" aria-hidden="true"></i>
                             </a>  
                         </div>
@@ -44,7 +44,7 @@
                 @endforeach
             </div>
             <div class="col-sm-3">
-                <a href="javascript:void(0);" uk-toggle="target: #add-shop-category-modal" title="Add Shop Image">
+                <a href="javascript:void(0);" uk-toggle="target: #add-shop-category-modal" title="Add Shop Category">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                 </a>  
             </div>
@@ -88,7 +88,7 @@
             <div class="row">
                 <div class="col-sm-9">
                     @foreach($workingHours as $workingHour)
-                        <div class="row">
+                        <div class="row my-2">
                             <div class="col-sm-9">                                
                                 <i class="fa fa-clock-o" aria-hidden="true"></i> {{ ucfirst($workingHour->day) }} : {{$workingHour->open_time}} to {{$workingHour->close_time}}
                             </div>
@@ -101,7 +101,7 @@
                     @endforeach
                 </div>
                 <div class="col-sm-3">
-                    <a href="javascript:void(0);" uk-toggle="target: #add-working-hour-modal" title="Add Social Link">
+                    <a href="javascript:void(0);" uk-toggle="target: #add-working-hour-modal" title="Add Working Hour">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a> 
                 </div>
@@ -148,12 +148,12 @@
                             <div class="col-sm-4">
                                <div id="carbonads"><span><span class="carbon-wrap"><a href="#" class="carbon-img" target="_blank" rel="noopener sponsored">
                                   <img src="{{ asset('images/coupan-img.jpg') }}" alt="ads via Carbon" border="0" height="100" width="130" style="max-width: 130px;"></a>
-                                  <a href="#" class="carbon-text" target="_blank" rel="noopener sponsored">{{ $coupon->description }}</a></span><br>
+                                  <a href="#" class="carbon-text" target="_blank" rel="noopener sponsored">{{ $coupon->title }}</a></span><br>
                                   <a href="#" class="carbon-poweredby" target="_blank" rel="noopener sponsored">{{ $coupon->expired_on }}</a></span>
                                </div>
                             </div>
                             <div class="col-sm-4">
-                                <a href="javascript:void(0);" class="editDiscountCoupon" id="edit-discount-coupon" data-id="{{ $coupon->id }}" title="Edit Discount Coupony">
+                                <a href="javascript:void(0);" class="editDiscountCoupon" id="edit-discount-coupon" data-id="{{ $coupon->id }}" title="Edit Discount Coupon">
                                     <i class="fa fa-edit" aria-hidden="true"></i>
                                 </a> 
                             </div>
@@ -161,7 +161,7 @@
                     @endforeach
                 </div>
                 <div class="col-sm-2">
-                    <a href="javascript:void(0);" class="addDiscountCoupon" uk-toggle="target: #add-discount-coupon" title="Add Discount Coupony">
+                    <a href="javascript:void(0);" class="addDiscountCoupon" uk-toggle="target: #add-discount-coupon" title="Add Discount Coupon">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a> 
                 </div>
@@ -175,7 +175,7 @@
         <div class="text-center py-4 border-b">
            <h3 class="text-lg font-semibold" id="postTitle">{{$shopImage == '' ? 'Add' : 'Change'}} Shop Image</h3>
            <span id="err_mess" style="color: red;font-weight: 700;padding: 5px 5px 5px 5px;"></span>
-           <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+           <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7" onclick="hideCurrentOpenModal('add-shop-image-modal', 'outputShopImage');"></button>
         </div>
         <form id="addShopImageForm" enctype="multipart/form-data" method="post">
             @csrf
@@ -362,7 +362,7 @@
                     <h5 class="pt-4">To</h5>
                   </div>
                   <div class="col-md-4">
-                    <input type="number" class="form-control my-4 border estimated-day" placeholder="Estimated Day" name="estimated_day">
+                    <input type="number" class="form-control my-4 border estimated-day" placeholder="Estimate Day" name="estimated_day">
                   </div>
                   <div class="col-md-2 pt-2">
                     <h5 class="pt-4">Days</h5>
@@ -392,7 +392,7 @@
                   <h5 class="pt-4">To</h5>
                 </div>
                 <div class="col-md-4">
-                  <input type="number" class="form-control my-4 border estimated-day" placeholder="Estimated Day" name="estimated_day">
+                  <input type="number" class="form-control my-4 border estimated-day" placeholder="Estimate Day" name="estimated_day">
                 </div>
                 <div class="col-md-2 pt-2">
                   <h5 class="pt-4">Days</h5>
@@ -437,11 +437,36 @@
             @csrf
             <div class="text-center px-4">
                 <input type="hidden" name="id" class="coupon-id">
-                <input type="text" class="form-control my-4 border coupon-title" placeholder="Enter Coupon Title" name="title">
-                <input type="text" class="form-control my-4 border coupon-description" placeholder="Enter Coupon Description" name="description">
-                <input type="text" class="form-control my-4 border coupon-type" placeholder="Enter Coupon Type" name="type">
-                <input type="text" class="form-control my-4 border coupon-expired-on" placeholder="Enter Coupon Expiry" name="expired_on">
-                <input type="text" class="form-control my-4 border coupon-discounted-value" placeholder="Enter Discounted Value" name="discounted_value">
+                <input
+                  type="text"
+                  class="form-control my-4 border coupon-title"
+                  placeholder="Enter Coupon Title"
+                  name="title"
+                >
+                <input
+                  type="text"
+                  class="form-control my-4 border coupon-description"
+                  placeholder="Enter Coupon Description"
+                  name="description"
+                >
+                <input
+                  type="text"
+                  class="form-control my-4 border coupon-type"
+                  placeholder="Enter Coupon Type"
+                  name="type"
+                >
+                <input
+                  type="text"
+                  class="form-control my-4 border coupon-expired-on"
+                  placeholder="Enter Coupon Expiry"
+                  name="expired_on"
+                >
+                <input
+                  type="text"
+                  class="form-control my-4 border coupon-discounted-value"
+                  placeholder="Enter Discounted Value"
+                  name="discounted_value"
+                >
                 <button type="submit" id="updateDiscountCouponBtn" class="btn btn-primary btn-sm mb-4">Update</button>
             </div>
         </form>

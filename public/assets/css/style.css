@@ -19255,3 +19255,28 @@ a.ad_to_colletion_btn i {
 li.li.uncompleted {
     padding-top: 18px;
 }
+
+.privacy {
+  background-color: #d5dde5;
+}
+
+.privacy a {
+  color: #2254e5;
+}
+
+label#agree-error {
+  position: absolute;
+  left: 0px;
+  top: 22px;
+}
+
+label.privacyPolicy {
+  left: 0px !important;
+  margin-left: 16px;
+  position: absolute;
+}
+
+.registerBtnSec {
+
+    padding-top: 65px;
+}

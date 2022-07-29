@@ -28,6 +28,9 @@ class PaymentController extends Controller
 
     public function paymentDetail(Request $request)
     {
+        // echo '<pre>';
+        // print_r($request->all());
+        // die;
         $data = [];
         foreach ($request->product as $key => $product) {
             $data[] = [
@@ -151,21 +154,11 @@ class PaymentController extends Controller
     {
         $product = [];
 
-        // $product['items'] = [
-        //     [
-        //         'name' => 'Nike Joyride 2',
-        //         'price' => 112,
-        //         'desc'  => 'Running shoes for Men',
-        //         'qty' => 2
-        //     ]
-        // ];
-
         foreach (Session::get('payment_detail') as $data) {
-            $product['items'] = $data;            
-            
+            $product['items'] = $data;                        
         }
         // die;
-        // dd(Session::get('payment_detail'));
+        // dd($product['items']);
   
         $product['invoice_id'] = 1;
         $product['invoice_description'] = "Order #{$product['invoice_id']} Bill";
@@ -173,9 +166,13 @@ class PaymentController extends Controller
         $product['cancel_url'] = route('cancel.payment');
         $product['total'] = 224;
         $paypalModule = new ExpressCheckout;
+        // echo '<pre>';
+        // print_r($product);
+        // die;
   
         $res = $paypalModule->setExpressCheckout($product);
         $res = $paypalModule->setExpressCheckout($product, true);
+
   
         return redirect($res['paypal_link']);
     }

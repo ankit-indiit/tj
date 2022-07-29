@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\ProductCategory;
 use App\ProductRelatedCategory;
 use App\Product;
+use Auth;
 
 class ProductCategoryController extends Controller
 {
@@ -20,7 +21,10 @@ class ProductCategoryController extends Controller
     {
         $categoryId = ProductCategory::where('slug', $slug)->pluck('id')->first();
         $productId = ProductRelatedCategory::where('cat_id', $categoryId)->pluck('product_id');
-        $products = Product::whereIn('id', $productId)->get();
+        $products = Product::whereIn('id', $productId)
+            ->where('user_id', '!=', Auth::id())
+            ->where('status', 1)
+            ->get();
         $data = ['page_title' => 'Feed | TJ', 'products' => $products];
         return view('marketplace.product-category.product',$data);
     }

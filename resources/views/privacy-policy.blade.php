@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-without-sidebar')
 @section('content') {{ asset('images/banner-no-login.jpg') }}
 <div class="main_contents mt-8" >
     <div class="container">

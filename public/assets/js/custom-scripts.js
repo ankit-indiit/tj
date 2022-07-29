@@ -101,13 +101,14 @@ $(document).ready(function () {
 
 function clearImage(imageId)
 {
-  $('#'+imageId).removeAttr('src');
-  $('#'+imageId).removeAttr('style');
-  $("#"+imageId).css("height", 0);
+    $('#'+imageId).removeAttr('src');
+    $('#'+imageId).removeAttr('style');
+    $("#"+imageId).css("height", 0);
 }
 
-function hideCurrentOpenModal(modalId) {
-  UIkit.modal('#' + modalId).hide();
+function hideCurrentOpenModal(modalId, imageId) {
+    clearImage(imageId);
+    UIkit.modal('#' + modalId).hide();
 }
 
 function updatePost(id)
@@ -117,7 +118,6 @@ function updatePost(id)
         url: _baseURL + "/edit-simple-post",
         data: { id: id },
         success: function (data) {
-            console.log(id);
             if (data.post_type == 1) {
                 $('#postTitle').html('Simple Post');
             } else if (data.post_type == 2) {

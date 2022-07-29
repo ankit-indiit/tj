@@ -42,11 +42,16 @@ class HomeController extends Controller
     {
         $searchBy = $request->search_option;
         if ($request->search_option == 'category') {
-            $filteredData = ProductCategory::where('name', 'like', '%' . $request->search . '%')->get();
+            $filteredData = ProductCategory::where('name', 'like', '%' . $request->search . '%')
+                ->get();
         } elseif ($request->search_option == 'product') {
-            $filteredData = Product::where('name', 'like', '%' . $request->search . '%')->get();
-        } elseif ($request->search_option == 'people') {
-            $filteredData = User::select('id', 'name', 'profile_image')->where('name', 'like', '%' . $request->search . '%')->get();
+            $filteredData = Product::where('name', 'like', '%' . $request->search . '%')
+                ->get();
+        } elseif ($request->search_option == 'people') {            
+            $filteredData = User::select('id', 'name', 'profile_image')
+                ->where('name', 'like', '%' . $request->search . '%')
+                ->where('privacy', '!=', 'only_me')
+                ->get();
         } else {
             $filteredData = (new Search())
                 ->registerModel(ProductCategory::class, 'name')
@@ -56,5 +61,11 @@ class HomeController extends Controller
         }
         $data = ['page_title' => 'Search | TJ', 'searchBy' => $searchBy, 'filteredData' => $filteredData];
         return view('search', $data);
+    }
+
+    public function help()
+    {
+        $data = ['page_title' => 'Help | TJ'];
+        return view('help',$data);
     }
 }

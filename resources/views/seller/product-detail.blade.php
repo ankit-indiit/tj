@@ -5,7 +5,7 @@
       <div class="items-center justify-between">
          <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-4">
-               <li class="breadcrumb-item"><a href="shop-1.html">Shop</a></li>
+               <li class="breadcrumb-item"><a href="{{ route('shop') }}">Shop</a></li>
                <li class="breadcrumb-item active" aria-current="page">Product Details</li>
             </ol>
          </nav>
@@ -20,7 +20,7 @@
                    $productImage = reset($unSerlizeProImage);
                 @endphp
                   <div class="product-details-image">
-                     <img src="{{ url("public/images/product/$productImage") }}" alt="image">
+                     <img src="{{ url("public/images/product/$productImage") }}" width="92%" alt="image">
                   </div>
                </div>
                <div class="col-lg-6 col-md-12">
@@ -321,14 +321,25 @@
 		                           {!! addToWishlistButtonSection(Auth::user()->id, $relatedProduct->id) !!}
 		                        </div>
 		                        <div class="card-body">                          
-		                           <div class="ext-lg font-medium mt-1 t truncate">
+		                              <div class="ext-lg font-medium mt-1 t truncate">
 		                           		<a href="{{ route('product.detail', $relatedProduct->slug) }}">
-		                           			{{ $relatedProduct->name }}			
+		                           			{{ $relatedProduct->name }}
+                                          <input type="hidden" id="productQuantity{{$relatedProduct->id}}" value="1" name="">
 		                           		</a>
 		                           	</div>
-		                           <a href="cart.html" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main">
-		                           Add to Cart
-		                           </a>
+                                 @if ($relatedProduct->check_cart_status == 1)
+                                    <div class="addToCartDiv{{ $relatedProduct->id }}">
+                                       <a type="submit" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main" href="{{ route('cart') }}">
+                                          Go To Cart
+                                       </a>
+                                    </div>
+                                 @else
+                                    <div class="addToCartDiv{{ $relatedProduct->id }}">
+                                       <a href="javascript:void(0);" class="absolute right-2 top-2 p-0.5 px-1.5 text-red-500 cart-icon-main" id="addToCart" data-product="{{ $relatedProduct->id }}">
+                                          Add to Cart
+                                       </a>
+                                    </div>
+                                 @endif		                           
 		                           <div class="text-xs font-semibold uppercase text-yellow-500">${{ $relatedProduct->price }}</div>
 		                           <div class="ratings">
 		                              <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>

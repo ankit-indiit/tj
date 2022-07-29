@@ -294,11 +294,13 @@ class ProductController extends Controller
 
     public function shop()
     {
-        $sellerId = BecomeSeller::where('user_id', Auth::user()->id)->pluck('user_id')->first();
-        if ($sellerId) {
-            $products = Product::where('user_id', '!=', $sellerId)->get();
+        $checkSeller = BecomeSeller::where('user_id', Auth::id())->exists();        
+        if ($checkSeller) {
+            $products = Product::where('user_id', '!=', Auth::id())
+                ->where('status', 1)
+                ->get();
         } else {
-            $products = Product::get();
+            $products = Product::where('status', 1)->get();
         }
         $productCategories = ProductCategory::select('feature_image', 'name', 'slug')->get();
         $data = ['page_title' => 'Shop Product | TJ', 'products' => $products, 'productCategories' => $productCategories];

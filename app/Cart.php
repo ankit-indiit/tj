@@ -43,7 +43,7 @@ class Cart extends Model
     {
     	$productImage = Product::where('id', $this->attributes['product_id'])->pluck('image')->first();
     	$unSerlizeProImage = unserialize($productImage);
-        $productImage = reset($unSerlizeProImage);
+        @$productImage = reset($unSerlizeProImage);
     	return url("public/images/product/$productImage");
     }
 

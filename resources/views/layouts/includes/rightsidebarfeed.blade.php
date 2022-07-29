@@ -41,7 +41,7 @@
                                     @php $cartTotalPrice = 0; @endphp
                                     @foreach ($cartItems as $cartItem)
                                     @php
-                                       $cartTotalPrice = $cartTotalPrice + $cartItem->product_price;
+                                       @$cartTotalPrice = $cartTotalPrice + $cartItem->product_price;
                                     @endphp   
                                        <li class="cart-product-list{{$cartItem->id}}">
                                           <div class="cart_avatar">

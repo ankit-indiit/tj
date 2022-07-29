@@ -8,7 +8,7 @@
                <div class="">
                   <h2 class="text-xl font-semibold"> Trending Products </h2>
                </div>
-               <a href="shop-1.html" class="text-blue-500 sm:block hidden"> See all </a>
+               <a href="{{ route('shop') }}" class="text-blue-500 sm:block hidden"> See all </a>
             </div>
          </div>
       </div>

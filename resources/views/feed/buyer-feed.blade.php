@@ -95,7 +95,6 @@
                       <div class="flex-1 pt-2">
                          <textarea name="post_content" id="edited_post_content" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="What's Your Mind ?"></textarea>
                       </div>
-
                    </div>
                    <div class="bsolute bottom-0 p-4 space-x-4 w-full">
                       <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
@@ -229,31 +228,34 @@
          <div class="bsolute bottom-0 p-4 space-x-4 w-full">
             <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
                <div class="lg:block hidden"> Add to your post </div>
-               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
-                  <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
+               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">                  
                   <a href="#" onclick="$('#post_image_upload').trigger('click'); return false;">
                      <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                      </svg>
+                  </a>                  
+                  <a href="#" onclick="$('#post_video_upload').trigger('click'); return false;">
+                    <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
+                    </svg>
                   </a>
 
-                  <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                  </svg>
-
-                  <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  {{-- <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                  </svg>
+                  </svg> --}}
                </div>
             </div>
+            <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
+            <input type="file" id="post_video_upload" name="post_video_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_video_upload','output_simple_post_video')" accept="video/mp4,video/x-m4v,video/*">
             <img id="output_simple_post_image" />
+            <img id="output_simple_post_video" />
          </div>
          <div class="flex items-center w-full justify-between p-3 border-t">
             <div class="flex space-x-2 pull-right">
                <button type="submit" id="add_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                   Cancel </a>
             </div>
          </div>
@@ -316,7 +318,7 @@
                <button type="submit" id="add_poll_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                   Cancel </a>
             </div>
          </div>
@@ -376,7 +378,7 @@
                <button type="submit" id="add_product_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Add Listing
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                   Cancel </a>
 
             </div>
@@ -424,7 +426,7 @@
                <button type="submit" id="add_suggestion_post_btn" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                   Ask for suggestions
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
                   Cancel </a>
             </div>
          </div>
@@ -447,16 +449,16 @@
 
       //To check if user upload any file
       if (FileUploadPath == '') {
-         swal("", 'Please upload an image', "error", {
-            button: "close",
-         });
+         // swal("", 'Please upload an image', "error", {
+         //    button: "close",
+         // });
 
       } else {
          var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
          //The file uploaded is an image
 
          if (Extension == "gif" || Extension == "png" || Extension == "bmp" ||
-            Extension == "jpeg" || Extension == "jpg") {
+            Extension == "jpeg" || Extension == "jpg"|| Extension == "mp4"|| Extension == "x-mp4") {
 
             // To Display
             if (fuData.files && fuData.files[0]) {
@@ -491,7 +493,7 @@
          }
       },
       messages: {
-         post_content: "Please enter your Bio.",
+         post_content: "Please enter post description!",
       },
       submitHandler: function(forms, e) {
          e.preventDefault();
@@ -549,7 +551,7 @@
          }
       },
       messages: {
-         post_content: "Please enter your Bio.",
+         post_content: "Please enter post description!",
       },
       submitHandler: function(forms, e) {
          e.preventDefault();

@@ -18,6 +18,8 @@ class Order extends Model
     	'coupon_applied',
     	'shipping_address_id',
         'billing_address_id',
+        'billing_address_type',
+        'shipping_address_type',
     	'order_status',
     ];
 

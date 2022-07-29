@@ -4,9 +4,9 @@
    <div class="mcontainer">
       <nav aria-label="breadcrumb">
          <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item"><a href="shop-1.html">Categories</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('category.index') }}">Categories</a></li>
             <li class="breadcrumb-item active" aria-current="page">
-              {{ str_replace('-', ' ', ucfirst(Request::segment(2))) }}
+              {{ Request::segment(2) ? str_replace('-', ' ', ucfirst(Request::segment(2))) : 'Category' }}
             </li>
          </ol>
       </nav>
@@ -91,9 +91,9 @@
 
     //To check if user upload any file
     if (FileUploadPath == '') {
-       swal("", 'Please upload an image', "error", {
-          button: "close",
-       });
+       // swal("", 'Please upload an image', "error", {
+       //    button: "close",
+       // });
 
     } else {
        var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();

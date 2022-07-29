@@ -494,7 +494,7 @@ $("#simplePostUpdateForm").validate({
       }
    },
    messages: {
-      post_content: "Please enter your Bio.",
+      post_content: "Please enter post description!",
    },
    submitHandler: function(forms, e) {
       e.preventDefault();

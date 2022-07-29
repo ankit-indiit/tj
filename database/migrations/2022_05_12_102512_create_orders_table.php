@@ -25,6 +25,8 @@ class CreateOrdersTable extends Migration
             $table->integer('coupon_applied')->nullable();
             $table->integer('shipping_address_id')->nullable();
             $table->integer('billing_address_id')->nullable();
+            $table->string('billing_address_type')->nullable();
+            $table->string('shipping_address_type')->nullable();
             $table->enum('order_status', [0, 1, 2])->nullable();
             $table->timestamps();
         });

@@ -84,42 +84,41 @@ $(document).ready(function () {
 });
 
 $("#updateCartForm").validate({
-    rules: {
+  rules: {
+          
+  },
+  messages: {
             
-    },
-    messages: {
-              
-    },
-    submitHandler: function(form) {
-     var serializedData = $(form).serialize();
-     $("#err_mess").html('');
-     $('#updateCartBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-     $.ajax({
-        headers: {
-           'X-CSRF-Token': $('input[name="_token"]').val()
-        },
-        type: 'post',
-        url: _baseURL + "/update-cart",
-        data: serializedData,
-        dataType: 'json',
-        success: function(data) {
-           $('#updateCartBtn').html('Save Changes');
-
-           if (data.erro == '101') {
-              swal("", data.message, "success", {
-                 button: "close",
-              });
-           } else {
-              swal("", data.message, "error", {
-                 button: "close",
-              });
-           }
-           $('.swal-button--confirm').on('click', function(){
-              window.location.reload();
-           });
+  },
+  submitHandler: function(form) {
+    var serializedData = $(form).serialize();
+    $("#err_mess").html('');
+    $('#updateCartBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    $.ajax({
+      headers: {
+         'X-CSRF-Token': $('input[name="_token"]').val()
+      },
+      type: 'post',
+      url: _baseURL + "/update-cart",
+      data: serializedData,
+      dataType: 'json',
+      success: function(data) {
+        $('#updateCartBtn').html('Save Changes');
+        if (data.erro == '101') {
+          swal("", data.message, "success", {
+            button: "close",
+          });
+        } else {
+          swal("", data.message, "error", {
+            button: "close",
+          });
         }
-     });
-     return false;
+        $('.swal-button--confirm').on('click', function(){
+          window.location.reload();
+        });
+      }
+    });
+   return false;
   }
 });
 
@@ -128,25 +127,25 @@ $(document).on('click', '#moveToWishlist', function(){
   var productId = $(this).data('product');
   $.ajax({
       headers: {
-          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       },
       type: 'post',
       url: _baseURL + "/move-to-wihlist",
       data: { 
-          id: id,
-          productId: productId,
+        id: id,
+        productId: productId,
       },
       dataType: 'json',
       success: function (data) {
         if (data.erro == '101') {
-            $('.cart-product-list'+id+'').addClass('d-none');            
-            swal("", data.message, "success", {
+          $('.cart-product-list'+id+'').addClass('d-none');            
+          swal("", data.message, "success", {
+            button: "close",
+          });              
+        } else {
+          swal("", data.message, "error", {
               button: "close",
-            });              
-          } else {
-            swal("", data.message, "error", {
-              button: "close",
-            });              
+          });              
         }
       }
   });
@@ -156,12 +155,12 @@ $(document).on('click', '#removeToCart', function(){
   var id = $(this).data('id');
   $.ajax({
       headers: {
-          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       },
       type: 'post',
       url: _baseURL + "/remove-to-cart",
       data: { 
-          id: id,
+        id: id,
       },
       dataType: 'json',
       success: function (data) {
@@ -184,27 +183,27 @@ $(document).on('click', '#applyCoupon', function(){
   var productIds = $('#product_ids').val();
   $.ajax({
       headers: {
-          'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       },
       type: 'post',
       url: _baseURL + "/apply-coupon",
       data: { 
-          couponName: couponName,
-          productIds: productIds,
+        couponName: couponName,
+        productIds: productIds,
       },
       dataType: 'json',
       success: function (data) {
         if (data.erro == '101') {                      
-            swal("", data.message, "success", {
-              button: "close",
-            });
-            $('.swal-button--confirm').on('click', function(){
-                window.location.reload();
-             });            
-          } else {
-            swal("", data.message, "error", {
-              button: "close",
-            });              
+          swal("", data.message, "success", {
+            button: "close",
+          });
+          $('.swal-button--confirm').on('click', function(){
+              window.location.reload();
+          });            
+        } else {
+          swal("", data.message, "error", {
+            button: "close",
+          });              
         }
       }
   });

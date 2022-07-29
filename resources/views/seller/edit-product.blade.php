@@ -231,9 +231,9 @@ function ValidateFileUpload(fileId, previewId) {
 
     //To check if user upload any file
     if (FileUploadPath == '') {
-       swal("", 'Please upload an image', "error", {
-          button: "close",
-       });
+       // swal("", 'Please upload an image', "error", {
+       //    button: "close",
+       // });
 
     } else {
        var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();

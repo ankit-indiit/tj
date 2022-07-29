@@ -81,7 +81,7 @@
                               <div class="maind-bgf">
                                  <div class="job-details timeline-order">
                                     <a href="" class="job-logo">
-                                       <img src="{{ $product->product_image }}" alt="">
+                                       <img src="{{ $product->product_image }}" alt="" width="100%" height="100%">
                                     </a>
                                     <div class="job-description">
                                        <div class="inner-info">
