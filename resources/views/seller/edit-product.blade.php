@@ -37,7 +37,7 @@
                   <div class="col-lg-12">
                      <div class="d-flex align-items-center justify-content-between">
                         <h4 class="text-xl mb-3 font-semibold">Edit Product</h4>
-                        <a href="{{ route('my-profile') }}" class="btn btn-primary pull-right  mb-3 bctp">Back To Products</a>
+                        <a href="{{ route('my-profile') }}?tab=product" class="btn btn-primary pull-right  mb-3 bctp">Back To Products</a>
                      </div>
                   </div>
                <div class="row">

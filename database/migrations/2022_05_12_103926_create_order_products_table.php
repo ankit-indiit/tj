@@ -20,6 +20,8 @@ class CreateOrderProductsTable extends Migration
             $table->integer('product_qty')->nullable();
             $table->string('product_price')->nullable();
             $table->string('seller_id')->nullable();
+            $table->string('user_id')->nullable();
+            $table->enum('status', ['unprocess', 'request', 'approved', 'packed', 'shipped', 'rejected', 'delivered'])->nullable();
             $table->timestamps();
         });
     }

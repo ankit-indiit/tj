@@ -98,4 +98,25 @@ class SellerShopController extends Controller
         $data = ['page_title' => 'Feed | TJ', 'shopMembers' => $shopMembers, 'shopDetails' => $shopDetails];
         return view('seller.shop.shop-follower',$data);
     }
+
+    public function searchProduct(Request $request)
+    {
+        if ($request->name != '') {
+            $searchedProducts = Product::where('user_id', $request->userId)
+                ->where('name', 'like', '%' . $request->name . '%')
+                ->get();
+        } else {
+            $searchedProducts = Product::where('user_id', $request->userId)
+            ->get();
+        }
+        $products = [];
+        foreach ($searchedProducts as $product) {            
+            $products []= view('seller.shop.shop-products', [
+                    'product' => $product
+                ])->render();
+        }
+        $message['erro'] = 101;
+        $message['products'] = $products;
+        return response()->json($message, 200);
+    }
 }

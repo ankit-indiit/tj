@@ -17,7 +17,6 @@
                <div class="profile_avatar_holder">
                   <img class="user_profile_image" src="{{ show_user_image() }}" alt="" />
                </div>
-               <!--div class="user_status status_online"></div-->
                <div class="icon_change_photo" onclick="profileImageForm();">
                   <ion-icon name="create-outline" class="text-xl md hydrated" role="img" aria-label="camera"></ion-icon>
                </div>
@@ -31,19 +30,19 @@
             <nav class="cd-secondary-nav pl-2 is_ligh -mb-0.5 border-transparent">
                <ul class="nav nav-tabs" id="myTab" role="tablist">
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link {{ request()->tab == 'feed' ? 'active' : '' }}" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Feed</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'feed' ? 'active' : '' }}" data-tab="feed" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Feed</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="user-pics-tab" data-toggle="tab" href="#user-photos" role="tab" aria-controls="user-photos" aria-selected="true">Photos</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'photo' ? 'active' : '' }}" data-tab="photo" id="user-pics-tab" data-toggle="tab" href="#user-photos" role="tab" aria-controls="user-photos" aria-selected="true">Photos</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link {{ request()->tab == 'product' ? 'active' : '' }}" id="product-tab" data-toggle="tab" href="#product" role="tab" aria-controls="profile" aria-selected="false">Product</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'product' ? 'active' : '' }}" data-tab="product" id="product-tab" data-toggle="tab" href="#product" role="tab" aria-controls="profile" aria-selected="false">Product</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="collection-tab" data-toggle="tab" href="#collectionTab" role="tab" aria-controls="collectionTab" aria-selected="true">Collections</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'collection' ? 'active' : '' }}" data-tab="collection" id="collection-tab" data-toggle="tab" href="#collectionTab" role="tab" aria-controls="collectionTab" aria-selected="true">Collections</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="shopInfoTab" data-toggle="tab" href="#shopInfo" role="tab" aria-controls="shopInfo" aria-selected="false">Shop Info</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'shop-info' ? 'active' : '' }}" data-tab="shop-info" id="shopInfoTab" data-toggle="tab" href="#shopInfo" role="tab" aria-controls="shopInfo" aria-selected="false">Shop Info</a>
                   </li>
                </ul>
             </nav>
@@ -53,22 +52,22 @@
             <nav class="cd-secondary-nav pl-2 is_ligh -mb-0.5 border-transparent">
                <ul class="nav nav-tabs" id="myTab" role="tablist">
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Feed</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'feed' ? 'active' : '' }}" data-tab="feed" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Feed</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="user-pics-tab" data-toggle="tab" href="#user-photos" role="tab" aria-controls="user-photos" aria-selected="true">Photos</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'photo' ? 'active' : '' }}" data-tab="photo" id="user-pics-tab" data-toggle="tab" href="#user-photos" role="tab" aria-controls="user-photos" aria-selected="true">Photos</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="messages-tab" data-toggle="tab" href="#userFriends" role="tab" aria-controls="userFriends" aria-selected="false">Friends</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'friend' ? 'active' : '' }}" data-tab="friend" id="messages-tab" data-toggle="tab" href="#userFriends" role="tab" aria-controls="userFriends" aria-selected="false">Friends</a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="wish-tab" data-toggle="tab" href="#wish" role="tab" aria-controls="wish" aria-selected="false">Wishlist </a>
-                  </li>                  
-                  <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">My Info</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'wish' ? 'active' : '' }}" data-tab="wish" id="wish-tab" data-toggle="tab" href="#wish" role="tab" aria-controls="wish" aria-selected="false">Wishlist </a>
                   </li>
                   <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="user-bio-tab" data-toggle="tab" href="#userBio" role="tab" aria-controls="userBio" aria-selected="false">My Bio</a>
+                     <a class="nav-link profileTab {{ request()->tab == 'my-info' ? 'active' : '' }}" data-tab="my-info" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">My Info</a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                     <a class="nav-link profileTab {{ request()->tab == 'my-bio' ? 'active' : '' }}" data-tab="my-bio" id="user-bio-tab" data-toggle="tab" href="#userBio" role="tab" aria-controls="userBio" aria-selected="false">My Bio</a>
                   </li>
                </ul>
             </nav>
@@ -85,28 +84,31 @@
          <div class="tab-pane {{ request()->tab == 'product' ? 'active' : '' }}" id="product" role="tabpanel" aria-labelledby="product-tab">
             @include('seller.product-tab')
          </div>
-         <div class="tab-pane {{ request()->tab == 'user-friends' ? 'active' : '' }}" id="userFriends" role="tabpanel" aria-labelledby="messages-tab">
+         <div class="tab-pane px-4 {{ request()->tab == 'friend' ? 'active' : '' }}" id="userFriends" role="tabpanel" aria-labelledby="messages-tab">
             <!-- post header-->
             <div class="row mt-4">
                <div class="col-sm-3">
                   <h4 class="text-2xl mb-3 font-semibold">Friends</h4>
                </div>
                <div class="col-sm-9 pull-right">
-                  <a href="#" class="text-black">
-                     <div class="header_search" aria-expanded="false">
-                        <input value="" type="text" class="form-control" placeholder="Search for Friends.." autocomplete="off" />
-                        <i class="uil-search-alt"></i>
-                     </div>
-                  </a>
+                  <div class="header_search" aria-expanded="false">
+                     <input type="hidden" name="tab" value="friend">
+                     <input
+                        name="name"
+                        type="text"
+                        class="form-control"
+                        placeholder="Search for Friends.." 
+                        autocomplete="off"
+                        id="searchUser"
+                        data-status="following"
+                        />                        
+                     <i class="uil-search-alt"></i>
+                  </div>
                   <div class="flex pull-right">
                      <a href="#" aria-expanded="false"> <i class="diff-icon icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
                      <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
                         <a href="#" class="flex items-center px-3 py-2 text-black-500 hover:bg-gray-100 hover:text-gray-500 rounded-md dark:hover:bg-red-600 p-4">
-                        <b>Select Audience</b>
-                       {{--  @php
-                           echo '<pre>';
-                           print_r(userFriends(Auth::id()));
-                        @endphp --}}
+                        <b>Select Audience</b>                       
                         </a>
                         <ul class="space-y-1">
                            <li class="{{ Auth::user()->privacy == 'friends' ? 'privacy' : '' }}">
@@ -129,36 +131,43 @@
                   </div>
                </div>
             </div>
-            <div class="row">
-               @foreach (userFriends() as $friend)
-                  @php $userId= Crypt::encrypt($friend); @endphp
-                  <div class="col-sm-6">
-                     <div class="flex justify-between items-center lg:p-4 p-2.5">
-                        <div class="flex flex-1 items-center space-x-4">
-                           <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
-                           <img src="{{ show_user_image($friend) }}" class="bg-gray-200 border border-white rounded-full w-10 h-10" />
-                           </a>
-                           <div class="flex-1 font-semibold capitalize">
-                              <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}" class="text-black">{{ show_user_name($friend) }}</a>
+            <div class="row filteredUserData">
+               @if (count(userFriends()) > 0)            
+                  @foreach (userFriends() as $friend)
+                     @php
+                        $profileRoute = route('my-profile').'?tab=feed'; 
+                        $userId= Crypt::encrypt($friend);
+                     @endphp
+                     <div class="col-sm-6">
+                        <div class="flex justify-between items-center lg:p-4 p-2.5">
+                           <div class="flex flex-1 items-center space-x-4">
+                              <a href="{{ $friend == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}">
+                                 <img src="{{ show_user_image($friend) }}" class="bg-gray-200 border border-white rounded-full w-10 h-10" />
+                              </a>
+                              <div class="flex-1 font-semibold capitalize">
+                                 <a href="{{ $friend == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}" class="text-black">{{ show_user_name($friend) }}</a>
+                              </div>
                            </div>
-                        </div>
-                        <div>
-                           <a href="#" aria-expanded="false"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
-                           <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
-                              <ul class="space-y-1">
-                                 <li></li>
-                                 <li>
-                                    <a href="javascript:void(0);" id="cancelOrunFollowFriend" data-id="{{ $friend }}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600"> <i class="uil-trash-alt mr-1"></i> Unfriend </a>
-                                 </li>
-                              </ul>
+                           <div>
+                              <a href="#" aria-expanded="false"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
+                              <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
+                                 <ul class="space-y-1">
+                                    <li></li>
+                                    <li>
+                                       <a href="javascript:void(0);" id="cancelOrunFollowFriend" data-id="{{ $friend }}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600"> <i class="uil-trash-alt mr-1"></i> Unfriend </a>
+                                    </li>
+                                 </ul>
+                              </div>
                            </div>
                         </div>
                      </div>
-                  </div>
-               @endforeach
+                  @endforeach
+               @else
+                  <span class="px-4">No user found!</span>
+               @endif
             </div>
          </div>
-         <div class="tab-pane" role="tabpanel" aria-labelledby="pics-tab">
+         <div class="tab-pane {{ request()->tab == 'photo' ? 'active' : '' }}" role="tabpanel" aria-labelledby="pics-tab">
             <div class="flex justify-between relative md:mb-4 mb-3">
                <div class="flex-1">
                   <h2 class="text-xl font-semibold mt-4">Photos</h2>
@@ -269,6 +278,7 @@
                <div class="">
                   <div class="tab-pane active" id="home-1" role="tabpanel" aria-labelledby="home-tab">
                      <div class="row">
+                        @if (count($wishlistedProducts) > 0)
                         @foreach ($wishlistedProducts as $wishlistedProduct)
                         @php
                         $unSerlizeProImage = unserialize($wishlistedProduct->image);
@@ -290,11 +300,50 @@
                                              <div class="simplebar-mask">
                                                 <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
                                                    <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
-                                                      <ul class="space-y-1">
+                                                      <ul class="space-y-1" style="padding-left: 84px;">
                                                          <li>
-                                                            Add to Collection
+                                                            <a href="javascript:void(0);" aria-expanded="false"> 
+                                                            Add to Collections
+                                                            </a>
+                                                            @if (count($collections) > 0)
+                                                            <div class="bg-white w-56 main-df shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss">
+                                                               <div class="sidebar_innersss" data-simplebar="init">
+                                                                  <div class="simplebar-wrapper" style="margin: 0px;">
+                                                                     <div class="simplebar-height-auto-observer-wrapper">
+                                                                        <div class="simplebar-height-auto-observer"></div>
+                                                                     </div>
+                                                                     <div class="simplebar-mask">
+                                                                        <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                                           <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
+                                                                              <ul class="space-y-1 ">
+                                                                                 @foreach ($productCollections as $collection)
+                                                                                 <li>
+                                                                                    <a href="javascript:void(0);" id="assignCollection" data-id="{{$collection->id}}" data-product="{{$wishlistedProduct->id}}">
+                                                                                    {{$collection->name}}
+                                                                                    </a>
+                                                                                 </li>
+                                                                                 @endforeach
+                                                                              </ul>
+                                                                           </div>
+                                                                        </div>
+                                                                     </div>
+                                                                     <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                                                                  </div>
+                                                                  <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                                                     <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
+                                                                  </div>
+                                                                  <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                                                     <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
+                                                                  </div>
+                                                               </div>
+                                                            </div>
+                                                            @endif
                                                          </li>
-                                                         <li>Remove From Wishlist</li>
+                                                         <li>
+                                                            <a href="javascript:void(0);" id="deleteProductFromWishlist" data-id="{{ $wishlistedProduct->id }}">
+                                                            Remove From Wishlist
+                                                            </a>
+                                                         </li>
                                                       </ul>
                                                    </div>
                                                 </div>
@@ -313,7 +362,7 @@
                               </div>
                               <div class="card-body">
                                  <a href="{{ route('product.detail', $wishlistedProduct->slug) }}" class="ext-lg font-medium mt-1 t truncate">{{ $wishlistedProduct->name }}</a>
-                                    {!! productCartButton($wishlistedProduct->id) !!}
+                                 {!! productCartButton($wishlistedProduct->id) !!}
                                  <div class="text-xs font-semibold uppercase text-yellow-500">${{ $wishlistedProduct->price }}</div>
                                  <div class="text-xs font-semibold ven-nam text-yellow-500">
                                     @foreach ($wishlistedProduct->productCategoryId as $proCatId)
@@ -329,6 +378,9 @@
                            </div>
                         </div>
                         @endforeach
+                        @else
+                        No Product Found!
+                        @endif
                      </div>
                   </div>
                   <div class="tab-pane" id="profile-1" role="tabpanel" aria-labelledby="profile-tabz">
@@ -407,7 +459,7 @@
                </div>
             </div>
          </div>
-         <div class="tab-pane {{ request()->tab == 'user-photos' ? 'active' : '' }} photos-page" id="user-photos" role="tabpanel" aria-labelledby="user-photos-tab">
+         <div class="tab-pane {{ request()->tab == 'photo' ? 'active' : '' }} photos-page" id="user-photos" role="tabpanel" aria-labelledby="user-photos-tab">
             <div class="tab-pane active" id="pics" role="tabpanel" aria-labelledby="pics-tab">
                <div class="flex justify-between relative md:mb-4 mb-3">
                   <div class="flex-1">
@@ -421,20 +473,20 @@
                </div>
                <div class="grid md:grid-cols-4 grid-cols-2 gap-3 mt-5">
                   @foreach ($userPhotos as $userPhoto)
-                     @if ($userPhoto != NULL)
-                        <div>
-                           <div id="photosOfYou" class="bg-green-400 max-w-full lg:h-56 h-48 rounded-lg relative overflow-hidden shadow uk-transition-toggle">
-                              <img src="{{ url("public/posts/images/$userPhoto") }}" class="w-full h-full absolute object-cover inset-0">
-                              <!-- overly-->
-                              <div class="-bottom-12 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
-                           </div>
-                        </div>
-                     @endif
+                  @if ($userPhoto != NULL)
+                  <div>
+                     <div id="photosOfYou" class="bg-green-400 max-w-full lg:h-56 h-48 rounded-lg relative overflow-hidden shadow uk-transition-toggle">
+                        <img src="{{ url("public/posts/images/$userPhoto") }}" class="w-full h-full absolute object-cover inset-0">
+                        <!-- overly-->
+                        <div class="-bottom-12 absolute bg-gradient-to-b from-transparent h-1/2 to-gray-800 uk-transition-slide-bottom-small w-full"></div>
+                     </div>
+                  </div>
+                  @endif
                   @endforeach
                </div>
-            </div>            
+            </div>
          </div>
-         <div class="tab-pane {{ request()->tab == 'collection-tab' ? 'active' : '' }} wishlist-page" id="collectionTab" role="tabpanel" aria-labelledby="collection-tab">
+         <div class="tab-pane {{ request()->tab == 'collection' ? 'active' : '' }} wishlist-page" id="collectionTab" role="tabpanel" aria-labelledby="collection-tab">
             <div class="" style="margin-top: 42px;">
                <div class="row mt-4">
                   <div class="col-sm-12">
@@ -443,70 +495,52 @@
                            <h2 class="text-xl font-semibold">Collections</h2>
                         </div>
                         @if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('seller'))
-                        <a href="#" class="is_link featured-btn pull-right" data-toggle="modal" data-target="#exampleModal"> Add Collection </a>
+                        <a href="#" class="is_link featured-btn pull-right" data-toggle="modal" data-target="#addProductCollection"> Add Collection </a>
                         @endif
                      </div>
                      <!-- Modal -->
-                     <div class="modal main-prod fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                           <div class="modal-content">
-                              <div class="modal-header">
-                                 <h5 class="modal-title" id="exampleModalLabel">Add Collection</h5>
-                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                 <span aria-hidden="true">×</span>
-                                 </button>
-                              </div>
-                              <div class="modal-body">
-                                 <div class="col-lg-12">
-                                    <div class="form-group">
-                                       <label for="">Collection Name</label>
-                                       <input type="text" class="form-control" placeholder="Enter Collection Name" />
-                                    </div>
+                     <div class="modal main-prod fade" id="addProductCollection" tabindex="-1" role="dialog" aria-labelledby="addProductCollectionLabel" aria-hidden="true">
+                        <form id="addProductCollectionForm" enctype="multipart/form-data" method="post">
+                           @csrf
+                           <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                 <div class="modal-header">
+                                    <h5 class="modal-title" id="addProductCollectionLabel">Add Collection</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                    </button>
                                  </div>
-                                 <div class="col-lg-12">
-                                    <div class="form-group">
-                                       <label for="profilepicture" class="">Cover Image</label>
-                                       <form action="#" method="post" class="dropzone" id="myDropzone" data-plugin="dropzone" data-previews-container="#file-previews" data-upload-preview-template="#uploadPreviewTemplate">
-                                          <div class="fallback">
-                                             <input name="file" type="file" />
-                                          </div>
-                                          <div class="dz-message needsclick">
-                                             <i class="fa fa-upload" aria-hidden="true"></i>
-                                             <h4>Drop files here or click to upload.</h4>
-                                          </div>
-                                       </form>
-                                       <!-- Preview -->
-                                       <div class="dropzone-previews mt-3" id="file-previews"></div>
-                                       <div class="d-none" id="uploadPreviewTemplate">
-                                          <div class="card mt-1 mb-0 shadow-none border">
-                                             <div class="p-2">
-                                                <div class="row align-items-center">
-                                                   <div class="col-auto">
-                                                      <img data-dz-thumbnail="" src="#" class="avatar-sm rounded bg-light" alt="" />
-                                                   </div>
-                                                   <div class="col pl-0">
-                                                      <a href="javascript:void(0);" class="text-muted font-weight-bold" data-dz-name=""></a>
-                                                      <p class="mb-0" data-dz-size=""></p>
-                                                   </div>
-                                                   <div class="col-auto">
-                                                      <!-- Button -->
-                                                      <a href="#" class="btn btn-link btn-lg text-muted" data-dz-remove="">
-                                                      <i class="mdi mdi-close"></i>
-                                                      </a>
-                                                   </div>
-                                                </div>
+                                 <div class="modal-body">
+                                    <div class="col-lg-12">
+                                       <div class="form-group">
+                                          <label for="">Collection Name</label>
+                                          <input type="text" class="form-control" name="name" placeholder="Enter Collection Name">
+                                       </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                       <div class="bsolute bottom-0 p-4 space-x-4 w-full">
+                                          <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
+                                             <div class="lg:block hidden"> Cover Image </div>
+                                             <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
+                                                <input type="file" id="product_collection_image" name="product_collection_image" style="visibility:hidden;" onchange="ValidateFileUpload('product_collection_image','output_product_collection_image');">
+                                                <a href="#" onclick="$('#product_collection_image').trigger('click'); return false;">
+                                                   <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                   </svg>
+                                                </a>
                                              </div>
                                           </div>
+                                          <img id="output_product_collection_image" />
                                        </div>
                                     </div>
                                  </div>
-                              </div>
-                              <div class="modal-footer">
-                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                 <button type="button" class="btn btn-primary">Add</button>
+                                 <div class="modal-footer">
+                                    <button type="submit" id="addProductCollectionBtn" class="btn btn-primary">Add</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                 </div>
                               </div>
                            </div>
-                        </div>
+                        </form>
                      </div>
                      <div></div>
                   </div>
@@ -526,8 +560,8 @@
                   @endforeach
                </div>
             </div>
-         </div>        
-         <div class="tab-pane {{ request()->tab == 'user-bio' ? 'active' : '' }}" id="userBio" role="tabpanel" aria-labelledby="user-bio-tab">
+         </div>
+         <div class="tab-pane {{ request()->tab == 'my-bio' ? 'active' : '' }}" id="userBio" role="tabpanel" aria-labelledby="user-bio-tab">
             @include('user.bio-tab')
          </div>
          <div class="tab-pane {{ request()->tab == 'shop-info' ? 'active' : '' }}" id="shopInfo" role="tabpanel" aria-labelledby="shopInfoTab">
@@ -693,7 +727,7 @@
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
          <h3 class="text-lg font-semibold">Simple Post</h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <button onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image', 'output_simple_post_video');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="simplePostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="simplePostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -703,52 +737,47 @@
             <div class="flex-1 pt-2">
                <textarea name="post_content" id="post_content" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="What's Your Mind ?"></textarea>
             </div>
-
          </div>
          <div class="bsolute bottom-0 p-4 space-x-4 w-full">
             <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
                <div class="lg:block hidden"> Add to your post </div>
-               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">                  
+               <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
                   <a href="#" onclick="$('#post_image_upload').trigger('click'); return false;">
                      <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                      </svg>
-                  </a>     
-                  <a href="#" onclick="$('#post_video_upload').trigger('click'); return false;">
-                    <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                    </svg>
                   </a>
-
-                  {{-- <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                  </svg> --}}
+                  <a href="#" onclick="$('#post_video_upload').trigger('click'); return false;">
+                     <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
+                     </svg>
+                  </a>
                </div>
             </div>
             <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
             <input type="file" id="post_video_upload" name="post_video_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_video_upload','output_simple_post_video')" accept="video/mp4,video/x-m4v,video/*">
+            <video id="output_simple_post_video" class="d-none" width="100" height="100" controls>
+               <source type="video/ogg">
+            </video>
             <img id="output_simple_post_image" />
-            <video id="output_simple_post_video"></video>
          </div>
          <div class="flex items-center w-full justify-between p-3 border-t">
             <div class="flex space-x-2 pull-right">
                <button type="submit" id="add_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
-                  Post
+               Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-                  Cancel </a>
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image', 'output_simple_post_video');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="simplePostForm">
+               Cancel </a>
             </div>
          </div>
       </form>
    </div>
 </div>
-<!-- Create post modal -->
-<!-- create poll post modal -->
-<div id="poll-post-modal" class="create-post" uk-modal>
+<div id="poll-post-modal" class="create-post main-post" uk-modal>
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
-         <h3 class="text-lg font-semibold"> Poll Post </h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <h3 class="text-lg font-semibold">Poll Post</h3>
+         <button onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image', 'test');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="pollPostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="pollPostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -794,20 +823,18 @@
                <button type="submit" id="add_poll_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image', 'test');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="pollPostForm">
                Cancel </a>
             </div>
          </div>
       </form>
    </div>
 </div>
-<!-- create poll post modal -->
-<!-- create product-post-modal -->
 <div id="product-post-modal" class="create-post" uk-modal>
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
-         <h3 class="text-lg font-semibold"> Post Listing </h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <h3 class="text-lg font-semibold">Post Listing</h3>
+         <button onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image', 'output_product_post_video');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="productPostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="productPostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -832,17 +859,23 @@
             <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
                <div class="lg:block hidden"> Add to your post </div>
                <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
-                  <input type="file" id="product_image_upload" name="product_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('product_image_upload','output_product_post_image')">
                   <a href="#" onclick="$('#product_image_upload').trigger('click'); return false;">
                      <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                      </svg>
                   </a>
-                  <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                  </svg>
+                  <a href="#" onclick="$('#product_video_upload').trigger('click'); return false;">
+                     <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
+                     </svg>
+                  </a>
                </div>
             </div>
+            <input type="file" id="product_image_upload" name="product_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('product_image_upload','output_product_post_image')">
+            <input type="file" id="product_video_upload" name="product_video_upload" style="visibility:hidden;" onchange="ValidateFileUpload('product_video_upload','output_product_post_video')" accept="video/mp4,video/x-m4v,video/*">
+            <video id="output_product_post_video" class="d-none" width="100" height="100" controls>
+               <source type="video/ogg">
+            </video>
             <img id="output_product_post_image" />
          </div>
          <div class="flex items-center w-full justify-between p-3 border-t">
@@ -850,20 +883,18 @@
                <button type="submit" id="add_product_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                Add Listing
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image', 'output_product_post_video');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="productPostForm">
                Cancel </a>
             </div>
          </div>
       </form>
    </div>
 </div>
-<!-- create product-post-modal -->
-<!--- create suggestion-post-modal--->
 <div id="suggestions-post-modal" class="create-post" uk-modal>
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
-         <h3 class="text-lg font-semibold"> Suggestions </h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <h3 class="text-lg font-semibold">Suggestions</h3>
+         <button onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image', 'test');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="suggestionPostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="suggestionPostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -893,7 +924,7 @@
                <button type="submit" id="add_suggestion_post_btn" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                Ask for suggestions
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image', 'test');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="suggestionPostForm">
                Cancel </a>
             </div>
          </div>
@@ -944,7 +975,92 @@
 @section('customScripts')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('js/custom-shop-info.js') }}"></script>
-<script>
+<script type="text/javascript">
+   $(document).on('keyup', '.searchProduct', function(){
+      var name = $(this).val();
+      $.ajax({
+         headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+         },
+         type: 'post',
+         url: "{{ route('searchProduct') }}",
+         data: { name: name },
+         dataType: 'json',
+         success: function (data) {
+            if (data.erro == '101') {
+               $('.searchedProduct').html(data.products);
+            }
+         }
+      });
+   });
+   
+   $(document).on('click', '#deleteProductFromWishlist', function(){
+    var productId = $(this).data('id');
+    $.ajax({
+        headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+        },
+        type: 'post',
+        url: _baseURL + "/delete-product-from-wishlist",
+        data: { productId: productId },
+        dataType: 'json',
+        success: function (data) {
+          if (data.erro == '101') {
+            swal("", data.message, "success", {
+               button: "close",
+            });               
+            $('.swal-button--confirm').on('click', function(){
+               window.location.reload();
+            });
+          }
+        }
+    });
+   });
+   
+   $(document).on('click', '.closePostModal', function(){
+      $('#'+$(this).data('form'))[0].reset();
+   });
+   
+   function ValidateFileUpload(fileId, previewId) {
+      
+      var fuData = document.getElementById(fileId);
+      var FileUploadPath = fuData.value;
+      //To check if user upload any file
+      if (FileUploadPath == '') {
+         // swal("", 'Please upload an image', "error", {
+         //    button: "close",
+         // });
+      } else {
+         var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+         //The file uploaded is an image
+   
+         if (Extension == "gif" || Extension == "png" || Extension == "bmp" ||
+            Extension == "jpeg" || Extension == "jpg"|| Extension == "mp4"|| Extension == "x-mp4"|| Extension == "webm") {
+   
+            // To Display
+            if (fuData.files && fuData.files[0]) {
+               var reader = new FileReader();
+   
+               reader.onload = function(e) {
+                  var output = document.getElementById(previewId);
+                  output.style.height = '150px';
+                  output.style.width = '150px';
+                  output.style.padding = '10px';
+                  output.src = e.target.result;
+               }
+               $('#'+previewId).removeClass('d-none');
+               reader.readAsDataURL(fuData.files[0]);
+            }
+         }
+         //The file upload is NOT an image
+         else {
+            swal("", 'Photo only allows file types of GIF, PNG, JPG, JPEG and BMP.', "error", {
+               button: "close",
+            });
+         }
+      }
+   }   
+   
    $(document).ready(function() {
       const phoneInputField = document.querySelector("#phone");
       const phoneInput = window.intlTelInput(phoneInputField, {
@@ -1785,49 +1901,7 @@
    
    function _(el) {
       return document.getElementById(el);
-   }
-   
-   
-   function ValidateFileUpload(fileId, previewId) {
-     
-      var fuData = document.getElementById(fileId);
-      var FileUploadPath = fuData.value;
-      //To check if user upload any file
-      if (FileUploadPath == '') {
-         // swal("", 'Please upload an image', "error", {
-         //    button: "close",
-         // });
-      } else {
-         var Extension = FileUploadPath.substring(FileUploadPath.lastIndexOf('.') + 1).toLowerCase();
-         //The file uploaded is an image
-
-         if (Extension == "gif" || Extension == "png" || Extension == "bmp" ||
-            Extension == "jpeg" || Extension == "jpg"|| Extension == "mp4"|| Extension == "x-mp4") {
-
-            // To Display
-            if (fuData.files && fuData.files[0]) {
-               var reader = new FileReader();
-
-               reader.onload = function(e) {
-                  var output = document.getElementById(previewId);
-                  output.style.height = '150px';
-                  output.style.width = '150px';
-                  output.style.padding = '10px';
-                  output.src = e.target.result;
-               }
-
-               reader.readAsDataURL(fuData.files[0]);
-            }
-
-         }
-         //The file upload is NOT an image
-         else {
-            swal("", 'Photo only allows file types of GIF, PNG, JPG, JPEG and BMP.', "error", {
-               button: "close",
-            });
-         }
-      }
-   }     
+   }  
    
    $("#addProductCategoryForm").validate({
    rules: {

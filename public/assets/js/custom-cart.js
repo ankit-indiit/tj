@@ -40,6 +40,8 @@ $(document).ready(function () {
         value = isNaN(value) ? 0 : value;
         if(value<act_qty){
             value++;
+            price = value*$(this).data('price');
+            $('.productPrice'+$(this).data('id')).html('$'+price);
             $(this).parents('.quantity').find('.cartQty').val(value);
         }
 
@@ -53,6 +55,8 @@ $(document).ready(function () {
         value = isNaN(value) ? 0 : value;
         if(value>1){
             value--;
+            price = value*$(this).data('price');
+            $('.productPrice'+$(this).data('id')).html('$'+price);
             $(this).parents('.quantity').find('.cartQty').val(value);
         }
     });

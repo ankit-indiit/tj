@@ -61,43 +61,7 @@
                                    <td class="product-subtotal">
                                       <span class="subtotal-amount">$25.00</span>
                                    </td>
-                                   <td class="product-subtotal fnd">
-                                      {{-- <div style="display: inline-block;" data-toggle="tooltip" data-placement="top" title="Add to Collection">
-                                         <a class="remove" href="#" aria-expanded="false">  <i class="icon-feather-layers"> </i>
-                                         </a>
-                                         <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss">
-                                            <div class="sidebar_innersss" data-simplebar="init">
-                                               <div class="simplebar-wrapper" style="margin: 0px;">
-                                                  <div class="simplebar-height-auto-observer-wrapper">
-                                                     <div class="simplebar-height-auto-observer"></div>
-                                                  </div>
-                                                  <div class="simplebar-mask">
-                                                     <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
-                                                        <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
-                                                           <ul class="space-y-1 ">
-                                                              <li> summer collection 2021
-                                                              </li>
-                                                              <li> 
-                                                                 winter collection 2020
-                                                              </li>
-                                                              <li> 
-                                                                 Exclusive collection 
-                                                              </li>
-                                                           </ul>
-                                                        </div>
-                                                     </div>
-                                                  </div>
-                                                  <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
-                                               </div>
-                                               <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                                                  <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                                               </div>
-                                               <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                                                  <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
-                                               </div>
-                                            </div>
-                                         </div>
-                                      </div> --}}
+                                   <td class="product-subtotal fnd">    
                                       <span class="continue-shopping-box cart-buttons" data-toggle="tooltip" data-placement="top" title="Add to Cart">
                                          <span href="#" class="">
                                             <a href="javascript:void(0);" id="addToCart" data-product="{{ $product->id }}" class="is_icon" aria-expanded="false">

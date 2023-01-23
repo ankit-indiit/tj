@@ -2,12 +2,15 @@
     <!-- post header-->
     <div class="flex justify-between items-center lg:p-4 p-2.5">
         <div class="flex flex-1 items-center space-x-4">
-            @php $userId= Crypt::encrypt($post->user_id); @endphp
-            <a href="{{ $post->user_id == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+            @php
+                $profileRoute = route('my-profile').'?tab=feed';
+                $userId= Crypt::encrypt($post->user_id);
+            @endphp
+            <a href="{{ $post->user_id == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}">
                 <img src="{{ show_user_image($post->user_id) }}" class="bg-gray-200 border border-white rounded-full w-10 h-10" />
             </a>
             <div class="flex-1 font-semibold capitalize">
-                <a href="{{ $post->user_id == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}" class="text-black"> {{ show_user_name($post->user_id) }} </a>
+                <a href="{{ $post->user_id == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}" class="text-black"> {{ show_user_name($post->user_id) }} </a>
                 <div class="text-gray-700 flex items-center space-x-2">{{ show_time_ago($post->created_at) }}
                     <ion-icon name="people" role="img" class="md hydrated" aria-label="people"></ion-icon>
                 </div>

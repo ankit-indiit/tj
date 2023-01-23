@@ -20,7 +20,10 @@
                         </div>
                         <ul class="uk-child-width-1-4@m uk-child-width-1-3@s uk-child-width-1-2 uk-grid-small uk-grid">
                            @foreach (userFriends() as $friend)
-                              @php $userId= Crypt::encrypt($friend); @endphp
+                              @php
+                                 $profileRoute = route('my-profile').'?tab=feed';
+                                 $userId= Crypt::encrypt($friend);
+                              @endphp
                               <li id="followingUser">
                                  <div class="dropdown">
                                     <i class="icon-feather-more-horizontal dropdown-toggle text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
@@ -28,7 +31,7 @@
                                        <a class="dropdown-item" href="javascript:void(0);" id="cancelOrunFollowFriend" data-id="{{ $friend }}" data-status="confirmed"> <i class="uil-trash-alt mr-1"></i>Unfollow</a>
                                     </div>
                                  </div>
-                                 <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                                 <a href="{{ $friend == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}">
                                     <img src="{{ show_user_image($friend) }}" class="w-full h-48 rounded-lg shadow-sm object-cover">
                                     <div class="pt-2">
                                        <h4 class="text-lg font-semibold">{{ show_user_name($friend) }}</h4>
@@ -49,7 +52,10 @@
                         </div>
                         <ul class="uk-child-width-1-4@m uk-child-width-1-3@s uk-child-width-1-2 uk-grid-small uk-grid">
                            @foreach (userFollowers() as $follower)
-                              @php $userId= Crypt::encrypt($follower); @endphp
+                              @php
+                                 $profileRoute = route('my-profile').'?tab=feed';
+                                 $userId= Crypt::encrypt($follower);
+                              @endphp
                            <li>
                               <div class="dropdown">
                                  <i class="icon-feather-more-horizontal dropdown-toggle text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></i>
@@ -57,7 +63,7 @@
                                     <a class="dropdown-item" href="#"> <i class="uil-trash-alt mr-1"></i>  Remove</a>
                                  </div>
                               </div>
-                              <a href="{{ $follower == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                              <a href="{{ $follower == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}">
                                  <img src="{{ show_user_image($follower) }}" class="w-full h-48 rounded-lg shadow-sm object-cover">
                                  <div class="pt-2">
                                     <h4 class="text-lg font-semibold">{{ show_user_name($follower) }}</h4>

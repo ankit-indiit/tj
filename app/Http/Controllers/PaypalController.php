@@ -163,11 +163,8 @@ class PaypalController extends Controller
                     }
                   
                     $order = Order::create([
-                        'user_id' => Auth::id(),
-                        'payment_type' => $data['payment_type'],
                         'payment_type' => $data['payment_type'],
                         'sub_total' => $data['sub_total'],
-                        'shipping' => $data['shipping'],
                         'shipping' => $data['shipping'],
                         'total' => $data['total'],
                         'coupon' => $data['coupon'],
@@ -175,7 +172,6 @@ class PaypalController extends Controller
                         'billing_address_id' => isset($billingAddress) ? $billingAddress->id : $data['billing_section'],
                         'billing_address_type' => $billingAddressType,
                         'shipping_address_type' => $shippingAddressType,
-                        'order_status' => '0',
                     ]);
                     foreach ($data['product'] as $key => $product) {
                         /*----Save order----*/
@@ -185,6 +181,8 @@ class PaypalController extends Controller
                             'product_qty' => $product['qty'],
                             'product_price' => $product['price'],
                             'seller_id' => $product['seller_id'],
+                            'user_id' => Auth::id(),
+                            'status' => 'request',
                         ]);
 
                         /*----Save Seller Inventory----*/
@@ -197,13 +195,7 @@ class PaypalController extends Controller
                         /*----Empty User Cart After Placed Order----*/
                         Cart::where('product_id', $product['id'])
                             ->where('user_id', Auth::user()->id)
-                            ->delete();
-                        /*----Save Product Delevery Status----*/
-                        OrderProductStatus::create([
-                            'order_id' => $order->id,
-                            'product_id' => $product['id'],
-                            'delivery_status' => 0,
-                        ]);
+                            ->delete();                        
                     }
 
                     /*----Save Coupon Detail if User Applies Coupon---*/

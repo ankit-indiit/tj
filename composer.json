@@ -19,7 +19,8 @@
         "php-ffmpeg/php-ffmpeg": "^0.19.0",
         "spatie/laravel-permission": "^3.15",
         "spatie/laravel-searchable": "^1.9.1",
-        "srmklive/paypal": "~1.0"
+        "srmklive/paypal": "~1.0",
+        "tucker-eric/eloquentfilter": "^3.1"
     },
     "require-dev": {
         "facade/ignition": "^1.16.15",

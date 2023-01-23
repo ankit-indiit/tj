@@ -13,6 +13,7 @@
               @if (count($notifications) > 0)
                 @foreach ($notifications as $notification)
                   @php
+                    $profileRoute = route('my-profile').'tab=feed';
                     $friend = $notification->data['data']['sender_id'];
                     $userId= Crypt::encrypt($friend);
                   @endphp
@@ -20,7 +21,7 @@
                         <div class="flex items-start space-x-5 p-7 my-4">
                            <img src="{{ show_user_image($notification->data['data']['sender_id']) }}" alt="" class="w-12 h-12 rounded-full">
                            <div class="flex-1">
-                              <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}" class="text-lg font-semibold line-clamp-1 mb-1">{{$notification->data['data']['body']}}</a>
+                              <a href="{{ $friend == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}" class="text-lg font-semibold line-clamp-1 mb-1">{{$notification->data['data']['body']}}</a>
                               <p class="text-sm text-gray-400 mb-2">{{ show_time_ago($notification->created_at) }}</p>                            
                               @if (isset($notification->data['data']['friendshipId']) && getUserById($friend)->user_friendship_status == 'pending')
                                 <div class="my-1 followBackBtnSec">

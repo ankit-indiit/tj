@@ -1,11 +1,16 @@
 <?php
 
 namespace App;
-
+use Auth;
+use Spatie\Searchable\Searchable;
+use Spatie\Searchable\SearchResult;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 
-class Order extends Model
+class Order extends Model 
 {
+    use Filterable;
+
     protected $fillable = [
     	'id',
     	'user_id',
@@ -23,7 +28,7 @@ class Order extends Model
     	'order_status',
     ];
 
-    // protected $appends = ['order_products'];
+    // protected $appends = ['order_products'];   
 
     public function getCreatedAtAttribute()
     {

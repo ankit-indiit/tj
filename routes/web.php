@@ -55,6 +55,7 @@ Route::get('get-sub-cat', 'ProductCategoryController@getSubCat')->name('get.sub-
 Route::post('product-attr-create', 'ProductController@storeProductAttr')->name('product-attr.store');
 Route::post('upload-product-files', 'ProductController@upload_files')->name('upload.product-files');
 Route::get('product-detail/{slug}', 'ProductController@productDetail')->name('product.detail');
+Route::post('search-product', 'ProductController@searchProduct')->name('searchProduct');
 Route::get('shop', 'ProductController@shop')->name('shop');
 Route::post('add-to-wishlist', 'ProductController@addToWishlist')->name('add-to-wishlist');
 Route::get('wishlist', 'WishlistController@index')->name('wishlist');
@@ -90,6 +91,7 @@ Route::post('follow-shop', 'SellerShopController@followShop')->name('follow.shop
 Route::post('un-follow-shop', 'SellerShopController@unFollowhop')->name('un.follow-shop');
 Route::get('seller-shop/{type?}', 'SellerShopController@sellerShop')->name('seller.shop');
 Route::get('shop-detail/{id}', 'SellerShopController@shopDetail')->name('shop.detail');
+Route::post('search-shop-product', 'SellerShopController@searchProduct')->name('shopSearchProduct');
 Route::get('shop-follower/{id}', 'SellerShopController@shopFollower')->name('shop.follower');
 Route::get('chat', 'MessageController@index')->name('chat');
 Route::get('user-chat', 'MessageController@getUserChat')->name('user-chat');

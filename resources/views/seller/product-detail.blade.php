@@ -27,7 +27,9 @@
                   <div class="product-details-desc">
                      <h3>{{ $productDetail->name }}</h3>
                      <div class="price">
-                        <span class="new-price">${{ $productDetail->discounted_price }}</span>
+                        <span class="new-price productPrice{{ $productDetail->id }}">
+                           ${{ $productDetail->discounted_price }}
+                        </span>
                         <span class="old-price">${{ $productDetail->price }}</span>
                      </div>
                      <div class="product-review">                        
@@ -42,14 +44,14 @@
                      <div class="product-add-to-cart">
                         <div class="input-counter quantity">
                            <span class="minus-btn">
-                              <a href="javascript:void(0);" class="dicreseProductQty">
+                              <a href="javascript:void(0);" class="dicreseProductQty" data-price="{{ $productDetail->discounted_price }}" data-id="{{ $productDetail->id }}">
                                  <i class="fa fa-minus"></i>                        
                               </a>
                            </span>
                            <input type="text" name="quantity" id="productQuantity{{ $productDetail->id }}" class="productQty" value="1">
                            <input type="hidden" name="quantity" class="proQty" value="{{ $productDetail->quantity }}">
                            <span class="plus-btn">
-                              <a href="javascript:void(0);" class="increseProductQty">
+                              <a href="javascript:void(0);" class="increseProductQty" data-price="{{ $productDetail->discounted_price }}" data-id="{{ $productDetail->id }}">
                                  <i class="fa fa-plus"></i>                         
                               </a>
                            </span>

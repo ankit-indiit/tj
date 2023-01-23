@@ -36,12 +36,12 @@
                               <div class="card-media h-44">
                                  <div class="card-media-overly"></div>
                                  <img src="{{ url("public/images/product/$productImage") }}" alt="">
-                                 <div class="product-list"> 
+                                 <{{-- div class="product-list"> 
                                     <label class="cont">
                                     <input type="checkbox" class="checkme">
                                     <span class="checkmark"></span>
                                     </label>
-                                 </div>
+                                 </div> --}}
                               </div>
                               <div class="card-body">
                                  <a href="{{ route('product.detail', $product->slug) }}" class="ext-lg font-medium mt-1 t truncate"> {{ $product->name }} </a>

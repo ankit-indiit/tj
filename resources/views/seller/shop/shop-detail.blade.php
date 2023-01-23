@@ -73,14 +73,17 @@
                   <div class="flex items-center justify-between mb-4">
                      <div>
                         <h4 class="text-2xl -mb-0.5 font-semibold"> Followers </h4>
-                        <p> 3,4510 Friends</p>
+                        <p> {{$shopDetails->followers_count}} Friends</p>
                      </div>
                      <a href="{{ route('shop.follower', $shopDetails->id) }}" class="text-blue-600 ">See all</a>
                   </div>
                   <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold">
                      @foreach (getAllShopFollowers($shopDetails->id) as $member)
-                        @php $userId= Crypt::encrypt($member->user_id); @endphp
-                        <a href="{{ $member->user_id == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                        @php
+                           $profileRoute = route('my-profile').'?tab=feed';
+                           $userId= Crypt::encrypt($member->user_id);
+                        @endphp
+                        <a href="{{ $member->user_id == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}">
                            <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2"> 
                               <img src="{{ @show_user_image($member->user_id) }}" alt="" class="w-full h-full object-cover absolute">
                            </div>
@@ -98,7 +101,7 @@
                   <h2 class="text-xl font-semibold mt-4"> Photos </h2>
                   <nav class="cd-secondary-nav border-b md:m-0 -mx-4">
                      <ul>
-                        <li class="active"><a href="#" class="lg:px-2">  Photos of you  <span> 230</span> </a></li>
+                        <li class="active"><a href="#" class="lg:px-2">  Photos of you  <span> {{-- count($shopPhotos)--}}</span> </a></li>
                      </ul>
                   </nav>
                </div>
@@ -139,7 +142,13 @@
                </div>
                <div class="wishlist-search">
                   <div class="header_search" aria-expanded="false">
-                     <input value="" type="text" class="form-control" placeholder="Search " autocomplete="off">
+                     <input
+                        type="text"
+                        class="form-control searchProduct"
+                        placeholder="Search "
+                        autocomplete="off"
+                        data-user-id="{{ $shopDetails->user_id }}"
+                     >
                      <i class="uil-search-alt"></i>
                   </div>
                </div>
@@ -153,32 +162,9 @@
                <div class="col-lg-12">
                   <div class="relative">
                      <div class="uk-slider-container px-1 py-3">
-                        <div class="row">
-                           @foreach ($products as $product)
-                              @php
-                                 $unSerlizeProImage = unserialize($product->image);
-                                 $productImage = reset($unSerlizeProImage);
-                              @endphp
-                              <div class="col-sm-3">
-                                 <div class="card">
-                                    <div class="card-media h-44">
-                                       <div class="card-media-overly"></div>
-                                       <img src="{{ url("public/images/product/$productImage") }}" alt="">                                       
-                                    </div>
-                                    <div class="card-body">
-                                       <a href="{{ route('product.detail', $product->slug) }}" class="ext-lg font-medium mt-1 t truncate">{{ $product->name }}</a>
-                                       <div class="text-xs font-semibold uppercase text-yellow-500">${{$product->discounted_price}}</div>
-                                       <div class="text-xs font-semibold ven-nam text-yellow-500">
-                                          @foreach ($product->productCategoryId as $proCatId)
-                                          <a href="{{ route('category.show', str_replace(' ', '-', strtolower(getProductCategoryNameById($proCatId->cat_id)))) }}">{{ getProductCategoryNameById($proCatId->cat_id) }}</a>
-                                          @endforeach
-                                       </div>
-                                       <div class="ratings">
-                                          <i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i><i class="fa fa-star" aria-hidden="true"></i>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
+                        <div class="row searchedProduct">
+                           @foreach ($products as $product)                              
+                              @include('seller.shop.shop-products', ['product' => $product])
                            @endforeach
                         </div>
                      </div>
@@ -486,6 +472,28 @@
 @section('customScripts')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
+   $(document).on('keyup', '.searchProduct', function(){
+      var name = $(this).val();
+      var userId = $(this).data('user-id');
+      $.ajax({
+         headers: {
+            'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+         },
+         type: 'post',
+         url: "{{ route('shopSearchProduct') }}",
+         data: {
+            name: name,
+            userId: userId
+         },
+         dataType: 'json',
+         success: function (data) {
+            if (data.erro == '101') {
+               $('.searchedProduct').html(data.products);
+            }
+         }
+      });
+   });
+
 $("#simplePostUpdateForm").validate({
    rules: {
       post_content: {

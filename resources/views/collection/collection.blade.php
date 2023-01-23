@@ -40,10 +40,6 @@
                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                     </svg>
                                     </a>
-                                    <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                                    </svg>
-
                                  </div>
                               </div>
                               <img id="output_product_collection_image" />
@@ -124,68 +120,7 @@ function ValidateFileUpload(fileId, previewId) {
             });
          }
       }
-   }
-
-   $("#addProductCollectionForm").validate({      
-      rules: {
-         name: {
-            required: true
-         },
-         product_collection_image: {
-            required: true
-         }
-      },
-      messages: {
-         name: "Please enter category name",
-         product_collection_image: "Please choose category image"
-      },
-      submitHandler: function(forms, e) {
-         e.preventDefault();
-         var form = $('#addProductCollectionForm')[0];
-         var serializedData = new FormData(form);
-
-         $("#addProductCollectionBtn").attr("disabled", true);
-         $('#addProductCollectionBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-         $.ajax({
-            headers: {
-               'X-CSRF-Token': $('input[name="_token"]').val()
-            },
-            type: 'post',
-            enctype: 'multipart/form-data',
-            url: "{{ route('collection.store') }}",
-            data: serializedData,
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function(data) {
-               $("#addProductCollectionBtn").attr("disabled", false);
-
-               $('#addProductCollectionBtn').html('Post');
-
-               if (data.erro == '101') {
-                  clearImage('output_simple_post_image');
-                 
-                  UIkit.modal('#addProductCollection').hide();
-
-                  swal("", data.message, "success", {
-                     button: "close",
-                  });
-
-                  $("#addProductCollectionForm").trigger('reset');
-                  $('.swal-button--confirm').on('click', function(){
-                     window.location.reload();
-                  });
-               } else {
-                  swal("", data.message, "error", {
-                     button: "close",
-                  });
-               }
-            }
-         });
-         return false;
-      }
-   });
+   }   
 
 </script>
 @endsection

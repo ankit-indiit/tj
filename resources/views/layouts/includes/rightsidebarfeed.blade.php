@@ -73,7 +73,7 @@
                      <div class="cart_footer">
                         @if (count($cartItems) > 0)
                            <a href="{{ route('cart') }}" class="is_link become-sel"> Go to Cart </a>
-                           <h1>Total : <strong> $ {{ $cartTotalPrice }}</strong></h1>
+                           <h1>Total : <strong> ${{ $cartTotalPrice }}</strong></h1>
                         @else
                            <p class="text-center">Missing cart items</p> 
                         @endif

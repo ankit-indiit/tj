@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use App\ModelFilters\OrderFilter;
 use Illuminate\Support\Facades\Validator;
 use App\Order;
 use App\OrderProduct;
@@ -118,12 +119,22 @@ class OrderController extends Controller
                 $shippingAddressType = 'un_saved';
             }
 
-            $request['billing_address_id'] = isset($billingAddress) ? $billingAddress->id : $request['billing_section'];
-            $request['shipping_address_id'] = isset($shippingAddress) ? $shippingAddress->id : $request['shipping_section'];
-            $request['billing_address_type'] = $billingAddressType;
-            $request['shipping_address_type'] = $shippingAddressType;
+            // $request['billing_address_id'] = isset($billingAddress) ? $billingAddress->id : $request['billing_section'];
+            // $request['shipping_address_id'] = isset($shippingAddress) ? $shippingAddress->id : $request['shipping_section'];
+            // $request['billing_address_type'] = $billingAddressType;
+            // $request['shipping_address_type'] = $shippingAddressType;
 
-            $order = Order::create($request->all());
+            $order = Order::create([
+                'payment_type' => $request->payment_type,
+                'sub_total' => $request->sub_total,
+                'shipping' => $request->shipping,
+                'total' => $request->total,
+                'coupon' => $request->coupon,
+                'shipping_address_id' => isset($shippingAddress) ? $shippingAddress->id : $request->shipping_section,
+                'billing_address_id' => isset($billingAddress) ? $billingAddress->id : $request->billing_section,
+                'billing_address_type' => $billingAddressType,
+                'shipping_address_type' => $shippingAddressType,
+            ]);
             foreach ($request->product as $key => $product) {
                 /*----Save order----*/
                 OrderProduct::create([
@@ -132,6 +143,8 @@ class OrderController extends Controller
                     'product_qty' => $product['qty'],
                     'product_price' => $product['price'],
                     'seller_id' => $product['seller_id'],
+                    'user_id' => Auth::id(),
+                    'status' => 'request',
                 ]);
 
                 /*----Save Seller Inventory----*/
@@ -144,15 +157,8 @@ class OrderController extends Controller
                 /*----Empty User Cart After Placed Order----*/
                 Cart::where('product_id', $product['id'])
                     ->where('user_id', Auth::user()->id)
-                    ->delete();
-                /*----Save Product Delevery Status----*/
-                OrderProductStatus::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product['id'],
-                    'delivery_status' => 0,
-                ]);
+                    ->delete();                
             }
-
 
             /*----Save Coupon Detail if User Applies Coupon---*/
             if (Session::get('coupon') != NULL) {
@@ -178,47 +184,54 @@ class OrderController extends Controller
         return redirect()->route('buyer.order')->with('success', 'Your order has been successfully placed!');
     }
 
-    public function sellerOrder()
+    public function sellerOrder(Request $request)
     {
-        // $orderProducts = DB::select("SELECT * FROM orders as O right join order_products as OP on O.id = OP.order_id where OP.seller_id = '".Auth::user()->id."' GROUP BY created_at ");
-        $orderProducts = Order::whereHas('OrderProduct', function (Builder $query) 
-            {  $query->where('seller_id', '=', Auth::user()->id); 
-        })->get();
-
+        // $orderProducts = Order::whereHas('OrderProduct', function (Builder $query) 
+        //     {
+        //         $query->where('seller_id', '=', Auth::user()->id); 
+        //     }
+        // )->get();
+        $orderProducts = OrderProduct::filter($request->all())
+            ->where('seller_id', Auth::id())
+            ->orderBy('id', 'DESC')
+            ->get();
         $data = ['page_title' => 'Seller Order | TJ', 'orderProducts' => $orderProducts];        
         return view('order.seller-order', $data);
     }
 
     public function updateSellerOrderStatus(Request $request)
     {
-        $orderProducts = OrderProductStatus::create([
-            'order_id' => $request->order_id,
-            'product_id' => $request->product_id,
-            'delivery_status' => $request->productStatus,
+        $orderProducts = OrderProduct::where('order_id', $request->order_id)
+            ->where('product_id', $request->product_id)
+            ->update([
+                'status' => $request->productStatus,
         ]);      
 
-        $messags['message'] = 'Order status has been update successfully!';
+        $messags['message'] = 'Order status has been updated!';
         $messags['erro'] = 101;
         echo json_encode($messags);              
     }
 
-    public function buyerOrder()
-    {
-        $orders = Order::select('id', 'created_at')->where('user_id', Auth::user()->id)->get();        
+    public function buyerOrder(Request $request)
+    {        
+        $orders = OrderProduct::filter($request->all())
+            ->where('user_id', Auth::id())
+            ->orderBy('id', 'DESC')
+            ->get();        
         $data = ['page_title' => 'Order History | TJ', 'orders' => $orders];        
         return view('order.buyer-order', $data);
     }
 
     public function buyerOrderDetail(Request $request, $id)
     {
-        $order = Order::where('id', $id)->first();
-        if ($order->shipping_address_id == 0) {
+        $product = OrderProduct::where('id', $id)->first();
+        if ($product->shipping_address_id == 0) {
             $userAddress = OrderAddress::where('user_id', Auth::id())->first();           
         } else {
-            $userAddress = UserAddress::where('id', $order->shipping_address_id)->first();            
-        }     
+            $userAddress = UserAddress::where('id', $product->shipping_address_id)->first();
+        }
         
-        $data = ['page_title' => 'Order History | TJ', 'order' => $order, 'userAddress' => $userAddress];
+        $data = ['page_title' => 'Order History | TJ', 'product' => $product, 'userAddress' => $userAddress];
         return view('order.buyer-order-detail', $data);
     }
 

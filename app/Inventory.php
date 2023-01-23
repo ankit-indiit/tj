@@ -37,9 +37,11 @@ class Inventory extends Model
     public function getProductImageAttribute()
     {
     	$productImage = Product::where('id', $this->attributes['product_id'])->pluck('image')->first();
-    	$unSerlizeProImage = unserialize($productImage);
-        $productImage = reset($unSerlizeProImage);
-    	return url("public/images/product/$productImage");
+        if ($productImage != '') {
+        	$unSerlizeProImage = unserialize($productImage);
+            $productImage = reset($unSerlizeProImage);
+        	return url("public/images/product/$productImage");            
+        }
     }
 
     public function getSkuAttribute()

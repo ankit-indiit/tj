@@ -29,11 +29,6 @@ class UserAddress extends Model
         return $query->join('countries', function($join)
             {
                 return $join->on('user_address.countryId', '=', 'countries.id')->select('countries.name','countries.nicename','countries.id as countryId');
-            })
-
-        ;
+            });
     }
-
-
-    
 }

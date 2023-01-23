@@ -21,9 +21,8 @@ use App\PostsComments;
 use App\CommentLike;
 use App\BecomeSeller;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\Storage;
-
+use File;
 
 class PostController extends Controller
 {
@@ -36,18 +35,27 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
-        echo '<pre>';
-        $video = $request->file('post_video_upload');
-        print_r($video->getMimeType());
-        die;
-        if ($request->file('post_video_upload')) {
-            $validator = Validator::make($request->all(), [
-                // 'post_video_upload' => 'video_length:45',
-                'post_video_upload'  => 'mimes:mp4,mov,ogg,qt | max:20000'
-            ]);            
+        if ($request->hasFile('post_video_upload')) {
+            $rules = [
+                'post_video_upload' => 'max:5120'
+            ];    
+            $messages = [
+                'post_video_upload.max' => 'Video duration is too large (maximun size 5 mb)'
+            ];
+            $validator = Validator::make( $request->all(), $rules, $messages );                      
         }
 
-        if ($validator->fails()) {
+        if ($request->hasFile('product_video_upload')) {
+            $rules = [
+                'product_video_upload' => 'max:5120'
+            ];    
+            $messages = [
+                'product_video_upload.max' => 'Video duration is too large (maximun size 5 mb)'
+            ];
+            $validator = Validator::make( $request->all(), $rules, $messages );            
+        }
+
+        if (isset($validator) && $validator->fails()) {
             $messags['message'] = $validator->errors()->first();
             $messags['erro'] = 202;
             return response()->json($messags, 200);
@@ -60,39 +68,50 @@ class PostController extends Controller
         switch ($request->postType) {
             case 1:
 
-                if ($request->file('post_image_upload')) {
-                    $image = $request->file('post_image_upload');
-                    $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
+                if ($request->hasFile('post_image_upload')) {
+                    $file = $request->file('post_image_upload');
+                    $imageName = time() . '_' . Auth::user()->id . '.' . $file->getClientOriginalExtension();
                     $destinationPath = public_path('/posts/images');
-                    $image->move($destinationPath, $imagename);
-                    $image = $imagename;
+                    $file->move($destinationPath, $imageName);
+                    $type = 'image';
+                } else {
+                    $imageName = '';
                 }
 
-                if ($request->file('post_video_upload')) {
-                    $image = $request->file('post_video_upload');
-                    $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
+                if ($request->hasFile('post_video_upload')) {
+                    $file = $request->file('post_video_upload');
+                    $videoName = time() . '_' . Auth::user()->id . '.' . $file->getClientOriginalExtension();
                     $destinationPath = public_path('/posts/images');
-                    $image->move($destinationPath, $imagename);
-                    $image = $imagename;
+                    $file->move($destinationPath, $videoName);
+                    $type = 'video';
+                } else {
+                    $videoName = '';
+                }
+                
+                if ($request->hasFile('post_image_upload') && $request->hasFile('post_video_upload')) {
+                    $type = 'both';
                 }
 
                 $store = [
                     'user_id' => Auth::user()->id,
                     'content' => $request->post_content,
                     'post_type' => $request->postType,
-                    'image'     => $image,
-                    'store_id'     => $request->store_id
+                    'image' => $imageName,
+                    'video' => $videoName,
+                    'store_id' => $request->store_id,
+                    'file_type' => $type
                 ];
 
                 break;
             case 2:
 
-                if ($request->file('poll_image_upload')) {
+                if ($request->hasFile('poll_image_upload')) {
                     $image = $request->file('poll_image_upload');
                     $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
                     $destinationPath = public_path('/posts/images');
                     $image->move($destinationPath, $imagename);
                     $image = $imagename;
+                    $type = 'image';
                 }
 
                 $store = [
@@ -101,42 +120,64 @@ class PostController extends Controller
                     'post_type' => $request->postType,
                     'button1' => $request->pollButton1,
                     'button2' => $request->pollButton2,
-                    'image'     => $image,
-                    'store_id'     => $request->store_id
+                    'image' => $image,
+                    'store_id' => $request->store_id,
+                    'file_type' => $type
                 ];
                 break;
             case 3:
 
-                if ($request->file('product_image_upload')) {
-                    $image = $request->file('product_image_upload');
-                    $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
+                if ($request->hasFile('product_image_upload')) {
+                    $file = $request->file('product_image_upload');
+                    $imageName = time() . '_' . Auth::user()->id . '.' . $file->getClientOriginalExtension();
                     $destinationPath = public_path('/posts/images');
-                    $image->move($destinationPath, $imagename);
-                    $image = $imagename;
+                    $file->move($destinationPath, $imageName);
+                    $type = 'image';
+                } else {
+                    $imageName = '';
                 }
+
+                if ($request->hasFile('product_video_upload')) {
+                    $file = $request->file('product_video_upload');
+                    $videoName = time() . '_' . Auth::user()->id . '.' . $file->getClientOriginalExtension();
+                    $destinationPath = public_path('/posts/images');
+                    $file->move($destinationPath, $videoName);
+                    $type = 'video';
+                } else {
+                    $videoName = '';
+                }
+
+                if ($request->hasFile('product_image_upload') && $request->hasFile('product_video_upload')) {
+                    $type = 'both';
+                }
+
                 $store = [
                     'content' => $request->product_post_content,
                     'user_id' => Auth::user()->id,
                     'post_type' => $request->postType,
                     'product_name' => $request->product_post_content,
                     'price' => $request->product_price,
-                    'image'     => $image
+                    'image' => $imageName,
+                    'video' => $videoName,
+                    'file_type' => $type
                 ];
                 break;
             case 4:
-                if ($request->file('suggestion_image_upload')) {
+                if ($request->hasFile('suggestion_image_upload')) {
                     $image = $request->file('suggestion_image_upload');
                     $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
                     $destinationPath = public_path('/posts/images');
                     $image->move($destinationPath, $imagename);
                     $image = $imagename;
+                    $type = 'image';
                 }
 
                 $store = [
                     'user_id' => Auth::user()->id,
                     'content' => $request->suggestion_post_content,
                     'post_type' => $request->postType,
-                    'image'     => $image
+                    'image' => $image,
+                    'file_type' => $type
                 ];
                 break;
 
@@ -148,7 +189,7 @@ class PostController extends Controller
                     'product_name' => $request->product_name,
                     'price' => $request->price,
                     'button1' => $request->button1,
-                    'button2' => $request->button2
+                    'button2' => $request->button2,
                 ];
         }
 
@@ -171,21 +212,39 @@ class PostController extends Controller
 
     public function update(Request $request)
     {
-        if ($request->file('post_image_upload')) {
-            $image = $request->file('post_image_upload');
-            $imagename = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
+        $post = Posts::where('id', $request->postId)->first();
+        if ($request->file('post_video_update')) {
+            $video = $request->file('post_video_update');
+            $videoName = time() . '_' . Auth::user()->id . '.' . $video->getClientOriginalExtension();
             $destinationPath = public_path('/posts/images');
-            $image->move($destinationPath, $imagename);
-            $image = $imagename;
-            $updatePost = Posts::where('id', $request->postId)->update([
-                'content' => $request->post_content,
-                'image' => $image,
-            ]);
+            $video->move($destinationPath, $videoName);
+            $type = 'video';           
         } else {
-            $updatePost = Posts::where('id', $request->postId)->update([
-                'content' => $request->post_content,
-            ]);
-        }       
+            $videoName = $post->video;
+            $type = 'video';
+        }
+        
+        if ($request->file('post_image_update')) {
+            $image = $request->file('post_image_update');
+            $imageName = time() . '_' . Auth::user()->id . '.' . $image->getClientOriginalExtension();
+            $destinationPath = public_path('/posts/images');
+            $image->move($destinationPath, $imageName);
+            $type = 'image';    
+        } else {
+            $imageName = $post->image;
+            $type = 'image';
+        }
+
+        if (isset($videoName) && isset($imageName)) {
+            $type = 'both';
+        }
+
+        $updatePost = Posts::where('id', $request->postId)->update([
+            'content' => $request->post_content,
+            'image' => $imageName,
+            'video' => $videoName,
+            'file_type' => $type,
+        ]);
         
         if ($updatePost) {
             $messags['message'] = "Post updated successfully.";
@@ -196,12 +255,29 @@ class PostController extends Controller
 
     function delete(Request $request)
     {
-        Posts::where('id', $request->id)->delete();
-        PostsComments::where('post_id', $request->id)->delete();
-        PostsLike::where('post_id', $request->id)->delete();
-        
-        $messags['message'] = "Post has been deleted.";
-        $messags['erro'] = 101;
+        DB::beginTransaction();
+
+        try {
+
+            $post = Posts::select('image', 'video')
+                ->where('id', $request->id)
+                ->first();
+            File::delete(public_path("/posts/images/$post->image"));
+            File::delete(public_path("/posts/images/$post->video"));
+            Posts::where('id', $request->id)->delete();
+            PostsComments::where('post_id', $request->id)->delete();
+            PostsLike::where('post_id', $request->id)->delete();
+            $messags['message'] = "Post has been deleted.";
+            $messags['erro'] = 101;
+            DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+            $messags['message'] = "Something went wrong please try again!";
+            $messags['erro'] = 101;
+            
+        }
         return response()->json($messags, 200);
     }
 

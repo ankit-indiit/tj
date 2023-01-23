@@ -101,7 +101,7 @@ if (!function_exists('user_posts')) {
             } else {
                 return  Posts::whereIn('user_id', $userFrd)->orderBy('id', 'desc')->get();
             }
-        } elseif (Route::currentRouteName() == 'shop.profile') {
+        } elseif (Route::currentRouteName() == 'shop.profile') {            
             return  Posts::where('store_id', $id)->orderBy('id', 'desc')->get();
         } else {
             return  Posts::where('user_id', $user_id)->orderBy('id', 'desc')->get();
@@ -357,30 +357,77 @@ if (!function_exists('userFollowUnFollowButtonSection')) {
 
 if (!function_exists('userFriends')) {
     function userFriends($id = '')
-    {       
-        $userIds = array();
-        $user_id = $id == "" ? Auth::user()->id : $id;
-        $exceptUserIds = DB::select('SELECT DISTINCT(friendships.userIds) FROM
-                (
-                   SELECT first_user as userIds, created_at FROM friendships  where  second_user = "'.$user_id.'" AND status = "confirmed"
-                   
-                   UNION
-
-                   SELECT second_user as userIds, created_at FROM friendships where first_user = "'.$user_id.'" AND status = "confirmed"
-
-                )
-            friendships WHERE friendships.userIds IS NOT NULL order by friendships.created_at desc');
-
-        if(count($exceptUserIds) > 0)
-        {
-            foreach($exceptUserIds as $userId)
-            {
-               array_push($userIds, $userId->userIds);
+    {
+        $userId = $id == "" ? Auth::id() : $id;        
+        $firstUser = Friendship::where('second_user', $userId)
+            ->where('status', 'confirmed')
+            ->orderBy('id', 'DESC')
+            ->pluck('first_user');
+        $secondUser = Friendship::where('first_user', $userId)
+            ->where('status', 'confirmed')
+            ->orderBy('id', 'DESC')
+            ->pluck('second_user');
+    
+        $friends = $firstUser->union($secondUser)->toArray();
+        if (isset($id) && getUserPrivacy($id)) {
+            switch (getUserPrivacy($id)) {
+                case 'public':
+                    return $friends;
+                    break;
+                case 'friends':
+                    if (in_array(Auth::id(), $friends)) {
+                        return $friends;
+                    } elseif (Auth::id() == $id) {
+                        return $friends;
+                    }
+                    break;
+                case 'only_me':
+                    if (Auth::id() == $id) {
+                        return $friends;
+                    }
+                    break;
             }
+        } else {
+            return $friends;
         }
-        return array_unique($userIds);    
     }
 }
+
+if (!function_exists('getUserPrivacy')) {
+    function getUserPrivacy($userId)
+    {
+        return User::where('id', $userId)
+            ->pluck('privacy')
+            ->first();
+    }
+}
+
+// if (!function_exists('userFriends')) {
+//     function userFriends($id = '')
+//     {       
+//         $userIds = array();
+//         $user_id = $id == "" ? Auth::user()->id : $id;
+//         $exceptUserIds = DB::select('SELECT DISTINCT(friendships.userIds) FROM
+//                 (
+//                    SELECT first_user as userIds, created_at FROM friendships  where  second_user = "'.$user_id.'" AND status = "confirmed"
+                   
+//                    UNION
+
+//                    SELECT second_user as userIds, created_at FROM friendships where first_user = "'.$user_id.'" AND status = "confirmed"
+
+//                 )
+//             friendships WHERE friendships.userIds IS NOT NULL order by friendships.created_at desc');
+
+//         if(count($exceptUserIds) > 0)
+//         {
+//             foreach($exceptUserIds as $userId)
+//             {
+//                array_push($userIds, $userId->userIds);
+//             }
+//         }
+//         return array_unique($userIds);    
+//     }
+// }
 
 if (!function_exists('userFollowers')) {
     function userFollowers($id = '')
@@ -435,7 +482,9 @@ if (!function_exists('userMsgNotification')) {
 if (!function_exists('getAllUserIds')) {
     function getAllUserIds()
     {       
-        return User::where('id', '!=', Auth::user()->id)->whereNotIn('id', userFriends())->pluck('id');              
+        return User::where('id', '!=', Auth::user()->id)
+            ->whereNotIn('id', userFriends())
+            ->pluck('id');              
     }
 }
 
@@ -472,14 +521,17 @@ if (!function_exists('getAllShopFollowers')) {
 if (!function_exists('checkFollowShopStatus')) {
     function checkFollowShopStatus($storeId = '')
     {       
-        return ShopFollower::where('user_id', Auth::user()->id)->where('store_id', $storeId)->exists();          
+        return ShopFollower::where('user_id', Auth::user()->id)
+            ->where('store_id', $storeId)
+            ->exists();          
     }
 }
 
 if (!function_exists('getShopMemberCount')) {
     function getShopMemberCount($storeId = '')
     {       
-        return ShopFollower::where('store_id', $storeId)->count();          
+        return ShopFollower::where('store_id', $storeId)
+            ->count();          
     }
 }
 
@@ -509,14 +561,18 @@ if (!function_exists('getShopMemberSection')) {
 if (!function_exists('checkIfUserSubmitedReview')) {
     function checkIfUserSubmitedReview($id = '')
     {       
-        return ProductReview::where('product_id', $id)->where('user_id', Auth::user()->id)->exists();
+        return ProductReview::where('product_id', $id)
+            ->where('user_id', Auth::user()->id)
+            ->exists();
     }
 }
 
 if (!function_exists('getProductCollection')) {
     function getProductCollection($id = '')
     {       
-        return ProductCollection::where('id', $id)->pluck('name')->first();
+        return ProductCollection::where('id', $id)
+            ->pluck('name')
+            ->first();
     }
 }
 
@@ -548,23 +604,41 @@ if (!function_exists('getProductById')) {
     }
 }
 
-if (!function_exists('getProductDeleveryStatus')) {
-    function getProductDeleveryStatus($orderId, $productId, $status = '')
+if (!function_exists('getOrderStatus')) {
+    function getOrderStatus($orderId)
     {       
-        return OrderProductStatus::where('order_id', $orderId)
-            ->where('product_id', $productId)
-            ->where('delivery_status', $status)
+        return OrderProduct::where('id', $orderId)
+            ->pluck('status')
             ->first();
     }
 }
-if (!function_exists('getUpdatedProductDeleveryStatus')) {
-    function getUpdatedProductDeleveryStatus($orderId, $productId)
+
+if (!function_exists('orderStatus')) {
+    function orderStatus($orderId)
     {       
-        return OrderProductStatus::where('order_id', $orderId)
-            ->where('product_id', $productId)
-            ->orderBy('id', 'DESC')
-            ->pluck('delivery_status')
+        $status = OrderProduct::where('id', $orderId)
+            ->pluck('status')
             ->first();
+        switch ($status) {
+            case 'delivered':
+                return ['request', 'approved', 'packed', 'shipped', 'delivered'];
+            break;
+            case 'shipped':
+                return ['request', 'approved', 'packed', 'shipped'];
+            break;
+            case 'packed':
+                return ['request', 'approved', 'packed'];
+            break;
+            case 'approved':
+                return ['request', 'approved'];
+            break;
+            case 'request':
+                return ['request'];
+            break;
+            default:
+                return [''];
+            break;
+        }
     }
 }
 

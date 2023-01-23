@@ -284,8 +284,7 @@ class ProductController extends Controller
         $productCollectionIds = ProductRelatedCollection::where('product_id', $productDetail->id)
             ->pluck('product_collection');
         $collections = ProductCollection::select('id', 'name')->whereNotIn('id', $productCollectionIds)->get();
-        $orderIds = Order::where('user_id', Auth::user()->id)->pluck('id')->toArray();
-        $existOrderProduct = OrderProduct::whereIn('order_id', $orderIds)
+        $existOrderProduct = OrderProduct::where('user_id', Auth::id())
             ->where('product_id', $productDetail->id)
             ->exists();
         $data = ['page_title' => 'Create Product | TJ', 'productDetail' => $productDetail, 'relatedProducts' => $relatedProducts, 'productReviews' => $productReviews, 'productReviewAverage' => $productReviewAverage, 'productCollectionIds' => $productCollectionIds, 'collections' => $collections, 'existOrderProduct' => $existOrderProduct];
@@ -446,6 +445,27 @@ class ProductController extends Controller
         ProductRelatedCollection::create($request->all());
         $message['message'] = "Collection has been added to product!";
         $message['erro'] = 101;
+        return response()->json($message, 200);
+    }
+
+    public function searchProduct(Request $request)
+    {
+        if ($request->name != '') {
+            $searchedProducts = Product::where('user_id', Auth::id())
+                ->where('name', 'like', '%' . $request->name . '%')
+                ->get();
+        } else {
+            $searchedProducts = Product::where('user_id', Auth::id())
+            ->get();
+        }
+        $products = [];
+        foreach ($searchedProducts as $product) {            
+            $products []= view('component.product-tab', [
+                    'product' => $product
+                ])->render();
+        }
+        $message['erro'] = 101;
+        $message['products'] = $products;
         return response()->json($message, 200);
     }
 }

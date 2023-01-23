@@ -5,7 +5,6 @@ use Auth;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
 use EloquentFilter\Filterable;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model implements Searchable
@@ -24,7 +23,7 @@ class Product extends Model implements Searchable
         'sku',
     ];
 
-    protected $appends = ['check_cart_status'];
+    protected $appends = ['check_cart_status', 'collections'];
 
     public function modelFilter()
     {
@@ -52,5 +51,14 @@ class Product extends Model implements Searchable
             $this,
             $this->name,
          );
+    }
+
+    public function getCollectionsAttribute()
+    {
+        $existColl = ProductRelatedCollection::where('product_id', $this->attributes['id'])
+            ->pluck('product_collection');
+        return ProductCollection::select('id', 'name')
+            ->whereNotIn('id', $existColl)
+            ->get();
     }
 }

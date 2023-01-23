@@ -76,12 +76,40 @@
                   <h4 class="text-2xl mb-3 font-semibold">About</h4>                  
                   <ul class="text-gray-600 space-y-4">
                      @if(count($address) > 0)
-                        @foreach($address as $addr)
-                           <li>{{  $addr->title }}</li>
-                           <li>{{  $addr->first_name }} {{  $addr->last_name }}</li>
-                           <li>{{  $addr->phone_no }}</li>
-                           <li>{{  $addr->Address }}, {{  $addr->nicename }}</li>
-                        @endforeach
+                        @switch(getUserPrivacy($userId))
+                           @case('public')
+                              @foreach($address as $addr)
+                                 <li>{{  $addr->title }}</li>
+                                 <li>{{  $addr->first_name }} {{  $addr->last_name }}</li>
+                                 <li>{{  $addr->phone_no }}</li>
+                                 <li>{{  $addr->Address }}, {{  $addr->nicename }}</li>
+                              @endforeach
+                           @break
+                           @case('friends')
+                              @if (userFriends($userId) && in_array(Auth::id(), userFriends($userId)))
+                                 @foreach($address as $addr)
+                                    <li>{{  $addr->title }}</li>
+                                    <li>{{  $addr->first_name }} {{  $addr->last_name }}</li>
+                                    <li>{{  $addr->phone_no }}</li>
+                                    <li>{{  $addr->Address }}, {{  $addr->nicename }}</li>
+                                 @endforeach
+                              @else
+                                 <span>This account is private!</span>                              
+                              @endif
+                           @break                                                  
+                           @case('only_me')
+                              @if (Auth::id() == $userId)
+                                 @foreach($address as $addr)
+                                    <li>{{  $addr->title }}</li>
+                                    <li>{{  $addr->first_name }} {{  $addr->last_name }}</li>
+                                    <li>{{  $addr->phone_no }}</li>
+                                    <li>{{  $addr->Address }}, {{  $addr->nicename }}</li>
+                                 @endforeach
+                              @else
+                                 <span>This account is private!</span>
+                              @endif
+                           @break
+                        @endswitch                        
                      @endif
                   </ul>
                </div>
@@ -89,24 +117,28 @@
                   <div class="flex items-center justify-between mb-4">
                      <div>
                         <h4 class="text-2xl -mb-0.5 font-semibold"> Friends </h4>
-                        <p>{{count(userFriends($userId))}} Friends</p>
+                        <p>{{ userFriends($userId) != '' ? count(userFriends($userId)) : 0}} Friends</p>
                      </div>
-                    @if (count(userFriends($userId)) > 0)
-                      <a href="#" class="text-blue-600 ">See all</a>
+                    @if (userFriends($userId) != '' && count(userFriends($userId)) > 0)
+                      <a href="{{ route('see.all-friendFollower', 'following') }}" class="text-blue-600 ">See all</a>
                      @endif
                   </div>
                   <div class="grid grid-cols-3 gap-3 text-gray-600 font-semibold">
-                    @foreach (userFriends($userId) as $friend)
-                      @php $userId= Crypt::encrypt($friend); @endphp
-                      <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
-                          <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
-                              <img src="{{ show_user_image($friend) }}" alt="" class="w-full h-full object-cover absolute" />
-                          </div>
-                          <div>{{ show_user_name($friend) }}</div>
-                      </a>
-                    @endforeach
+                     @if (userFriends($userId) != '' && count(userFriends($userId)) > 0)
+                        @foreach (userFriends($userId) as $friend)
+                           @php $userId= Crypt::encrypt($friend); @endphp
+                           <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                              <div class="avatar relative rounded-md overflow-hidden w-full h-24 mb-2">
+                                 <img src="{{ show_user_image($friend) }}" alt="" class="w-full h-full object-cover absolute" />
+                              </div>
+                              <div>{{ show_user_name($friend) }}</div>
+                           </a>
+                        @endforeach
+                     @else
+                        No user found!
+                     @endif
                 </div>
-                @if (count(userFriends($userId)) > 0)
+                @if (userFriends($userId) != '' && count(userFriends($userId)) > 0)
                   <a href="#" class="bg-gray-100 py-2.5 text-center font-semibold w-full mt-4 block rounded"> See all </a>
                 @endif
                </div>
@@ -196,41 +228,39 @@
                   <h4 class="text-2xl mb-3 font-semibold "> Friends </h4>
                </div>
                <div class="col-sm-9 pull-right">
-                  <a href="#" class="text-black">
-                     <div class="header_search" aria-expanded="false">
-                        <input value="" type="text" class="form-control" placeholder="Search for Friends.." autocomplete="off">
-                        <i class="uil-search-alt"></i>
-                     </div>
-                  </a>
+                  <div class="header_search" aria-expanded="false">
+                     <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Search for Friends.."
+                        autocomplete="off"
+                        id="searchUser"
+                        data-status="following"
+                     >
+                     <i class="uil-search-alt"></i>
+                  </div>
                </div>
             </div>
-            <div class="row">
-              @foreach (userFriends($userProfile->id) as $friend)
-                @php $userId= Crypt::encrypt($friend); @endphp
-                <div class="col-sm-6">
-                   <div class="flex justify-between items-center lg:p-4 p-2.5">
-                      <div class="flex flex-1 items-center space-x-4">
-                         <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
-                         <img src="{{ show_user_image($friend) }}" class="bg-gray-200 border border-white rounded-full w-10 h-10" />
-                         </a>
-                         <div class="flex-1 font-semibold capitalize">
-                            <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}" class="text-black">{{ show_user_name($friend) }}</a>
-                         </div>
+            <div class="row filteredUserData">
+               @if (userFriends($userProfile->id) != '' && count(userFriends($userProfile->id)) > 0)
+               @foreach (userFriends($userProfile->id) as $friend)
+                  @php $userId= Crypt::encrypt($friend); @endphp
+                   <div class="col-sm-6">
+                      <div class="flex justify-between items-center lg:p-4 p-2.5">
+                         <div class="flex flex-1 items-center space-x-4">
+                            <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}">
+                            <img src="{{ show_user_image($friend) }}" class="bg-gray-200 border border-white rounded-full w-10 h-10" />
+                            </a>
+                            <div class="flex-1 font-semibold capitalize">
+                               <a href="{{ $friend == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}" class="text-black">{{ show_user_name($friend) }}</a>
+                            </div>
+                         </div>                         
                       </div>
-                      {{-- <div>
-                         <a href="#" aria-expanded="false"> <i class="icon-feather-more-horizontal text-2xl hover:bg-gray-200 rounded-full p-2 transition -mr-1 dark:hover:bg-gray-700"></i> </a>
-                         <div class="bg-white w-56 shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small">
-                            <ul class="space-y-1">
-                               <li></li>
-                               <li>
-                                  <a href="javascript:void(0);" id="cancelOrunFollowFriend" data-id="{{ $friend }}" class="flex items-center px-3 py-2 text-red-500 hover:bg-red-100 hover:text-red-500 rounded-md dark:hover:bg-red-600"> <i class="uil-trash-alt mr-1"></i> Unfriend </a>
-                               </li>
-                            </ul>
-                         </div>
-                      </div> --}}
                    </div>
-                </div>
-             @endforeach
+               @endforeach
+               @else
+                  No User Found!
+               @endif
             </div>
          </div>
          <div class="tab-pane photos-page" id="user-photos" role="tabpanel" aria-labelledby="user-photos-tab">

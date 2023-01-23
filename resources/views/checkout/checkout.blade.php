@@ -93,13 +93,14 @@
                             @endphp
                             @foreach ($cartItems as $cartItem)
                               @php
-                                $cartTotal = $cartTotal + $cartItem->product_price;
+                                $cartTotal = $cartTotal + $cartItem->product_price*$cartItem->quantity;
+                                $productPrice = $cartItem->product_price*$cartItem->quantity;
                                 $productIds[] .= $cartItem->product_id;
                               @endphp
                               <div class="card-body cart-product-list{{$cartItem->id}}">
                                   <input type="hidden" name="product[{{$cartItem->product_id}}][id]" value="{{$cartItem->product_id}}">
                                   <input type="hidden" name="product[{{$cartItem->product_id}}][qty]" value="{{$cartItem->quantity}}">
-                                  <input type="hidden" name="product[{{$cartItem->product_id}}][price]" value="{{$cartItem->product_price}}">
+                                  <input type="hidden" name="product[{{$cartItem->product_id}}][price]" value="{{$productPrice}}">
                                   <input type="hidden" name="product[{{$cartItem->product_id}}][seller_id]" value="{{$cartItem->seller_id}}">
                                   <div class="full-w cart-n mt-4">
                                      <div class="job-list">
@@ -127,7 +128,7 @@
                                                     <div class="col-sm-5">
                                                        <h3>{{ $cartItem->product_name }}</h3>
                                                        <h4>Seller: {{ show_user_name($cartItem->seller_id) }} </h4>
-                                                       <b class="color-black">${{ $cartItem->product_price }}</b>                                                
+                                                       <b class="color-black">${{ $productPrice }}</b>                                                
                                                     </div>
                                                     <div class="col-sm-4">
                                                        <h4 class="">

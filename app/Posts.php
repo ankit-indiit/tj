@@ -19,7 +19,7 @@ class Posts extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'user_id', 'content', 'image', 'video', 'post_type', 'product_name', 'price', 'button1', 'button2', 'hide_comment', 'store_id'
+        'id', 'user_id', 'content', 'image', 'video', 'post_type', 'product_name', 'price', 'button1', 'button2', 'hide_comment', 'store_id', 'file_type'
     ];
 
 

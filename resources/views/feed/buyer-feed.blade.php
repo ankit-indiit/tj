@@ -50,9 +50,18 @@
                      </svg>
                      Simple Post
                   </div>
-                  <div class="hover:bg-gray-100 flex items-center p-1.5 rounded-md cursor-pointer" uk-toggle="target: #poll-post-modal"><i class="fa fa-line-chart" aria-hidden="true"></i>Poll Post</div>
-                  <div class="hover:bg-gray-100 flex items-center p-1.5 rounded-md cursor-pointer" uk-toggle="target: #product-post-modal"><i class="fa fa-upload" aria-hidden="true"></i>Post Listing</div>
-                  <div class="hover:bg-gray-100 flex items-center p-1.5 rounded-md cursor-pointer" uk-toggle="target: #suggestions-post-modal"><i class="fa fa-commenting" aria-hidden="true"></i>Suggestions</div>
+                  <div class="hover:bg-gray-100 flex items-center p-1.5 rounded-md cursor-pointer" uk-toggle="target: #poll-post-modal">
+                     <i class="fa fa-line-chart" aria-hidden="true"></i>
+                     Poll Post
+                  </div>
+                  <div class="hover:bg-gray-100 flex items-center p-1.5 rounded-md cursor-pointer" uk-toggle="target: #product-post-modal">
+                     <i class="fa fa-upload" aria-hidden="true"></i>
+                     Post Listing
+                  </div>
+                  <div class="hover:bg-gray-100 flex items-center p-1.5 rounded-md cursor-pointer" uk-toggle="target: #suggestions-post-modal">
+                     <i class="fa fa-commenting" aria-hidden="true"></i>
+                     Suggestions
+                  </div>
                 </div>                          
             </div>
 
@@ -84,7 +93,7 @@
              <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
                 <div class="text-center py-4 border-b">
                    <h3 class="text-lg font-semibold" id="postTitle">Simple Post</h3>
-                   <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+                   <button onclick="hideCurrentOpenModal('update-post-modal', 'update_simple_post_image', 'update_simple_post_video');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="simplePostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
                 </div>
                 <form id="simplePostUpdateForm" enctype="multipart/form-data" method="post">
                    @csrf
@@ -95,36 +104,48 @@
                       <div class="flex-1 pt-2">
                          <textarea name="post_content" id="edited_post_content" class="uk-textare text-black shadow-none focus:shadow-none text-xl font-medium resize-none" rows="5" placeholder="What's Your Mind ?"></textarea>
                       </div>
+
                    </div>
                    <div class="bsolute bottom-0 p-4 space-x-4 w-full">
                       <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
                          <div class="lg:block hidden"> Add to your post </div>
                          <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
-                            <input type="file" id="updated_post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('updated_post_image_upload','update_preview_simple_post_image')">
-                            <a href="#" onclick="$('#updated_post_image_upload').trigger('click'); return false;">
+                            <a href="#" onclick="$('#post_image_update').trigger('click'); return false;">
                                <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                </svg>
+                            </a>                  
+                            <a href="#" onclick="$('#post_video_update').trigger('click'); return false;">
+                              <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
+                              </svg>
                             </a>
 
-                            <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                            </svg>
-
-                            <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            {{-- <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                            </svg>
+                            </svg> --}}
                          </div>
                       </div>
-                      <img id="update_preview_simple_post_image" style="height: 150px; width: 150px; padding: 10px;" />
+                      <input type="file" id="post_image_update" name="post_image_update" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_update','update_simple_post_image')">
+                      <input type="file" id="post_video_update" name="post_video_update" style="visibility:hidden;" onchange="ValidateFileUpload('post_video_update','update_simple_post_video')" accept="video/mp4,video/x-m4v,video/*">
+                      <div class="row">
+                          <div class="col-md-6">
+                              <img id="update_simple_post_image" width="100" height="80" />
+                          </div>
+                          <div class="col-md-6">
+                              <video id="update_simple_post_video" width="100" height="80" controls>
+                                <source type="video/ogg">
+                              </video>                        
+                          </div>
+                      </div>
                    </div>
                    <div class="flex items-center w-full justify-between p-3 border-t">
                       <div class="flex space-x-2 pull-right">
                          <button type="submit" id="update_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                             Post
                          </button>
-                         <a href="javascript:void(0);" onclick="hideCurrentOpenModal('update-post-modal');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
-                            Cancel </a>
+                         <a href="javascript:void(0);" onclick="hideCurrentOpenModal('update-post-modal', 'update_simple_post_image', 'update_simple_post_video');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="simplePostForm">
+                        Cancel </a>
                       </div>
                    </div>
                 </form>
@@ -213,7 +234,7 @@
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
          <h3 class="text-lg font-semibold">Simple Post</h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <button onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image', 'output_simple_post_video');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="simplePostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="simplePostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -239,23 +260,21 @@
                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
                     </svg>
                   </a>
-
-                  {{-- <svg class="text-green-600 h-9 p-1.5 rounded-full bg-green-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
-                  </svg> --}}
                </div>
             </div>
             <input type="file" id="post_image_upload" name="post_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_image_upload','output_simple_post_image')">
             <input type="file" id="post_video_upload" name="post_video_upload" style="visibility:hidden;" onchange="ValidateFileUpload('post_video_upload','output_simple_post_video')" accept="video/mp4,video/x-m4v,video/*">
+            <video id="output_simple_post_video" class="d-none" width="100" height="100" controls>
+               <source type="video/ogg">
+             </video>
             <img id="output_simple_post_image" />
-            <img id="output_simple_post_video" />
          </div>
          <div class="flex items-center w-full justify-between p-3 border-t">
             <div class="flex space-x-2 pull-right">
                <button type="submit" id="add_simple_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('create-post-modal', 'output_simple_post_image', 'output_simple_post_video');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="simplePostForm">
                   Cancel </a>
             </div>
          </div>
@@ -267,7 +286,7 @@
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
          <h3 class="text-lg font-semibold">Poll Post</h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <button onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image', 'test');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="pollPostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="pollPostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -318,7 +337,7 @@
                <button type="submit" id="add_poll_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Post
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('poll-post-modal', 'output_poll_post_image', 'test');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="pollPostForm">
                   Cancel </a>
             </div>
          </div>
@@ -330,7 +349,7 @@
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
          <h3 class="text-lg font-semibold">Post Listing</h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <button onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image', 'output_product_post_video');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="productPostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="productPostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -357,18 +376,24 @@
             <div class="flex bg-gray-50 border border-purple-100 rounded-2xl p-3 shadow-sm items-center">
                <div class="lg:block hidden"> Add to your post </div>
                <div class="flex flex-1 items-center lg:justify-end justify-center space-x-2">
-                  <input type="file" id="product_image_upload" name="product_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('product_image_upload','output_product_post_image')">
                   <a href="#" onclick="$('#product_image_upload').trigger('click'); return false;">
                   <svg class="bg-blue-100 h-9 p-1.5 rounded-full text-blue-600 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                   </svg>
                   </a>
-                  <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
-                  </svg>
+                  <a href="#" onclick="$('#product_video_upload').trigger('click'); return false;">
+                     <svg class="text-red-600 h-9 p-1.5 rounded-full bg-red-100 w-9 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"> </path>
+                     </svg>
+                  </a>
 
                </div>
             </div>
+            <input type="file" id="product_image_upload" name="product_image_upload" style="visibility:hidden;" onchange="ValidateFileUpload('product_image_upload','output_product_post_image')">
+            <input type="file" id="product_video_upload" name="product_video_upload" style="visibility:hidden;" onchange="ValidateFileUpload('product_video_upload','output_product_post_video')" accept="video/mp4,video/x-m4v,video/*">
+            <video id="output_product_post_video" class="d-none" width="100" height="100" controls>
+               <source type="video/ogg">
+            </video>
             <img id="output_product_post_image" />
             
          </div>
@@ -378,7 +403,7 @@
                <button type="submit" id="add_product_post_btn" class="flex text-center items-center justify-center w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                   Add Listing
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('product-post-modal', 'output_product_post_image', 'output_product_post_video');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="productPostForm">
                   Cancel </a>
 
             </div>
@@ -391,7 +416,7 @@
    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical rounded-lg p-0 lg:w-5/12 relative shadow-2xl uk-animation-slide-bottom-small">
       <div class="text-center py-4 border-b">
          <h3 class="text-lg font-semibold">Suggestions</h3>
-         <button class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
+         <button onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image', 'test');" class="uk-modal-close-default bg-gray-100 rounded-full p-2.5 m-1 right-2 closePostModal" data-form="suggestionPostForm" type="button" uk-close uk-tooltip="title: Close ; pos: bottom ;offset:7"></button>
       </div>
       <form id="suggestionPostForm" enctype="multipart/form-data" method="post">
          @csrf
@@ -426,7 +451,7 @@
                <button type="submit" id="add_suggestion_post_btn" class="bg-blue-600 flex h-9 items-center justify-center rounded-md text-white px-5 font-medium">
                   Ask for suggestions
                </button>
-               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm">
+               <a href="javascript:void(0);" onclick="hideCurrentOpenModal('suggestions-post-modal', 'output_suggestion_post_image', 'test');" class="bg-red-100 flex font-medium h-9 items-center justify-center px-5 rounded-md text-red-600 text-sm closePostModal" data-form="suggestionPostForm">
                   Cancel </a>
             </div>
          </div>
@@ -442,8 +467,11 @@
 @section('customScripts')
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
 <script type="text/javascript">
-    function ValidateFileUpload(fileId, previewId) {
-     
+   $(document).on('click', '.closePostModal', function(){
+      $('#'+$(this).data('form'))[0].reset();
+   });
+
+   function ValidateFileUpload(fileId, previewId) {
       var fuData = document.getElementById(fileId);
       var FileUploadPath = fuData.value;
 
@@ -458,7 +486,7 @@
          //The file uploaded is an image
 
          if (Extension == "gif" || Extension == "png" || Extension == "bmp" ||
-            Extension == "jpeg" || Extension == "jpg"|| Extension == "mp4"|| Extension == "x-mp4") {
+            Extension == "jpeg" || Extension == "jpg"|| Extension == "mp4"|| Extension == "webm") {
 
             // To Display
             if (fuData.files && fuData.files[0]) {
@@ -471,7 +499,7 @@
                   output.style.padding = '10px';
                   output.src = e.target.result;
                }
-
+               $('#'+previewId).removeClass('d-none');
                reader.readAsDataURL(fuData.files[0]);
             }
 

@@ -14,9 +14,7 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('user_id')->nullable();
-            $table->integer('seller_id')->nullable();
+            $table->bigIncrements('id');            
             $table->enum('payment_type', ['cod', 'paypal', 'stripe'])->nullable();
             $table->integer('sub_total')->nullable();
             $table->integer('shipping')->nullable();
@@ -27,7 +25,6 @@ class CreateOrdersTable extends Migration
             $table->integer('billing_address_id')->nullable();
             $table->string('billing_address_type')->nullable();
             $table->string('shipping_address_type')->nullable();
-            $table->enum('order_status', [0, 1, 2])->nullable();
             $table->timestamps();
         });
     }

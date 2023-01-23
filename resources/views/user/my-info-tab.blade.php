@@ -45,7 +45,7 @@
                         {{ __('Save Changes') }}
                     </button>
                  
-                    <a href="{{ url('my-profile') }}" class="flex text-center items-center justify-center gray-bg w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
+                    <a href="{{ url('my-profile') }}?tab=feed" class="flex text-center items-center justify-center gray-bg w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                         Cancel
                     </a>
               </div>
@@ -202,7 +202,7 @@
                         {{ __('Save Changes') }}
                     </button>
                  
-                    <a href="{{ url('my-profile') }}" class="flex text-center items-center justify-center gray-bg w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
+                    <a href="{{ url('my-profile') }}?tab=feed" class="flex text-center items-center justify-center gray-bg w-16 h-9 px-4 rounded-md bg-gray-200 font-semibold">
                         Cancel
                     </a>
                </div>

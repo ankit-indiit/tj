@@ -106,8 +106,16 @@ function clearImage(imageId)
     $("#"+imageId).css("height", 0);
 }
 
-function hideCurrentOpenModal(modalId, imageId) {
+function clearVideo(videoId)
+{
+    $('#'+videoId).removeAttr('src');
+    $('#'+videoId).removeAttr('style');
+    $("#"+videoId).css("height", 0);
+}
+
+function hideCurrentOpenModal(modalId, imageId, videoId) {
     clearImage(imageId);
+    clearVideo(videoId);
     UIkit.modal('#' + modalId).hide();
 }
 
@@ -128,7 +136,8 @@ function updatePost(id)
                 $('#postTitle').html('Suggestion Post');
             }
             $("#edited_post_content").html(data.content);
-            $('#update_preview_simple_post_image').attr('src', _baseURL+'/public/posts/images/'+data.image);
+            $('#update_simple_post_image').attr('src', _baseURL+'/public/posts/images/'+data.image);
+            $('#update_simple_post_video').attr('src', _baseURL+'/public/posts/images/'+data.video);
             $("#editedPostId").val(id);
             var modal = UIkit.modal("#update-post-modal");
             modal.show();             
@@ -587,38 +596,18 @@ $(document).on('click', '#assignCollection', function(){
     });
 });
 
-$("#deleteSellerProduct").validate({
-  rules: {
-     
-  },
-  messages: {
-      
-  },
-  submitHandler: function(forms, e) {
-    e.preventDefault();
-    var id = $('#id').val();
-    var form = $('#deleteSellerProduct')[0];
-    var serializedData = new FormData(form);
-    // serializedData.append('product_images', JSON.stringify(all_uploaded_files));
-    // console.log(serializedData);
-    
-     $("#deleteSellerProductBtn").attr("disabled", true);
-     $('#deleteSellerProductBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
-     $.ajax({
+$(document).on('click', '#deleteSellerProductBtn', function(){
+    $(this).html('Processing <i class="fa fa-spinner fa-spin"></i>');
+    var id = $(this).data('id');
+    $.ajax({
         headers: {
-           'X-CSRF-Token': $('input[name="_token"]').val()
+           'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
         },
-        type: 'POST',
+        type: 'DELETE',
         enctype: 'multipart/form-data',        
         url: _baseURL + "/product/"+id,
-        data: serializedData,
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        cache: false,
+        data: { id: id },        
         success: function(data) {
-           $("#deleteSellerProductBtn").attr("disabled", false);
-
            if (data.erro == '101') {
               swal("", data.message, "success", {
                  button: "close",
@@ -633,7 +622,118 @@ $("#deleteSellerProduct").validate({
               });
            }
         }
+    });
+});
+
+// $("#deleteSellerProduct").validate({
+//   rules: {
+     
+//   },
+//   messages: {
+      
+//   },
+//   submitHandler: function(forms, e) {
+//     // e.preventDefault();
+//     var id = $('#id').val();
+//     alert(id);
+//     var form = $('#deleteSellerProduct')[0];
+//     var serializedData = new FormData(form);
+//     // serializedData.append('product_images', JSON.stringify(all_uploaded_files));
+//     // console.log(serializedData);
+    
+//      $("#deleteSellerProductBtn").attr("disabled", true);
+//      $('#deleteSellerProductBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+     
+//      return false;
+//   }
+// });
+
+$(document).on('click', '.profileTab', function(){
+    var searchParams = new URLSearchParams(window.location.search)
+    searchParams.set("tab", $(this).data('tab'));
+    var newRelativePathQuery = window.location.pathname + '?' + searchParams.toString();
+    history.pushState(null, '', newRelativePathQuery);
+}) 
+
+$(document).on('keyup', '#searchUser', function(){
+  var user = $(this).val();
+  var searchFor = $(this).data('status');      
+     $.ajax({
+          headers: {
+             'X-CSRF-Token': $('input[name="_token"]').val()
+          },    
+          type: 'get',
+          url: _baseURL + "/search-user",
+          data: { 
+              user: user,
+              searchFor: searchFor,
+          },
+          success: function (data) {
+              var userData = '';
+              if (user.length > 0) {
+                 $('.filteredUserData').html(data);
+              }            
+          }            
+      });     
+});
+
+$("#addProductCollectionForm").validate({      
+  rules: {
+     name: {
+        required: true
+     },
+     product_collection_image: {
+        required: true
+     }
+  },
+  messages: {
+     name: "Please enter category name",
+     product_collection_image: "Please choose category image"
+  },
+  submitHandler: function(forms, e) {
+     e.preventDefault();
+     var form = $('#addProductCollectionForm')[0];
+     var serializedData = new FormData(form);
+
+     $("#addProductCollectionBtn").attr("disabled", true);
+     $('#addProductCollectionBtn').html('Processing <i class="fa fa-spinner fa-spin"></i>');
+     $.ajax({
+        headers: {
+           'X-CSRF-Token': $('input[name="_token"]').val()
+        },
+        type: 'post',
+        enctype: 'multipart/form-data',
+        url: _baseURL + "/collection",
+        data: serializedData,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(data) {
+           $("#addProductCollectionBtn").attr("disabled", false);
+
+           $('#addProductCollectionBtn').html('Post');
+
+           if (data.erro == '101') {
+              clearImage('output_simple_post_image');
+             
+              UIkit.modal('#addProductCollection').hide();
+
+              swal("", data.message, "success", {
+                 button: "close",
+              });
+
+              $("#addProductCollectionForm").trigger('reset');
+              $('.swal-button--confirm').on('click', function(){
+                 window.location.reload();
+              });
+           } else {
+              swal("", data.message, "error", {
+                 button: "close",
+              });
+           }
+        }
      });
      return false;
   }
-}); 
+});

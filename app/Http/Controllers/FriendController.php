@@ -55,7 +55,6 @@ class FriendController extends Controller
             $notification->sender_id = Auth::user()->id;
             $notification->actionURL = url('/notification');
             $notification->friendshipId = $friendship->id;
-	    	
 	        $notidicationId = Notification::send($user, new MyNotification($notification));
 
 	        DB::commit();
@@ -83,7 +82,9 @@ class FriendController extends Controller
             ->orWhere('second_user', Auth::user()->id)
             ->delete();        
         if ($userfriendShipStatus) {
-            DB::table('notifications')->where('id', $userfriendShipStatus)->delete();
+            DB::table('notifications')
+                ->where('id', $userfriendShipStatus)
+                ->delete();
         }
         $messags['message'] = $userfriendShipStatus == 'pending' ? 'Canceled!' : 'Unfriend!';
         $messags['erro'] = 101;
@@ -145,8 +146,11 @@ class FriendController extends Controller
 
     public function deleteFollowRequest(Request $request)
     {
-        Friendship::where('id', $request->friendshipId)->delete();
-        DB::table('notifications')->where('id', $request->notoficationId)->delete();
+        Friendship::where('id', $request->friendshipId)
+            ->delete();
+        DB::table('notifications')
+            ->where('id', $request->notoficationId)
+            ->delete();
         $messags['message'] = "Done!";
         $messags['erro'] = 101;
         return response()->json($messags, 200);
@@ -169,11 +173,17 @@ class FriendController extends Controller
     public function searchUser(Request $request)
     {
         if ($request->searchFor == 'suggestion') {            
-            $users = User::whereIn('id', getAllUserIds())->where('name', 'like', '%' . $request->user . '%')->get();            
+            $users = User::whereIn('id', getAllUserIds())
+                ->where('name', 'like', '%' . $request->user . '%')
+                ->get();            
         } elseif ($request->searchFor == 'following') {
-            $users = User::whereIn('id', userFriends())->where('name', 'like', '%' . $request->user . '%')->get();
+            $users = User::whereIn('id', userFriends())
+                ->where('name', 'like', '%' . $request->user . '%')
+                ->get();
         } elseif ($request->searchFor == 'followers') {
-            $users = User::whereIn('id', userFollowers())->where('name', 'like', '%' . $request->user . '%')->get();
+            $users = User::whereIn('id', userFollowers())
+                ->where('name', 'like', '%' . $request->user . '%')
+                ->get();
         }
 
         $filteredUsers = [];
@@ -193,7 +203,11 @@ class FriendController extends Controller
             
             }            
         }
-        return $filteredUsers;
+        if ($filteredUsers) {
+            return $filteredUsers;
+        } else {
+            return 'No User Found!';
+        }
     }
 
     public function chat()

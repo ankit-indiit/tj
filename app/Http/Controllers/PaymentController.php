@@ -100,7 +100,6 @@ class PaymentController extends Controller
                     'product_id' => $product['id'],
                     'product_qty' => $product['qty'],
                     'product_price' => $product['price'],
-                    'seller_id' => $product['seller_id'],
                 ]);
 
                 /*----Save Seller Inventory----*/
@@ -115,11 +114,11 @@ class PaymentController extends Controller
                     ->where('user_id', Auth::user()->id)
                     ->delete();
                 /*----Save Product Delevery Status----*/
-                OrderProductStatus::create([
-                    'order_id' => $order->id,
-                    'product_id' => $product['id'],
-                    'delivery_status' => 0,
-                ]);
+                // OrderProductStatus::create([
+                //     'order_id' => $order->id,
+                //     'product_id' => $product['id'],
+                //     'delivery_status' => 0,
+                // ]);
             }
 
 

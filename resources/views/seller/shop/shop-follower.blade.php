@@ -26,13 +26,16 @@
                   </div>
                   <div class="mt-1">
                      @foreach ($shopMembers as $shopMember)
-                        @php $userId= Crypt::encrypt($shopMember); @endphp
+                        @php
+                           $profileRoute  = route('my-profile').'?tab=feed';
+                           $userId= Crypt::encrypt($shopMember);
+                        @endphp
                            <div class="flex items-center space-x-4 rounded-md -mx-2 p-2">
                               <div class="w-14 h-14 flex-shrink-0 rounded-md relative">
                                  <img src="{{ show_user_image($shopMember) }}" class="absolute w-full h-full inset-0 rounded-md" alt="">
                               </div>
                               <div class="flex-1 suggestion">
-                                 <a href="{{ $shopMember == Auth::user()->id ? route('my-profile') : route('time.line', $userId) }}" class="text-md font-semibold capitalize">{{ show_user_name($shopMember) }}</a>
+                                 <a href="{{ $shopMember == Auth::user()->id ? $profileRoute : route('time.line', $userId) }}" class="text-md font-semibold capitalize">{{ show_user_name($shopMember) }}</a>
                                  <div class="text-sm text-gray-500 mt-0.5"> {{count(userFriends())}} Following</div>
                               </div>
                                  {{-- <a href="javascript:void(0);" id="followForFriendship" data-id="{{$shopMember}}" class="flex items-center justify-center h-9 px-4 rounded-md bg-gray-200 font-semibold">Follow</a> --}}

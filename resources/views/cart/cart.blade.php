@@ -18,14 +18,12 @@
                      <div class="job-list">
                         @csrf
                         @php
-                           // Session::forget('coupon');
                            $subTotal = 0;
                            $productIds = [];
                         @endphp
                         @foreach ($cartItems as $cartItem)
                         @php 
-                           // $subTotal = $cartItem->product_price;
-                           $subTotal = $subTotal + $cartItem->product_price;
+                           $subTotal = $subTotal + $cartItem->product_price*$cartItem->quantity;
                            
                            $productIds[] .= $cartItem->product_id;
                         @endphp
@@ -40,14 +38,14 @@
                                           <div class="product-quantity">
                                              <div class="input-counter">
                                                 <span class="minus-btn">
-                                                   <a href="javascript:void(0);" class="dicreseCartQty">
+                                                   <a href="javascript:void(0);" class="dicreseCartQty" data-price="{{ $cartItem->product_price }}" data-id="{{ $cartItem->product_id }}">
                                                       <i class="fa fa-minus"></i>                        
                                                    </a>
                                                 </span>
                                                 <input type="text" name="quantity[]" class="cartQty" value="{{ $cartItem->quantity }}">
-                                                <input type="hidden" class="proQty" value="{{ $cartItem->product_quentity }}">
+                                                <input type="hidden" class="proQty" value="{{ $cartItem->product_quentity }}" >
                                                 <span class="plus-btn">
-                                                   <a href="javascript:void(0);" class="increseCartQty">
+                                                   <a href="javascript:void(0);" class="increseCartQty" data-price="{{ $cartItem->product_price }}" data-id="{{ $cartItem->product_id }}">
                                                       <i class="fa fa-plus"></i>                         
                                                    </a>
                                                 </span>
@@ -57,7 +55,7 @@
                                        <div class="col-sm-5">
                                           <h3>{{ $cartItem->product_name }}</h3>
                                           <h4>Seller: {{ show_user_name($cartItem->seller_id) }} </h4>
-                                          <b class="color-black">${{ $cartItem->product_price }}</b>
+                                          <b class="color-black productPrice{{ $cartItem->product_id }}">${{ $cartItem->quantity*$cartItem->product_price }}</b>
                                           <a href="javascript:void(0);" id="moveToWishlist" data-id="{{ $cartItem->id }}" data-product="{{ $cartItem->product_id }}" class="display-inline sp-m wsh">
                                              <b class="color-black">Move to wishlist</b>
                                           </a>

@@ -13,6 +13,11 @@ class Friendship extends Model
     	'status',
     ];
 
+    // public function modelFilter()
+    // {
+    //     return $this->provideFilter(\App\ModelFilters\FriendshipFilter::class);
+    // }
+
     // friendship that this user started
 	protected function friendsOfThisUser()
 	{

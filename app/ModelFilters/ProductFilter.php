@@ -17,6 +17,13 @@ class ProductFilter extends ModelFilter
         return $this->where('name', $name);
     }
 
+    public function search($search)
+    {
+        echo $search;
+        die;
+        return $this->where('name', 'like', '%' . $search . '%');
+    }
+
     // public function startDate($date)
     // {
     //     $startDate = \Carbon\Carbon::parse($date);

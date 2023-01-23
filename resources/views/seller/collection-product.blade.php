@@ -77,7 +77,42 @@
                         <a href="#" class="bg-red-100 absolute right-2 top-2 p-0.5 px-1.5 rounded-full text-red-500">
                         <i class="icon-feather-heart"> </i>
                         </a>                                                          
-                        <a href="#" class="ad_to_colletion_btn" data-toggle="modal" data-target="#exampleModal"><i class="icon-feather-layers" data-toggle="tooltip" data-placement="top" title="" data-original-title="Add to Collection"> </i></a>                                
+                        <a href="javascript:void(0);" class="ad_to_colletion_btn" aria-expanded="false">
+                           <i class="icon-feather-layers" data-toggle="tooltip" data-placement="top" title="" data-original-title="{{ count($collectionProduct->collections) > 0 ? 'Add to Collection' : 'No More Collection to add' }}"> </i>
+                        </a>
+                        @if (count($collectionProduct->collections) > 0)
+                           <div class="bg-white w-56 main-df shadow-md mx-auto p-2 mt-12 rounded-md text-gray-500 hidden text-base border border-gray-100 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 uk-drop" uk-drop="mode: click;pos: bottom-right;animation: uk-animation-slide-bottom-small main-ss" style="left: 0px! !important; top: 68px; width: 100%;">
+                              <div class="sidebar_innersss" data-simplebar="init">
+                                 <div class="simplebar-wrapper" style="margin: 0px;">
+                                    <div class="simplebar-height-auto-observer-wrapper">
+                                       <div class="simplebar-height-auto-observer"></div>
+                                    </div>
+                                    <div class="simplebar-mask">
+                                       <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                          <div class="simplebar-content" style="padding: 0px; height: auto; overflow: hidden;">
+                                             <ul class="space-y-1 ">
+                                                @foreach ($collectionProduct->collections as $collection)
+                                                   <li>
+                                                      <a href="javascript:void(0);" id="assignCollection" data-id="{{ $collection->id}}" data-product="{{$collectionProduct->id}}">
+                                                         {{ $collection->name }}
+                                                      </a>
+                                                   </li>
+                                                @endforeach
+                                             </ul>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                                 </div>
+                                 <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                    <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
+                                 </div>
+                                 <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                    <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); visibility: hidden;"></div>
+                                 </div>
+                              </div>
+                           </div>
+                        @endif                                
                      </div>
                      <div class="card-body">
                         <a href="{{ route('product.detail', $collectionProduct->slug) }}" class="ext-lg font-medium mt-1 t truncate">{{ $collectionProduct->name }}</a>
